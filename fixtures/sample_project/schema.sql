@@ -1,0 +1,2 @@
+CREATE TABLE users (name TEXT PRIMARY KEY);
+SELECT name FROM users;

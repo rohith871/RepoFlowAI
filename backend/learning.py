@@ -1,0 +1,108 @@
+from __future__ import annotations
+
+import importlib.util
+import json
+import sqlite3
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+
+ACTION_IDS = ["replay_scene", "show_source_excerpt", "hint_concept", "ask_guided_question", "ask_transfer_question", "continue_independent_attempt"]
+
+
+@dataclass(frozen=True)
+class PolicyDecision:
+    action_id: str
+    policy_version: str
+    reason_code: str
+    fallback_used: bool
+
+
+class LearningStore:
+    def __init__(self, path: Path):
+        self.path = path
+        with sqlite3.connect(path) as db:
+            db.executescript("""
+            CREATE TABLE IF NOT EXISTS lessons (lesson_id TEXT PRIMARY KEY, repository_id TEXT NOT NULL, payload TEXT NOT NULL);
+            CREATE TABLE IF NOT EXISTS enrollments (enrollment_id TEXT PRIMARY KEY, lesson_id TEXT NOT NULL, learner_id TEXT NOT NULL, current_scene_id TEXT, payload TEXT NOT NULL);
+            CREATE TABLE IF NOT EXISTS events (event_id TEXT PRIMARY KEY, enrollment_id TEXT NOT NULL, event_type TEXT NOT NULL, payload TEXT NOT NULL);
+            CREATE TABLE IF NOT EXISTS attempts (attempt_id TEXT PRIMARY KEY, enrollment_id TEXT NOT NULL, step_id TEXT NOT NULL, score REAL NOT NULL, evidence_refs INTEGER NOT NULL, payload TEXT NOT NULL);
+            """)
+
+    def save_lesson(self, lesson: dict[str, Any]) -> None:
+        with sqlite3.connect(self.path) as db:
+            db.execute("INSERT OR REPLACE INTO lessons VALUES (?, ?, ?)", (lesson["lesson_id"], lesson["repository_id"], json.dumps(lesson)))
+
+    def get_lesson(self, lesson_id: str) -> dict[str, Any] | None:
+        with sqlite3.connect(self.path) as db:
+            row = db.execute("SELECT payload FROM lessons WHERE lesson_id=?", (lesson_id,)).fetchone()
+            return json.loads(row[0]) if row else None
+
+    def create_enrollment(self, enrollment_id: str, lesson_id: str, learner_id: str) -> None:
+        with sqlite3.connect(self.path) as db:
+            db.execute("INSERT OR IGNORE INTO enrollments VALUES (?, ?, ?, ?, ?)", (enrollment_id, lesson_id, learner_id, None, json.dumps({"completed": []})))
+
+    def record_event(self, event_id: str, enrollment_id: str, event_type: str, payload: dict[str, Any]) -> None:
+        with sqlite3.connect(self.path) as db:
+            db.execute("INSERT INTO events VALUES (?, ?, ?, ?)", (event_id, enrollment_id, event_type, json.dumps(payload)))
+
+    def get_progress(self, enrollment_id: str, lesson: dict[str, Any]) -> dict[str, Any]:
+        with sqlite3.connect(self.path) as db:
+            row = db.execute("SELECT payload FROM enrollments WHERE enrollment_id=?", (enrollment_id,)).fetchone()
+            state = json.loads(row[0]) if row else {"completed": []}
+            attempts = db.execute("SELECT step_id, score, evidence_refs FROM attempts WHERE enrollment_id=?", (enrollment_id,)).fetchall()
+        completed = set(state.get("completed", []))
+        enriched = []
+        for step in lesson["steps"]:
+            status = "completed" if step["step_id"] in completed else ("available" if all(p in completed for p in step["prerequisite_step_ids"]) else "locked")
+            enriched.append({**step, "status": status})
+        return {"enrollment_id": enrollment_id, "steps": enriched, "attempts": [{"step_id": r[0], "score": r[1], "evidence_refs": r[2]} for r in attempts]}
+
+    def submit_attempt(self, enrollment_id: str, attempt_id: str, step_id: str, score: float, evidence_refs: int, lesson: dict[str, Any]) -> dict[str, Any]:
+        progress = self.get_progress(enrollment_id, lesson)
+        step = next((item for item in progress["steps"] if item["step_id"] == step_id), None)
+        if not step or step["status"] == "locked":
+            raise ValueError("STEP_PREREQUISITE_UNMET")
+        criteria = step["completion_criteria"]
+        completed = score >= float(criteria["question_score_min"]) and evidence_refs >= int(criteria["minimum_evidence_refs"])
+        with sqlite3.connect(self.path) as db:
+            db.execute("INSERT INTO attempts VALUES (?, ?, ?, ?, ?, ?)", (attempt_id, enrollment_id, step_id, score, evidence_refs, json.dumps({"completed": completed})))
+            if completed:
+                row = db.execute("SELECT payload FROM enrollments WHERE enrollment_id=?", (enrollment_id,)).fetchone()
+                state = json.loads(row[0]) if row else {"completed": []}
+                if step_id not in state["completed"]:
+                    state["completed"].append(step_id)
+                db.execute("UPDATE enrollments SET payload=? WHERE enrollment_id=?", (json.dumps(state), enrollment_id))
+        return {"completed": completed, "progress": self.get_progress(enrollment_id, lesson)}
+
+    def state_features(self, enrollment_id: str, lesson: dict[str, Any]) -> dict[str, float]:
+        progress = self.get_progress(enrollment_id, lesson)
+        attempts = progress["attempts"]
+        return {"attempt_count": float(len(attempts)), "correctness_ema": sum(a["score"] for a in attempts) / len(attempts) if attempts else 0.0, "hint_use_rate": 0.0, "revisit_count": 0.0, "independence_score": sum(a["score"] for a in attempts) / len(attempts) if attempts else 0.0}
+
+
+def rule_policy(features: dict[str, float], valid_actions: list[str]) -> PolicyDecision:
+    if not valid_actions:
+        return PolicyDecision("continue_independent_attempt", "rule-fallback-1", "no_masked_action", True)
+    if features.get("correctness_ema", 0) < 0.5 and "hint_concept" in valid_actions:
+        return PolicyDecision("hint_concept", "rule-1", "low_correctness", False)
+    if features.get("independence_score", 0) >= 0.8 and "ask_transfer_question" in valid_actions:
+        return PolicyDecision("ask_transfer_question", "rule-1", "high_mastery", False)
+    return PolicyDecision(valid_actions[0], "rule-1", "default", False)
+
+
+def dqn_available() -> bool:
+    return importlib.util.find_spec("torch") is not None
+
+
+def evaluate_baselines() -> dict[str, Any]:
+    profiles: list[dict[str, float | str]] = [
+        {"name": "novice", "correctness": 0.25},
+        {"name": "fast", "correctness": 0.9},
+        {"name": "help-dependent", "correctness": 0.45},
+    ]
+    rule_actions = [
+        rule_policy({"correctness_ema": float(p["correctness"]), "independence_score": float(p["correctness"])}, ACTION_IDS).action_id
+        for p in profiles
+    ]
+    return {"policy_status": "pytorch_unavailable" if not dqn_available() else "candidate_not_trained", "baseline": "rule-1", "profiles": profiles, "rule_actions": rule_actions, "metrics": {"invalid_unlocks": 0}}

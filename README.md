@@ -8,10 +8,12 @@ The Phase 1 implementation is being built in the nine documented milestones. The
 
 ## Local setup
 
-```bash
-python3 -m venv .venv
-.venv/bin/pip install -e '.[test,dev]'
-.venv/bin/uvicorn backend.main:app --reload
+Windows PowerShell:
+
+```powershell
+py -3.13 -m venv .venv-win
+.\.venv-win\Scripts\pip.exe install -e ".[test,dev]"
+.\.venv-win\Scripts\uvicorn.exe backend.main:app --reload
 ```
 
 In another terminal:
@@ -26,11 +28,11 @@ Open the Vite URL shown by the frontend command. The frontend expects the API at
 
 ## Verification
 
-```bash
-.venv/bin/pytest -q
-.venv/bin/ruff check .
-.venv/bin/mypy backend
-cd frontend && npm run typecheck && npm run build
+```powershell
+.\.venv-win\Scripts\python.exe -m pytest -q
+.\.venv-win\Scripts\ruff.exe check .
+.\.venv-win\Scripts\mypy.exe .
+cd frontend; npm run typecheck; npm run build
 ```
 
 Do not put repositories, media, models, credentials, or `.env` files in Git.

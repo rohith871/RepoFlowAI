@@ -31,6 +31,7 @@ target-version = "py311"
 python_version = "3.11"
 strict = false
 warn_unused_ignores = true
+exclude = "(^|/)(storage|frontend|fixtures)/"
 
 [tool.setuptools.packages.find]
 include = ["backend*"]
