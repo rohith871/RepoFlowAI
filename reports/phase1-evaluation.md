@@ -42,11 +42,11 @@ analyse fixture -> create lesson -> enrol learner -> read progress
 -> submit evidence-backed attempt -> ask evidence question -> render media
 ```
 
-Observed result: repository analysis, lesson creation, enrollment, locked-step progress, completed-attempt unlocking, evidence-ranked question response, and media manifest generation all returned successfully for `fixtures/sample_project`.
+Observed result: repository analysis, lesson creation, enrollment, locked-step progress, completed-attempt unlocking, evidence-ranked question response, and media manifest generation all returned successfully for `fixtures/sample_project`. After installing the approved local `media` extra, the generated `lesson.mp4` passed FFmpeg decode validation; narration remains explicitly marked as text-only fallback because no local TTS engine is installed.
 
 ## Current limitations
 
-- The current environment does not expose FFmpeg, an SVG rasteriser, or a local TTS engine. The media pipeline therefore reports `blocked_missing_ffmpeg` and `fallback_text_only` rather than claiming a playable narrated video.
+- The current environment does not expose a local TTS engine. The project media extra supplies Pillow and an imageio-managed FFmpeg binary, so the pipeline produces a playable silent/text-caption video while honestly reporting `fallback_text_only` narration.
 - PyTorch is not installed in the project environment. The rule-based policy is the active fallback; the DQN adapter and evaluation interface are present but no neural policy has been trained or evaluated.
 - Ollama availability is detected at runtime through its HTTP API. A deterministic evidence-first answer is returned if the service/model is unavailable or returns malformed structured output.
 - Web and framework analysis uses conservative regular-expression adapters in this slice. Unsupported and dynamic behaviour is surfaced rather than treated as verified.

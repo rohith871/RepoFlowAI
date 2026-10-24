@@ -12,7 +12,7 @@ Windows PowerShell:
 
 ```powershell
 py -3.13 -m venv .venv-win
-.\.venv-win\Scripts\pip.exe install -e ".[test,dev]"
+.\.venv-win\Scripts\pip.exe install -e ".[test,dev,media]"
 .\.venv-win\Scripts\uvicorn.exe backend.main:app --reload
 ```
 

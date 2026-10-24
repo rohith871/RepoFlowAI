@@ -18,6 +18,7 @@ dependencies = [
 test = ["pytest>=8,<9"]
 dev = ["ruff>=0.6,<1", "mypy>=1.11,<2"]
 ml = ["torch>=2.4,<3"]
+media = ["Pillow>=10,<13", "imageio-ffmpeg>=0.5,<1"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
