@@ -12,10 +12,15 @@ class Settings:
     max_total_bytes: int = int(os.getenv("REPOFLOW_MAX_TOTAL_BYTES", "100000000"))
     ollama_url: str = os.getenv("REPOFLOW_OLLAMA_URL", "http://127.0.0.1:11434")
     ollama_model: str = os.getenv("REPOFLOW_OLLAMA_MODEL", "qwen2.5-coder:7b")
+    pocket_tts_voice: str = os.getenv("REPOFLOW_POCKET_TTS_VOICE", "alba")
 
     @property
     def database_path(self) -> Path:
         return self.storage_dir / "repoflow.sqlite3"
+
+    @property
+    def policy_checkpoint(self) -> Path:
+        return self.storage_dir / "models" / "teaching_policy.pt"
 
     def ensure_directories(self) -> None:
         self.storage_dir.mkdir(parents=True, exist_ok=True)

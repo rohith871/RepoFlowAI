@@ -180,6 +180,12 @@ class PkmStore:
                                latest_published_revision_id=row["latest_published_revision_id"],
                                isolation_key=row["isolation_key"]) for row in rows]
 
+    def delete_repository(self, repository_id: str) -> None:
+        with self.connection() as db:
+            for table in ("relationships", "evidence", "facts", "symbols", "files", "revisions"):
+                db.execute(f"DELETE FROM {table} WHERE repository_id=?", (repository_id,))
+            db.execute("DELETE FROM repositories WHERE repository_id=?", (repository_id,))
+
     def export_snapshot(self, snapshot: PkmSnapshot, path: Path) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(snapshot.model_dump_json(indent=2), encoding="utf-8")

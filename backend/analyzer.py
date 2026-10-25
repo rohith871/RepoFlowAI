@@ -6,6 +6,7 @@ import re
 import shutil
 from dataclasses import dataclass
 from pathlib import Path
+from typing import TypeVar
 
 from backend.config import Settings
 from backend.ids import stable_id
@@ -24,6 +25,8 @@ from backend.models import (
     VerificationStatus,
 )
 from backend.storage import PkmStore
+
+ModelT = TypeVar("ModelT")
 
 
 @dataclass(frozen=True)
@@ -93,7 +96,10 @@ class RepositoryAnalyzer:
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(path, destination)
             language = SUPPORTED.get(path.suffix.lower(), "unsupported")
-            text = data.decode("utf-8", errors="replace")
+            # GitHub and Windows tools sometimes write a UTF-8 BOM.  It is
+            # metadata, not source content; strip it before parser handoff so
+            # ast.parse can see the real module.
+            text = data.decode("utf-8-sig", errors="replace")
             lines = text.splitlines(keepends=True)
             file_id = stable_id("file", repository_id, rel)
             file_item = SourceFile(file_id=file_id, repository_id=repository_id, pkm_revision_id=revision_id,
@@ -102,6 +108,33 @@ class RepositoryAnalyzer:
                                    unsupported_reason=None if language != "unsupported" else f"No analyser for {path.suffix}",
                                    line_count=len(lines))
             files.append(file_item)
+            if language in {"python", "javascript", "typescript"}:
+                module_end = max(1, len(lines))
+                module_evidence = self._add_evidence(
+                    repository_id,
+                    revision_id,
+                    file_item,
+                    lines or [""],
+                    1,
+                    min(module_end, 3),
+                    evidence,
+                    "module_declaration",
+                    "file_inventory",
+                )
+                symbols.append(
+                    Symbol(
+                        symbol_id=stable_id("sym", repository_id, rel, "module"),
+                        repository_id=repository_id,
+                        pkm_revision_id=revision_id,
+                        file_id=file_item.file_id,
+                        kind="module",
+                        qualified_name=rel,
+                        name=Path(rel).stem,
+                        line_start=1,
+                        line_end=module_end,
+                        language_metadata={"path": rel, "evidence_id": module_evidence},
+                    )
+                )
             if language == "python":
                 self._analyse_python(repository_id, revision_id, file_item, text, lines, symbols, facts, evidence, relationships, warnings)
             elif language in {"javascript", "typescript"}:
@@ -112,6 +145,10 @@ class RepositoryAnalyzer:
                 if language == "unsupported":
                     warnings.append(f"Unsupported language for {rel}: {path.suffix or 'no extension'}")
                 self._analyse_text(repository_id, revision_id, file_item, text, lines, facts, evidence)
+
+        self._link_module_imports(repository_id, revision_id, files, symbols, facts, evidence, relationships)
+        facts = self._deduplicate_models(facts, "fact_id", "fact")
+        relationships = self._deduplicate_models(relationships, "relationship_id", "relationship")
 
         revision = PkmRevision(pkm_revision_id=revision_id, repository_id=repository_id, parent_revision_id=parent_id,
                                source_snapshot_id=stable_id("snap", repository_id, revision_id), analysis_run_id=run_id,
@@ -124,9 +161,32 @@ class RepositoryAnalyzer:
         self.store.export_snapshot(snapshot, self.settings.storage_dir / "exports" / f"{revision_id}.json")
         return AnalysisResult(snapshot=snapshot, source_root=snapshot_dir, warnings=warnings)
 
+    @staticmethod
+    def _deduplicate_models(items: list[ModelT], id_field: str, prefix: str) -> list[ModelT]:
+        seen: set[str] = set()
+        counters: dict[str, int] = {}
+        output: list[ModelT] = []
+        for item in items:
+            identifier = str(getattr(item, id_field))
+            if identifier in seen:
+                counters[identifier] = counters.get(identifier, 0) + 1
+                identifier = stable_id(prefix, identifier, str(counters[identifier]))
+                while identifier in seen:
+                    counters[identifier] = counters.get(identifier, 0) + 1
+                    identifier = stable_id(prefix, identifier, str(counters[identifier]))
+                item = item.model_copy(update={id_field: identifier})  # type: ignore[attr-defined]
+            seen.add(identifier)
+            output.append(item)
+        return output
+
     def _add_evidence(self, repo: str, rev: str, file: SourceFile, lines: list[str], start: int, end: int,
                       evidence: list[Evidence], evidence_type: str, method: str = "python_ast") -> str:
         evidence_id = stable_id("evidence", repo, rev, file.path, str(start), str(end), evidence_type)
+        existing_ids = {item.evidence_id for item in evidence}
+        suffix = 1
+        while evidence_id in existing_ids:
+            evidence_id = stable_id("evidence", repo, rev, file.path, str(start), str(end), evidence_type, str(suffix))
+            suffix += 1
         evidence.append(Evidence(evidence_id=evidence_id, repository_id=repo, pkm_revision_id=rev, file_id=file.file_id,
                                  source_path=file.path, line_start=start, line_end=end,
                                  excerpt=_excerpt(lines, start, end), evidence_type=evidence_type,
@@ -141,55 +201,65 @@ class RepositoryAnalyzer:
         except SyntaxError as exc:
             warnings.append(f"Parser failed for {file.path}: {exc.msg} at line {exc.lineno}")
             return
+        nodes = [node for node in ast.walk(tree) if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))]
         symbol_by_name: dict[str, str] = {}
-        for node in ast.walk(tree):
-            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
-                kind = "class" if isinstance(node, ast.ClassDef) else "function"
-                symbol_id = stable_id("sym", repo, file.path, kind, node.name, str(node.lineno))
-                symbol_by_name[node.name] = symbol_id
-                end = getattr(node, "end_lineno", node.lineno)
-                evidence_id = self._add_evidence(repo, rev, file, lines, node.lineno, end, evidence, "symbol_declaration")
-                signature = None if kind == "class" else ast.unparse(node.args) if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) else None
-                symbols.append(Symbol(symbol_id=symbol_id, repository_id=repo, pkm_revision_id=rev, file_id=file.file_id, kind=kind,
-                                      qualified_name=f"{file.path}:{node.name}", name=node.name, signature=signature,
-                                      line_start=node.lineno, line_end=end))
-                facts.append(Fact(fact_id=stable_id("fact", symbol_id, "symbol"), repository_id=repo, pkm_revision_id=rev,
-                                  fact_type=kind, subject_id=symbol_id, attributes={"name": node.name},
-                                  assertion_status=AssertionStatus.VERIFIED_STATIC, evidence_ids=[evidence_id],
-                                  extraction_method="python_ast", extractor_version="stdlib"))
-                if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                    for child in ast.walk(node):
-                        if isinstance(child, ast.Call) and isinstance(child.func, ast.Name):
-                            target = symbol_by_name.get(child.func.id)
-                            if target:
-                                rel_evidence = self._add_evidence(repo, rev, file, lines, child.lineno, getattr(child, "end_lineno", child.lineno), evidence, "call_expression")
-                                relationships.append(Relationship(relationship_id=stable_id("rel", symbol_id, target, "calls", str(child.lineno)),
-                                    repository_id=repo, pkm_revision_id=rev, source_id=symbol_id, target_id=target,
-                                    relationship_type="calls", status="verified", claim_level=ClaimLevel.RESOLVED_STATIC,
-                                    evidence_ids=[rel_evidence], verification_method="python_ast_name_resolution",
-                                    verification_status=VerificationStatus.VERIFIED, confidence=0.95, created_by="python-ast"))
-            elif isinstance(node, ast.Import):
-                for alias in node.names:
-                    evidence_id = self._add_evidence(repo, rev, file, lines, node.lineno, node.lineno, evidence, "import")
-                    facts.append(Fact(fact_id=stable_id("fact", repo, file.path, "import", alias.name), repository_id=repo,
-                                      pkm_revision_id=rev, fact_type="import", subject_id=file.file_id,
+        symbol_by_node: dict[int, str] = {}
+        for node in nodes:
+            kind = "class" if isinstance(node, ast.ClassDef) else "function"
+            symbol_id = stable_id("sym", repo, file.path, kind, node.name, str(node.lineno))
+            symbol_by_name.setdefault(node.name, symbol_id)
+            symbol_by_node[id(node)] = symbol_id
+            end = getattr(node, "end_lineno", node.lineno)
+            evidence_id = self._add_evidence(repo, rev, file, lines, node.lineno, end, evidence, "symbol_declaration")
+            signature = ast.unparse(node.args) if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) else None
+            symbols.append(Symbol(symbol_id=symbol_id, repository_id=repo, pkm_revision_id=rev, file_id=file.file_id, kind=kind,
+                                  qualified_name=f"{file.path}:{node.name}", name=node.name, signature=signature,
+                                  line_start=node.lineno, line_end=end))
+            facts.append(Fact(fact_id=stable_id("fact", symbol_id, "symbol"), repository_id=repo, pkm_revision_id=rev,
+                              fact_type=kind, subject_id=symbol_id, attributes={"name": node.name},
+                              assertion_status=AssertionStatus.VERIFIED_STATIC, evidence_ids=[evidence_id],
+                              extraction_method="python_ast", extractor_version="stdlib"))
+
+        for node in nodes:
+            if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                continue
+            source_id = symbol_by_node[id(node)]
+            for child in ast.walk(node):
+                if isinstance(child, ast.Call) and isinstance(child.func, ast.Name):
+                    target = symbol_by_name.get(child.func.id)
+                    if target:
+                        rel_evidence = self._add_evidence(repo, rev, file, lines, child.lineno, getattr(child, "end_lineno", child.lineno), evidence, "call_expression")
+                        relationships.append(Relationship(relationship_id=stable_id("rel", source_id, target, "calls", str(child.lineno)),
+                            repository_id=repo, pkm_revision_id=rev, source_id=source_id, target_id=target,
+                            relationship_type="calls", status="verified", claim_level=ClaimLevel.RESOLVED_STATIC,
+                            evidence_ids=[rel_evidence], verification_method="python_ast_name_resolution",
+                            verification_status=VerificationStatus.VERIFIED, confidence=0.95, created_by="python-ast"))
+        for tree_node in ast.walk(tree):
+            if isinstance(tree_node, ast.Import):
+                for alias in tree_node.names:
+                    evidence_id = self._add_evidence(repo, rev, file, lines, tree_node.lineno, tree_node.lineno, evidence, "import")
+                    facts.append(Fact(fact_id=stable_id("fact", repo, file.path, "import", alias.name, str(tree_node.lineno)), repository_id=repo,
+                                      pkm_revision_id=rev,
+                                      fact_type="import", subject_id=file.file_id,
                                       attributes={"module": alias.name, "alias": alias.asname}, assertion_status=AssertionStatus.VERIFIED_STATIC,
                                       evidence_ids=[evidence_id], extraction_method="python_ast", extractor_version="stdlib"))
-            elif isinstance(node, ast.ImportFrom):
-                module = node.module or ""
-                evidence_id = self._add_evidence(repo, rev, file, lines, node.lineno, node.lineno, evidence, "import")
-                facts.append(Fact(fact_id=stable_id("fact", repo, file.path, "from", module), repository_id=repo,
-                                  pkm_revision_id=rev, fact_type="import", subject_id=file.file_id,
-                                  attributes={"module": module, "names": [a.name for a in node.names]},
+            elif isinstance(tree_node, ast.ImportFrom):
+                module = tree_node.module or ""
+                evidence_id = self._add_evidence(repo, rev, file, lines, tree_node.lineno, tree_node.lineno, evidence, "import")
+                facts.append(Fact(fact_id=stable_id("fact", repo, file.path, "from", module, str(tree_node.lineno)), repository_id=repo,
+                                  pkm_revision_id=rev,
+                                  fact_type="import", subject_id=file.file_id,
+                                  attributes={"module": module, "names": [a.name for a in tree_node.names]},
                                   assertion_status=AssertionStatus.VERIFIED_STATIC, evidence_ids=[evidence_id],
                                   extraction_method="python_ast", extractor_version="stdlib"))
-            elif isinstance(node, (ast.Assign, ast.AnnAssign)):
-                line = getattr(node, "lineno", 1)
-                value = getattr(node, "value", None)
+            elif isinstance(tree_node, (ast.Assign, ast.AnnAssign)):
+                line = getattr(tree_node, "lineno", 1)
+                value = getattr(tree_node, "value", None)
                 if isinstance(value, ast.Constant) and isinstance(value.value, (str, int, float, bool)):
                     evidence_id = self._add_evidence(repo, rev, file, lines, line, line, evidence, "configuration")
                     facts.append(Fact(fact_id=stable_id("fact", repo, file.path, "config", str(line)), repository_id=repo,
-                                      pkm_revision_id=rev, fact_type="configuration", subject_id=file.file_id,
+                                      pkm_revision_id=rev,
+                                      fact_type="configuration", subject_id=file.file_id,
                                       attributes={"line": line}, assertion_status=AssertionStatus.VERIFIED_STATIC,
                                       evidence_ids=[evidence_id], extraction_method="python_ast", extractor_version="stdlib"))
         self._add_python_framework_facts(repo, rev, file, text, lines, facts, evidence)
@@ -219,6 +289,47 @@ class RepositoryAnalyzer:
             line = text.count("\n", 0, match.start()) + 1
             eid = self._add_evidence(repo, rev, file, lines, line, line, evidence, "api_client_call", "web_regex")
             facts.append(Fact(fact_id=stable_id("fact", repo, file.path, "api_client", str(line)), repository_id=repo, pkm_revision_id=rev, fact_type="api_client_call", subject_id=file.file_id, attributes={"path": match.group(1)}, assertion_status=AssertionStatus.VERIFIED_DECLARED, evidence_ids=[eid], extraction_method="web_regex", extractor_version="0.1"))
+        for match in re.finditer(r"import\s+.*?\s+from\s+[\"']([^\"']+)[\"']|import\s+[\"']([^\"']+)[\"']", text):
+            module = match.group(1) or match.group(2) or ""
+            line = text.count("\n", 0, match.start()) + 1
+            eid = self._add_evidence(repo, rev, file, lines, line, line, evidence, "import", "web_regex")
+            facts.append(Fact(fact_id=stable_id("fact", repo, file.path, "web_import", module, str(line)), repository_id=repo, pkm_revision_id=rev, fact_type="import", subject_id=file.file_id, attributes={"module": module}, assertion_status=AssertionStatus.VERIFIED_STATIC, evidence_ids=[eid], extraction_method="web_regex", extractor_version="0.1"))
+
+    def _link_module_imports(self, repo: str, rev: str, files: list[SourceFile], symbols: list[Symbol], facts: list[Fact], evidence: list[Evidence], relationships: list[Relationship]) -> None:
+        modules = [symbol for symbol in symbols if symbol.repository_id == repo and symbol.pkm_revision_id == rev and symbol.kind == "module"]
+        by_file_id = {symbol.file_id: symbol for symbol in modules}
+        module_names: dict[str, Symbol] = {}
+        for file in files:
+            module = by_file_id.get(file.file_id)
+            if module is None:
+                continue
+            path = Path(file.path)
+            dotted = path.with_suffix("").as_posix().replace("/", ".")
+            dotted = dotted.removesuffix(".__init__")
+            module_names[dotted] = module
+        for fact in facts:
+            if fact.fact_type != "import" or not fact.subject_id:
+                continue
+            target_module = str(fact.attributes.get("module", ""))
+            target = module_names.get(target_module)
+            source = by_file_id.get(fact.subject_id)
+            if source is None or target is None or source.symbol_id == target.symbol_id:
+                continue
+            relationships.append(Relationship(
+                relationship_id=stable_id("rel", source.symbol_id, target.symbol_id, "imports"),
+                repository_id=repo,
+                pkm_revision_id=rev,
+                source_id=source.symbol_id,
+                target_id=target.symbol_id,
+                relationship_type="imports",
+                status="verified",
+                claim_level=ClaimLevel.RESOLVED_STATIC,
+                evidence_ids=fact.evidence_ids,
+                verification_method="static_import_resolution",
+                verification_status=VerificationStatus.VERIFIED,
+                confidence=0.9,
+                created_by="repository-analyzer",
+            ))
 
     def _analyse_sql(self, repo: str, rev: str, file: SourceFile, text: str, lines: list[str], facts: list[Fact], evidence: list[Evidence]) -> None:
         for match in re.finditer(r"\b(CREATE\s+TABLE|ALTER\s+TABLE|SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b", text, re.IGNORECASE):

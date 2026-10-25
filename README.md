@@ -4,7 +4,7 @@ RepoFlow AI turns real source repositories into evidence-grounded, narrated, ani
 
 ## Current status
 
-The Phase 1 implementation is being built in the nine documented milestones. The current baseline includes the local Python environment, FastAPI health service, React/Vite shell, configuration, test/lint/typecheck scaffolding, and the approved design contracts.
+The working product now supports static repository analysis, persistent evidence-linked knowledge models, local and GitHub import jobs, source-grounded Ollama questions, persisted lessons and learner progress, a separately trained PyTorch teaching policy, Pocket TTS `alba` narration, and FFmpeg MP4 rendering with captions and chapters. Repository code is analyzed statically and is never executed. The configured primary model is `qwen2.5-coder:7b`; when Ollama is unavailable, the UI and job metadata identify the deterministic evidence fallback.
 
 ## Local setup
 
@@ -14,6 +14,13 @@ Windows PowerShell:
 py -3.13 -m venv .venv-win
 .\.venv-win\Scripts\pip.exe install -e ".[test,dev,media]"
 .\.venv-win\Scripts\uvicorn.exe backend.main:app --reload
+```
+
+Train or refresh the adaptive policy explicitly when needed:
+
+```powershell
+$env:REPOFLOW_STORAGE_DIR = "storage"
+.\.venv-win\Scripts\python.exe scripts\train_policy.py
 ```
 
 In another terminal:
@@ -34,5 +41,7 @@ Open the Vite URL shown by the frontend command. The frontend expects the API at
 .\.venv-win\Scripts\mypy.exe .
 cd frontend; npm run typecheck; npm run build
 ```
+
+The generated policy checkpoint and evaluation report are written under `storage/models/`. Rendered lessons are written under `storage/media/<lesson_id>/`; a successful narrated render produces `lesson.mp4`, `captions.vtt`, and `manifest.json`.
 
 Do not put repositories, media, models, credentials, or `.env` files in Git.

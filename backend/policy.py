@@ -20,14 +20,15 @@ class DqnTeachingPolicy(TeachingPolicy):
 
     def __init__(self, action_ids: list[str] | None = None):
         self.action_ids = action_ids or ACTION_IDS
+        self._torch: Any = None
+        self._network: Any = None
         try:
-            import torch  # type: ignore[import-not-found]
+            import torch
             from torch import nn
             self._torch = torch
             self._network = nn.Sequential(nn.Linear(5, 16), nn.ReLU(), nn.Linear(16, len(self.action_ids)))
         except ImportError:
-            self._torch = None
-            self._network = None
+            pass
 
     @property
     def available(self) -> bool:

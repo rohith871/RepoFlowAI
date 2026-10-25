@@ -38,6 +38,14 @@ class LearningStore:
             row = db.execute("SELECT payload FROM lessons WHERE lesson_id=?", (lesson_id,)).fetchone()
             return json.loads(row[0]) if row else None
 
+    def list_lessons(self, repository_id: str) -> list[dict[str, Any]]:
+        with sqlite3.connect(self.path) as db:
+            rows = db.execute(
+                "SELECT payload FROM lessons WHERE repository_id=? ORDER BY lesson_id DESC",
+                (repository_id,),
+            ).fetchall()
+        return [payload for row in rows if (payload := json.loads(row[0])).get("content_kind", "lesson") == "lesson"]
+
     def create_enrollment(self, enrollment_id: str, lesson_id: str, learner_id: str) -> None:
         with sqlite3.connect(self.path) as db:
             db.execute("INSERT OR IGNORE INTO enrollments VALUES (?, ?, ?, ?, ?)", (enrollment_id, lesson_id, learner_id, None, json.dumps({"completed": []})))
@@ -78,7 +86,35 @@ class LearningStore:
     def state_features(self, enrollment_id: str, lesson: dict[str, Any]) -> dict[str, float]:
         progress = self.get_progress(enrollment_id, lesson)
         attempts = progress["attempts"]
-        return {"attempt_count": float(len(attempts)), "correctness_ema": sum(a["score"] for a in attempts) / len(attempts) if attempts else 0.0, "hint_use_rate": 0.0, "revisit_count": 0.0, "independence_score": sum(a["score"] for a in attempts) / len(attempts) if attempts else 0.0}
+        with sqlite3.connect(self.path) as db:
+            rows = db.execute("SELECT event_type, payload FROM events WHERE enrollment_id=?", (enrollment_id,)).fetchall()
+        hint_count = sum(1 for row in rows if row[0] == "hint_requested")
+        revisit_count = sum(1 for row in rows if row[0] == "scene_revisited")
+        repeated_errors = sum(1 for attempt in attempts if float(attempt["score"]) < 0.5)
+        correctness = sum(a["score"] for a in attempts) / len(attempts) if attempts else 0.0
+        return {"attempt_count": float(len(attempts)), "correctness_ema": correctness,
+                "hint_use_rate": hint_count / max(1, len(attempts)), "revisit_count": float(revisit_count),
+                "independence_score": max(0.0, correctness - min(0.3, hint_count * 0.05)),
+                "repeated_error_rate": repeated_errors / max(1, len(attempts)),
+                "completed_steps": float(sum(1 for step in progress["steps"] if step["status"] == "completed"))}
+
+    def delete_repository(self, repository_id: str) -> None:
+        with sqlite3.connect(self.path) as db:
+            lesson_rows = db.execute("SELECT lesson_id FROM lessons WHERE repository_id=?", (repository_id,)).fetchall()
+            lesson_ids = [row[0] for row in lesson_rows]
+            if not lesson_ids:
+                return
+            placeholders = ",".join("?" for _ in lesson_ids)
+            enrollment_rows = db.execute(
+                f"SELECT enrollment_id FROM enrollments WHERE lesson_id IN ({placeholders})", lesson_ids
+            ).fetchall()
+            enrollment_ids = [row[0] for row in enrollment_rows]
+            if enrollment_ids:
+                event_placeholders = ",".join("?" for _ in enrollment_ids)
+                db.execute(f"DELETE FROM events WHERE enrollment_id IN ({event_placeholders})", enrollment_ids)
+                db.execute(f"DELETE FROM attempts WHERE enrollment_id IN ({event_placeholders})", enrollment_ids)
+                db.execute(f"DELETE FROM enrollments WHERE enrollment_id IN ({event_placeholders})", enrollment_ids)
+            db.execute(f"DELETE FROM lessons WHERE lesson_id IN ({placeholders})", lesson_ids)
 
 
 def rule_policy(features: dict[str, float], valid_actions: list[str]) -> PolicyDecision:
@@ -95,7 +131,7 @@ def dqn_available() -> bool:
     return importlib.util.find_spec("torch") is not None
 
 
-def evaluate_baselines() -> dict[str, Any]:
+def evaluate_baselines(policy_status: str | None = None) -> dict[str, Any]:
     profiles: list[dict[str, float | str]] = [
         {"name": "novice", "correctness": 0.25},
         {"name": "fast", "correctness": 0.9},
@@ -105,4 +141,4 @@ def evaluate_baselines() -> dict[str, Any]:
         rule_policy({"correctness_ema": float(p["correctness"]), "independence_score": float(p["correctness"])}, ACTION_IDS).action_id
         for p in profiles
     ]
-    return {"policy_status": "pytorch_unavailable" if not dqn_available() else "candidate_not_trained", "baseline": "rule-1", "profiles": profiles, "rule_actions": rule_actions, "metrics": {"invalid_unlocks": 0}}
+    return {"policy_status": policy_status or ("pytorch_unavailable" if not dqn_available() else "candidate_not_trained"), "baseline": "rule-1", "profiles": profiles, "rule_actions": rule_actions, "metrics": {"invalid_unlocks": 0}}
