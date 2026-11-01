@@ -1,0 +1,811 @@
+{
+  "lesson_id": "explanation_5eb8ea074d2ad231ab3d",
+  "status": "preview_ready",
+  "frames": [
+    "/tmp/repoflow-animation-test2/media/explanation_5eb8ea074d2ad231ab3d/scene-000.svg",
+    "/tmp/repoflow-animation-test2/media/explanation_5eb8ea074d2ad231ab3d/scene-001.svg",
+    "/tmp/repoflow-animation-test2/media/explanation_5eb8ea074d2ad231ab3d/scene-002.svg",
+    "/tmp/repoflow-animation-test2/media/explanation_5eb8ea074d2ad231ab3d/scene-003.svg",
+    "/tmp/repoflow-animation-test2/media/explanation_5eb8ea074d2ad231ab3d/scene-004.svg",
+    "/tmp/repoflow-animation-test2/media/explanation_5eb8ea074d2ad231ab3d/scene-005.svg",
+    "/tmp/repoflow-animation-test2/media/explanation_5eb8ea074d2ad231ab3d/scene-006.svg",
+    "/tmp/repoflow-animation-test2/media/explanation_5eb8ea074d2ad231ab3d/scene-007.svg",
+    "/tmp/repoflow-animation-test2/media/explanation_5eb8ea074d2ad231ab3d/scene-008.svg",
+    "/tmp/repoflow-animation-test2/media/explanation_5eb8ea074d2ad231ab3d/scene-009.svg",
+    "/tmp/repoflow-animation-test2/media/explanation_5eb8ea074d2ad231ab3d/scene-010.svg"
+  ],
+  "narration": {
+    "status": "generated",
+    "voice": "alba",
+    "segments": [
+      {
+        "scene_id": "story-1b3bdf4f-repository-000",
+        "text": "This explanation covers 4 analyzed files, 6 extracted symbols, and 3 evidence-backed relationships. The visuals show only structures recovered from the pinned static-analysis revision.",
+        "path": "/tmp/repoflow-animation-test2/media/explanation_5eb8ea074d2ad231ab3d/audio/scene-000.wav",
+        "duration_ms": 10560,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-1b3bdf4f-repository-001",
+        "text": "The module api is declared at api.py:1-6. Its qualified name is api.py. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "path": "/tmp/repoflow-animation-test2/media/explanation_5eb8ea074d2ad231ab3d/audio/scene-001.wav",
+        "duration_ms": 11920,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-1b3bdf4f-repository-002",
+        "text": "The function user_route is declared at api.py:4-6. Its qualified name is api.py:user_route. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "path": "/tmp/repoflow-animation-test2/media/explanation_5eb8ea074d2ad231ab3d/audio/scene-002.wav",
+        "duration_ms": 12400,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-1b3bdf4f-repository-003",
+        "text": "The module app is declared at app.py:1-14. Its qualified name is app.py. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "path": "/tmp/repoflow-animation-test2/media/explanation_5eb8ea074d2ad231ab3d/audio/scene-003.wav",
+        "duration_ms": 11040,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-1b3bdf4f-repository-004",
+        "text": "The class User is declared at app.py:5-6. Its qualified name is app.py:User. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "path": "/tmp/repoflow-animation-test2/media/explanation_5eb8ea074d2ad231ab3d/audio/scene-004.wav",
+        "duration_ms": 11680,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-1b3bdf4f-repository-005",
+        "text": "The function load_user is declared at app.py:9-10. Its qualified name is app.py:load_user. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "path": "/tmp/repoflow-animation-test2/media/explanation_5eb8ea074d2ad231ab3d/audio/scene-005.wav",
+        "duration_ms": 11680,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-1b3bdf4f-repository-006",
+        "text": "The function get_user is declared at app.py:13-14. Its qualified name is app.py:get_user. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "path": "/tmp/repoflow-animation-test2/media/explanation_5eb8ea074d2ad231ab3d/audio/scene-006.wav",
+        "duration_ms": 11840,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-1b3bdf4f-repository-007",
+        "text": "Static analysis links app.py:get_user to app.py:load_user through a calls relationship. It is marked verified with 1 supporting evidence record(s).",
+        "path": "/tmp/repoflow-animation-test2/media/explanation_5eb8ea074d2ad231ab3d/audio/scene-007.wav",
+        "duration_ms": 8720,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-1b3bdf4f-repository-008",
+        "text": "Static analysis links api.py to app.py through a imports relationship. It is marked verified with 1 supporting evidence record(s).",
+        "path": "/tmp/repoflow-animation-test2/media/explanation_5eb8ea074d2ad231ab3d/audio/scene-008.wav",
+        "duration_ms": 8080,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-1b3bdf4f-repository-009",
+        "text": "Static analysis links app.py:load_user to app.py:User through a calls relationship. It is marked verified with 1 supporting evidence record(s).",
+        "path": "/tmp/repoflow-animation-test2/media/explanation_5eb8ea074d2ad231ab3d/audio/scene-009.wav",
+        "duration_ms": 8640,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-1b3bdf4f-repository-010",
+        "text": "The final summary distinguishes parser-verified declarations and relationships from behavior that would require runtime observation. Use the cited source locations to continue the investigation.",
+        "path": "/tmp/repoflow-animation-test2/media/explanation_5eb8ea074d2ad231ab3d/audio/scene-010.wav",
+        "duration_ms": 9840,
+        "status": "generated"
+      }
+    ]
+  },
+  "captions": [
+    {
+      "scene_id": "story-1b3bdf4f-repository-000",
+      "text": "This explanation covers 4 analyzed files, 6 extracted symbols, and 3 evidence-backed relationships. The visuals show only structures recovered from the pinned static-analysis revision.",
+      "start_ms": 0,
+      "end_ms": 10560
+    },
+    {
+      "scene_id": "story-1b3bdf4f-repository-001",
+      "text": "The module api is declared at api.py:1-6. Its qualified name is api.py. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+      "start_ms": 10560,
+      "end_ms": 22480
+    },
+    {
+      "scene_id": "story-1b3bdf4f-repository-002",
+      "text": "The function user_route is declared at api.py:4-6. Its qualified name is api.py:user_route. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+      "start_ms": 22480,
+      "end_ms": 34880
+    },
+    {
+      "scene_id": "story-1b3bdf4f-repository-003",
+      "text": "The module app is declared at app.py:1-14. Its qualified name is app.py. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+      "start_ms": 34880,
+      "end_ms": 45920
+    },
+    {
+      "scene_id": "story-1b3bdf4f-repository-004",
+      "text": "The class User is declared at app.py:5-6. Its qualified name is app.py:User. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+      "start_ms": 45920,
+      "end_ms": 57600
+    },
+    {
+      "scene_id": "story-1b3bdf4f-repository-005",
+      "text": "The function load_user is declared at app.py:9-10. Its qualified name is app.py:load_user. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+      "start_ms": 57600,
+      "end_ms": 69280
+    },
+    {
+      "scene_id": "story-1b3bdf4f-repository-006",
+      "text": "The function get_user is declared at app.py:13-14. Its qualified name is app.py:get_user. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+      "start_ms": 69280,
+      "end_ms": 81120
+    },
+    {
+      "scene_id": "story-1b3bdf4f-repository-007",
+      "text": "Static analysis links app.py:get_user to app.py:load_user through a calls relationship. It is marked verified with 1 supporting evidence record(s).",
+      "start_ms": 81120,
+      "end_ms": 89840
+    },
+    {
+      "scene_id": "story-1b3bdf4f-repository-008",
+      "text": "Static analysis links api.py to app.py through a imports relationship. It is marked verified with 1 supporting evidence record(s).",
+      "start_ms": 89840,
+      "end_ms": 97920
+    },
+    {
+      "scene_id": "story-1b3bdf4f-repository-009",
+      "text": "Static analysis links app.py:load_user to app.py:User through a calls relationship. It is marked verified with 1 supporting evidence record(s).",
+      "start_ms": 97920,
+      "end_ms": 106560
+    },
+    {
+      "scene_id": "story-1b3bdf4f-repository-010",
+      "text": "The final summary distinguishes parser-verified declarations and relationships from behavior that would require runtime observation. Use the cited source locations to continue the investigation.",
+      "start_ms": 106560,
+      "end_ms": 116400
+    }
+  ],
+  "chapters": [
+    {
+      "title": "Repository architecture",
+      "start_ms": 0,
+      "end_ms": 10560,
+      "scene_id": "story-1b3bdf4f-repository-000"
+    },
+    {
+      "title": "api",
+      "start_ms": 10560,
+      "end_ms": 22480,
+      "scene_id": "story-1b3bdf4f-repository-001"
+    },
+    {
+      "title": "user_route",
+      "start_ms": 22480,
+      "end_ms": 34880,
+      "scene_id": "story-1b3bdf4f-repository-002"
+    },
+    {
+      "title": "app",
+      "start_ms": 34880,
+      "end_ms": 45920,
+      "scene_id": "story-1b3bdf4f-repository-003"
+    },
+    {
+      "title": "User",
+      "start_ms": 45920,
+      "end_ms": 57600,
+      "scene_id": "story-1b3bdf4f-repository-004"
+    },
+    {
+      "title": "load_user",
+      "start_ms": 57600,
+      "end_ms": 69280,
+      "scene_id": "story-1b3bdf4f-repository-005"
+    },
+    {
+      "title": "get_user",
+      "start_ms": 69280,
+      "end_ms": 81120,
+      "scene_id": "story-1b3bdf4f-repository-006"
+    },
+    {
+      "title": "get_user \u2192 load_user",
+      "start_ms": 81120,
+      "end_ms": 89840,
+      "scene_id": "story-1b3bdf4f-repository-007"
+    },
+    {
+      "title": "api \u2192 app",
+      "start_ms": 89840,
+      "end_ms": 97920,
+      "scene_id": "story-1b3bdf4f-repository-008"
+    },
+    {
+      "title": "load_user \u2192 User",
+      "start_ms": 97920,
+      "end_ms": 106560,
+      "scene_id": "story-1b3bdf4f-repository-009"
+    },
+    {
+      "title": "What the evidence establishes",
+      "start_ms": 106560,
+      "end_ms": 116400,
+      "scene_id": "story-1b3bdf4f-repository-010"
+    }
+  ],
+  "render": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "codec": "h264",
+    "audio_codec": "aac"
+  },
+  "scope": "repository",
+  "generation_provider": "deterministic-evidence-storyboard",
+  "estimated_duration_ms": 116086,
+  "storyboard": {
+    "storyboard_version": "1.0",
+    "repository_id": "repo_df8326fc4a0c1b3bdf4f",
+    "pkm_revision_id": "pkmrev_c307aaf6ad70bedc66ed",
+    "scope": "repository",
+    "question": "",
+    "detail": "summary",
+    "title": "Repository architecture",
+    "chapters": [
+      {
+        "chapter_id": "chapter-overview",
+        "title": "Architecture overview",
+        "scene_ids": [
+          "story-1b3bdf4f-repository-000"
+        ]
+      },
+      {
+        "chapter_id": "chapter-components",
+        "title": "Important components",
+        "scene_ids": [
+          "story-1b3bdf4f-repository-001",
+          "story-1b3bdf4f-repository-002",
+          "story-1b3bdf4f-repository-003",
+          "story-1b3bdf4f-repository-004",
+          "story-1b3bdf4f-repository-005",
+          "story-1b3bdf4f-repository-006"
+        ]
+      },
+      {
+        "chapter_id": "chapter-flow",
+        "title": "Execution and data flow",
+        "scene_ids": [
+          "story-1b3bdf4f-repository-007",
+          "story-1b3bdf4f-repository-008",
+          "story-1b3bdf4f-repository-009"
+        ]
+      },
+      {
+        "chapter_id": "chapter-recap",
+        "title": "Evidence recap",
+        "scene_ids": [
+          "story-1b3bdf4f-repository-010"
+        ]
+      }
+    ],
+    "scenes": [
+      {
+        "scene_id": "story-1b3bdf4f-repository-000",
+        "chapter_id": "chapter-overview",
+        "order": 1,
+        "kind": "architecture_overview",
+        "title": "Repository architecture",
+        "objective": "Orient the viewer using the extracted repository structure.",
+        "narration": "This explanation covers 4 analyzed files, 6 extracted symbols, and 3 evidence-backed relationships. The visuals show only structures recovered from the pinned static-analysis revision.",
+        "source_refs": [
+          "README.md",
+          "api.py",
+          "app.py",
+          "schema.sql"
+        ],
+        "node_ids": [
+          "sym_990ca78446c7a84e26cf",
+          "sym_a22b8ff31c2aeaa883af",
+          "sym_baf410a9dfdab75a1097",
+          "sym_e4825c8da4acd532d9cc",
+          "sym_2149c69d947897d2e490",
+          "sym_df896b12bd1eca2ff7f7"
+        ],
+        "edge_ids": [
+          "rel_8a164ecd20d07be26010",
+          "rel_b8259196ffb9bdf532aa",
+          "rel_1efe25123f7cc8753097"
+        ],
+        "visual_nodes": [
+          {
+            "id": "sym_990ca78446c7a84e26cf",
+            "label": "api",
+            "kind": "module"
+          },
+          {
+            "id": "sym_a22b8ff31c2aeaa883af",
+            "label": "user_route",
+            "kind": "function"
+          },
+          {
+            "id": "sym_baf410a9dfdab75a1097",
+            "label": "app",
+            "kind": "module"
+          },
+          {
+            "id": "sym_e4825c8da4acd532d9cc",
+            "label": "User",
+            "kind": "class"
+          },
+          {
+            "id": "sym_2149c69d947897d2e490",
+            "label": "load_user",
+            "kind": "function"
+          },
+          {
+            "id": "sym_df896b12bd1eca2ff7f7",
+            "label": "get_user",
+            "kind": "function"
+          }
+        ],
+        "visual_edges": [
+          {
+            "source": "sym_df896b12bd1eca2ff7f7",
+            "target": "sym_2149c69d947897d2e490",
+            "type": "calls"
+          },
+          {
+            "source": "sym_990ca78446c7a84e26cf",
+            "target": "sym_baf410a9dfdab75a1097",
+            "type": "imports"
+          },
+          {
+            "source": "sym_2149c69d947897d2e490",
+            "target": "sym_e4825c8da4acd532d9cc",
+            "type": "calls"
+          }
+        ],
+        "visual_type": "architecture",
+        "transition": "progressive-build",
+        "highlight_lines": []
+      },
+      {
+        "scene_id": "story-1b3bdf4f-repository-001",
+        "chapter_id": "chapter-components",
+        "order": 2,
+        "kind": "code_walkthrough",
+        "title": "api",
+        "objective": "Understand the module api and its source location.",
+        "narration": "The module api is declared at api.py:1-6. Its qualified name is api.py. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "source_refs": [
+          "api.py:1-6"
+        ],
+        "node_ids": [
+          "sym_990ca78446c7a84e26cf"
+        ],
+        "edge_ids": [
+          "rel_b8259196ffb9bdf532aa"
+        ],
+        "code_excerpt": "from app import get_user\n\n\n",
+        "visual_nodes": [
+          {
+            "id": "sym_990ca78446c7a84e26cf",
+            "label": "api",
+            "kind": "module"
+          }
+        ],
+        "visual_edges": [],
+        "highlight_lines": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "visual_type": "code",
+        "transition": "focus-zoom"
+      },
+      {
+        "scene_id": "story-1b3bdf4f-repository-002",
+        "chapter_id": "chapter-components",
+        "order": 3,
+        "kind": "code_walkthrough",
+        "title": "user_route",
+        "objective": "Understand the function user_route and its source location.",
+        "narration": "The function user_route is declared at api.py:4-6. Its qualified name is api.py:user_route. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "source_refs": [
+          "api.py:4-6"
+        ],
+        "node_ids": [
+          "sym_a22b8ff31c2aeaa883af"
+        ],
+        "edge_ids": [],
+        "code_excerpt": "def user_route(name: str) -> dict[str, str]:\n    user = get_user(name)\n    return {\"name\": user.name}\n",
+        "visual_nodes": [
+          {
+            "id": "sym_a22b8ff31c2aeaa883af",
+            "label": "user_route",
+            "kind": "function"
+          }
+        ],
+        "visual_edges": [],
+        "highlight_lines": [
+          4,
+          5,
+          6
+        ],
+        "visual_type": "code",
+        "transition": "focus-zoom"
+      },
+      {
+        "scene_id": "story-1b3bdf4f-repository-003",
+        "chapter_id": "chapter-components",
+        "order": 4,
+        "kind": "code_walkthrough",
+        "title": "app",
+        "objective": "Understand the module app and its source location.",
+        "narration": "The module app is declared at app.py:1-14. Its qualified name is app.py. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "source_refs": [
+          "app.py:1-14"
+        ],
+        "node_ids": [
+          "sym_baf410a9dfdab75a1097"
+        ],
+        "edge_ids": [
+          "rel_b8259196ffb9bdf532aa"
+        ],
+        "code_excerpt": "from dataclasses import dataclass\n\n\n",
+        "visual_nodes": [
+          {
+            "id": "sym_baf410a9dfdab75a1097",
+            "label": "app",
+            "kind": "module"
+          }
+        ],
+        "visual_edges": [],
+        "highlight_lines": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "visual_type": "code",
+        "transition": "focus-zoom"
+      },
+      {
+        "scene_id": "story-1b3bdf4f-repository-004",
+        "chapter_id": "chapter-components",
+        "order": 5,
+        "kind": "code_walkthrough",
+        "title": "User",
+        "objective": "Understand the class User and its source location.",
+        "narration": "The class User is declared at app.py:5-6. Its qualified name is app.py:User. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "source_refs": [
+          "app.py:5-6"
+        ],
+        "node_ids": [
+          "sym_e4825c8da4acd532d9cc"
+        ],
+        "edge_ids": [
+          "rel_1efe25123f7cc8753097"
+        ],
+        "code_excerpt": "class User:\n    name: str\n",
+        "visual_nodes": [
+          {
+            "id": "sym_e4825c8da4acd532d9cc",
+            "label": "User",
+            "kind": "class"
+          }
+        ],
+        "visual_edges": [],
+        "highlight_lines": [
+          5,
+          6
+        ],
+        "visual_type": "code",
+        "transition": "focus-zoom"
+      },
+      {
+        "scene_id": "story-1b3bdf4f-repository-005",
+        "chapter_id": "chapter-components",
+        "order": 6,
+        "kind": "code_walkthrough",
+        "title": "load_user",
+        "objective": "Understand the function load_user and its source location.",
+        "narration": "The function load_user is declared at app.py:9-10. Its qualified name is app.py:load_user. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "source_refs": [
+          "app.py:9-10"
+        ],
+        "node_ids": [
+          "sym_2149c69d947897d2e490"
+        ],
+        "edge_ids": [
+          "rel_8a164ecd20d07be26010",
+          "rel_1efe25123f7cc8753097"
+        ],
+        "code_excerpt": "def load_user(name: str) -> User:\n    return User(name=name)\n",
+        "visual_nodes": [
+          {
+            "id": "sym_2149c69d947897d2e490",
+            "label": "load_user",
+            "kind": "function"
+          }
+        ],
+        "visual_edges": [],
+        "highlight_lines": [
+          9,
+          10
+        ],
+        "visual_type": "code",
+        "transition": "focus-zoom"
+      },
+      {
+        "scene_id": "story-1b3bdf4f-repository-006",
+        "chapter_id": "chapter-components",
+        "order": 7,
+        "kind": "code_walkthrough",
+        "title": "get_user",
+        "objective": "Understand the function get_user and its source location.",
+        "narration": "The function get_user is declared at app.py:13-14. Its qualified name is app.py:get_user. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "source_refs": [
+          "app.py:13-14"
+        ],
+        "node_ids": [
+          "sym_df896b12bd1eca2ff7f7"
+        ],
+        "edge_ids": [
+          "rel_8a164ecd20d07be26010"
+        ],
+        "code_excerpt": "def get_user(name: str) -> User:\n    return load_user(name)\n",
+        "visual_nodes": [
+          {
+            "id": "sym_df896b12bd1eca2ff7f7",
+            "label": "get_user",
+            "kind": "function"
+          }
+        ],
+        "visual_edges": [],
+        "highlight_lines": [
+          13,
+          14
+        ],
+        "visual_type": "code",
+        "transition": "focus-zoom"
+      },
+      {
+        "scene_id": "story-1b3bdf4f-repository-007",
+        "chapter_id": "chapter-flow",
+        "order": 8,
+        "kind": "execution_flow",
+        "title": "get_user \u2192 load_user",
+        "objective": "Trace the statically verified calls relationship.",
+        "narration": "Static analysis links app.py:get_user to app.py:load_user through a calls relationship. It is marked verified with 1 supporting evidence record(s).",
+        "source_refs": [
+          "app.py"
+        ],
+        "node_ids": [
+          "sym_df896b12bd1eca2ff7f7",
+          "sym_2149c69d947897d2e490"
+        ],
+        "edge_ids": [
+          "rel_8a164ecd20d07be26010"
+        ],
+        "flow_nodes": [
+          "get_user",
+          "load_user"
+        ],
+        "flow_edges": [
+          "rel_8a164ecd20d07be26010"
+        ],
+        "visual_nodes": [
+          {
+            "id": "sym_df896b12bd1eca2ff7f7",
+            "label": "get_user",
+            "kind": "function"
+          },
+          {
+            "id": "sym_2149c69d947897d2e490",
+            "label": "load_user",
+            "kind": "function"
+          }
+        ],
+        "visual_edges": [
+          {
+            "source": "sym_df896b12bd1eca2ff7f7",
+            "target": "sym_2149c69d947897d2e490",
+            "type": "calls"
+          }
+        ],
+        "visual_type": "flow",
+        "transition": "draw-connection",
+        "highlight_lines": []
+      },
+      {
+        "scene_id": "story-1b3bdf4f-repository-008",
+        "chapter_id": "chapter-flow",
+        "order": 9,
+        "kind": "data_flow",
+        "title": "api \u2192 app",
+        "objective": "Trace the statically verified imports relationship.",
+        "narration": "Static analysis links api.py to app.py through a imports relationship. It is marked verified with 1 supporting evidence record(s).",
+        "source_refs": [
+          "api.py"
+        ],
+        "node_ids": [
+          "sym_990ca78446c7a84e26cf",
+          "sym_baf410a9dfdab75a1097"
+        ],
+        "edge_ids": [
+          "rel_b8259196ffb9bdf532aa"
+        ],
+        "flow_nodes": [
+          "api",
+          "app"
+        ],
+        "flow_edges": [
+          "rel_b8259196ffb9bdf532aa"
+        ],
+        "visual_nodes": [
+          {
+            "id": "sym_990ca78446c7a84e26cf",
+            "label": "api",
+            "kind": "module"
+          },
+          {
+            "id": "sym_baf410a9dfdab75a1097",
+            "label": "app",
+            "kind": "module"
+          }
+        ],
+        "visual_edges": [
+          {
+            "source": "sym_990ca78446c7a84e26cf",
+            "target": "sym_baf410a9dfdab75a1097",
+            "type": "imports"
+          }
+        ],
+        "visual_type": "flow",
+        "transition": "draw-connection",
+        "highlight_lines": []
+      },
+      {
+        "scene_id": "story-1b3bdf4f-repository-009",
+        "chapter_id": "chapter-flow",
+        "order": 10,
+        "kind": "execution_flow",
+        "title": "load_user \u2192 User",
+        "objective": "Trace the statically verified calls relationship.",
+        "narration": "Static analysis links app.py:load_user to app.py:User through a calls relationship. It is marked verified with 1 supporting evidence record(s).",
+        "source_refs": [
+          "app.py"
+        ],
+        "node_ids": [
+          "sym_2149c69d947897d2e490",
+          "sym_e4825c8da4acd532d9cc"
+        ],
+        "edge_ids": [
+          "rel_1efe25123f7cc8753097"
+        ],
+        "flow_nodes": [
+          "load_user",
+          "User"
+        ],
+        "flow_edges": [
+          "rel_1efe25123f7cc8753097"
+        ],
+        "visual_nodes": [
+          {
+            "id": "sym_2149c69d947897d2e490",
+            "label": "load_user",
+            "kind": "function"
+          },
+          {
+            "id": "sym_e4825c8da4acd532d9cc",
+            "label": "User",
+            "kind": "class"
+          }
+        ],
+        "visual_edges": [
+          {
+            "source": "sym_2149c69d947897d2e490",
+            "target": "sym_e4825c8da4acd532d9cc",
+            "type": "calls"
+          }
+        ],
+        "visual_type": "flow",
+        "transition": "draw-connection",
+        "highlight_lines": []
+      },
+      {
+        "scene_id": "story-1b3bdf4f-repository-010",
+        "chapter_id": "chapter-recap",
+        "order": 11,
+        "kind": "recap",
+        "title": "What the evidence establishes",
+        "objective": "Separate verified structure from runtime uncertainty.",
+        "narration": "The final summary distinguishes parser-verified declarations and relationships from behavior that would require runtime observation. Use the cited source locations to continue the investigation.",
+        "source_refs": [
+          "README.md",
+          "api.py",
+          "app.py"
+        ],
+        "node_ids": [
+          "sym_990ca78446c7a84e26cf",
+          "sym_a22b8ff31c2aeaa883af",
+          "sym_baf410a9dfdab75a1097",
+          "sym_e4825c8da4acd532d9cc",
+          "sym_2149c69d947897d2e490",
+          "sym_df896b12bd1eca2ff7f7"
+        ],
+        "edge_ids": [
+          "rel_8a164ecd20d07be26010",
+          "rel_b8259196ffb9bdf532aa",
+          "rel_1efe25123f7cc8753097"
+        ],
+        "visual_nodes": [
+          {
+            "id": "sym_990ca78446c7a84e26cf",
+            "label": "api",
+            "kind": "module"
+          },
+          {
+            "id": "sym_a22b8ff31c2aeaa883af",
+            "label": "user_route",
+            "kind": "function"
+          },
+          {
+            "id": "sym_baf410a9dfdab75a1097",
+            "label": "app",
+            "kind": "module"
+          },
+          {
+            "id": "sym_e4825c8da4acd532d9cc",
+            "label": "User",
+            "kind": "class"
+          },
+          {
+            "id": "sym_2149c69d947897d2e490",
+            "label": "load_user",
+            "kind": "function"
+          },
+          {
+            "id": "sym_df896b12bd1eca2ff7f7",
+            "label": "get_user",
+            "kind": "function"
+          }
+        ],
+        "visual_edges": [
+          {
+            "source": "sym_df896b12bd1eca2ff7f7",
+            "target": "sym_2149c69d947897d2e490",
+            "type": "calls"
+          },
+          {
+            "source": "sym_990ca78446c7a84e26cf",
+            "target": "sym_baf410a9dfdab75a1097",
+            "type": "imports"
+          },
+          {
+            "source": "sym_2149c69d947897d2e490",
+            "target": "sym_e4825c8da4acd532d9cc",
+            "type": "calls"
+          }
+        ],
+        "visual_type": "summary",
+        "transition": "fade-out",
+        "highlight_lines": []
+      }
+    ],
+    "estimated_duration_ms": 116086,
+    "generation_provider": "deterministic-evidence-storyboard"
+  },
+  "actual_duration_ms": 116400,
+  "video_status": "playable",
+  "video_path": "/tmp/repoflow-animation-test2/media/explanation_5eb8ea074d2ad231ab3d/lesson.mp4"
+}

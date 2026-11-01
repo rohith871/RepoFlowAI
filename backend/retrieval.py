@@ -71,7 +71,39 @@ def build_deterministic_explanation(snapshot: PkmSnapshot, query: str, result: R
         return {"answer": "The analysed repository does not contain enough matching evidence to answer this question.", "claims": [], "assumptions": [], "unresolved_questions": result.unresolved_questions}
     evidence_by_id = {item.evidence_id: item for item in snapshot.evidence}
     claims: list[dict[str, object]] = []
-    for item in result.items[:5]:
+    explanations: list[str] = []
+
+    for item in result.items[:6]:
         excerpts = [evidence_by_id[eid].excerpt for eid in item.evidence_ids if eid in evidence_by_id and evidence_by_id[eid].excerpt]
-        claims.append({"text": item.text, "classification": "verified_fact" if item.kind != "relationship" else "static_relationship", "evidence_ids": item.evidence_ids, "excerpts": excerpts[:2]})
-    return {"answer": f"Evidence-ranked findings for: {query}", "claims": claims, "assumptions": [], "unresolved_questions": result.unresolved_questions}
+        fact_item = next((f for f in snapshot.facts if f.fact_id == item.item_id), None)
+        if fact_item and fact_item.fact_type == "component_understanding":
+            attrs = fact_item.attributes
+            name = attrs.get("name")
+            role = str(attrs.get("execution_role", "")).replace("_", " ")
+            resp = attrs.get("responsibility", "")
+            inputs = ", ".join(f"{inp.get('name')}: {inp.get('type')}" for inp in attrs.get("inputs", [])) or "none"
+            outputs = attrs.get("outputs", [{}])[0].get("type", "None") if attrs.get("outputs") else "None"
+            claim_text = f"{name} acts as {role}: {resp} Accepts: {inputs}. Returns: {outputs}."
+            claims.append({"text": claim_text, "classification": "verified_component_understanding", "evidence_ids": item.evidence_ids, "excerpts": excerpts[:2]})
+            explanations.append(claim_text)
+        elif fact_item and fact_item.fact_type == "execution_path":
+            attrs = fact_item.attributes
+            name = attrs.get("name")
+            steps_desc = " -> ".join(str(s.get("description", "")).split(".")[0] for s in attrs.get("steps", [])[:4])
+            claim_text = f"Execution path {name}: {steps_desc}."
+            claims.append({"text": claim_text, "classification": "verified_execution_flow", "evidence_ids": item.evidence_ids, "excerpts": excerpts[:2]})
+            explanations.append(claim_text)
+        elif fact_item and fact_item.fact_type == "knowledge_gap":
+            attrs = fact_item.attributes
+            claim_text = f"Known limitation for {attrs.get('subject_name')}: {attrs.get('limitation_note')}."
+            claims.append({"text": claim_text, "classification": "disclosed_knowledge_gap", "evidence_ids": item.evidence_ids, "excerpts": []})
+        else:
+            claims.append({"text": item.text, "classification": "verified_fact" if item.kind != "relationship" else "static_relationship", "evidence_ids": item.evidence_ids, "excerpts": excerpts[:2]})
+
+    answer_text = " ".join(explanations) if explanations else f"Evidence-ranked findings for: {query}"
+    return {
+        "answer": answer_text,
+        "claims": claims,
+        "assumptions": ["Based on statically verified repository revision."],
+        "unresolved_questions": result.unresolved_questions,
+    }

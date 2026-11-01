@@ -1,0 +1,449 @@
+{
+  "lesson_id": "lesson_6a2e3778eb7fd2c9b372",
+  "status": "preview_ready",
+  "frames": [
+    "C:\\Users\\KOYA ROHITH\\RepoFlowAI\\output\\e2e_video_test\\scene-000.svg",
+    "C:\\Users\\KOYA ROHITH\\RepoFlowAI\\output\\e2e_video_test\\scene-001.svg",
+    "C:\\Users\\KOYA ROHITH\\RepoFlowAI\\output\\e2e_video_test\\scene-002.svg",
+    "C:\\Users\\KOYA ROHITH\\RepoFlowAI\\output\\e2e_video_test\\scene-003.svg",
+    "C:\\Users\\KOYA ROHITH\\RepoFlowAI\\output\\e2e_video_test\\scene-004.svg",
+    "C:\\Users\\KOYA ROHITH\\RepoFlowAI\\output\\e2e_video_test\\scene-005.svg",
+    "C:\\Users\\KOYA ROHITH\\RepoFlowAI\\output\\e2e_video_test\\scene-006.svg"
+  ],
+  "narration": {
+    "status": "fallback_text_only",
+    "voice": "alba",
+    "segments": [
+      {
+        "scene_id": "scene_9fec6a1e97ed283d0bf0",
+        "text": "In this guided technical lesson, we will explore: Explain API request handling and user data lineage. The analysis is strictly grounded in the verified static revision of sample_project.",
+        "path": null,
+        "duration_ms": 1500,
+        "status": "unavailable"
+      },
+      {
+        "scene_id": "scene_308475ff3d68bddeb05e",
+        "text": "To keep state predictable and prevent loose dictionaries from circulating across modules, the application defines the User data model. Notice on screen how it establishes a strongly-typed in-memory contract: downstream functions can confidently rely on its attributes without writing defensive runtime assertions everywhere. Whenever you extend this model, maintain this structure so dependent services remain intact.",
+        "path": null,
+        "duration_ms": 1500,
+        "status": "unavailable"
+      },
+      {
+        "scene_id": "scene_053cf442187fada452a5",
+        "text": "Next, load_user coordinates domain processing by orchestrating calls to sym_e59d8678a1341cfa2534. Rather than performing raw data manipulation itself, it acts as an intermediate business coordinator, delegating specific retrieval tasks while guaranteeing that downstream components receive verified arguments.",
+        "path": null,
+        "duration_ms": 1500,
+        "status": "unavailable"
+      },
+      {
+        "scene_id": "scene_4a7fe1e695da536a1763",
+        "text": "Next, get_user coordinates domain processing by orchestrating calls to sym_2403baf2102d3932ebcd. Rather than performing raw data manipulation itself, it acts as an intermediate business coordinator, delegating specific retrieval tasks while guaranteeing that downstream components receive verified arguments.",
+        "path": null,
+        "duration_ms": 1500,
+        "status": "unavailable"
+      },
+      {
+        "scene_id": "scene_48f3cd5328f5f190dabe",
+        "text": "Let's examine how user_route functions as the external gateway for this workflow. Rather than coupling network transport with internal database operations, its primary job is to accept name, validate the incoming payload, and immediately hand off control to domain services. By keeping this gateway lean, changes to HTTP endpoints or web protocols won't destabilize your core business logic.",
+        "path": null,
+        "duration_ms": 1500,
+        "status": "unavailable"
+      },
+      {
+        "scene_id": "scene_c625033718c2e3fbbac7",
+        "text": "Now, let's trace the complete lifecycle of a request as it travels through the application. Execution begins at user_route. Notice how data transitions across each architectural boundary: then request reaches user_route in api.py with name: str., then user_route invokes get_user in app.py., then get_user invokes load_user in app.py., then load_user instantiates class user.. Finally, the terminal result\u2014dict[str, str]\u2014is returned safely to the caller, ensuring a predictable execution lifecycle.",
+        "path": null,
+        "duration_ms": 1500,
+        "status": "unavailable"
+      },
+      {
+        "scene_id": "scene_e2661c1946a8914d40b2",
+        "text": "In summary, verified static relationships establish the call sequence and data transformations. Runtime database connectivity and network latency remain unverified without live telemetry.",
+        "path": null,
+        "duration_ms": 1500,
+        "status": "unavailable"
+      }
+    ]
+  },
+  "captions": [
+    {
+      "scene_id": "scene_9fec6a1e97ed283d0bf0",
+      "text": "In this guided technical lesson, we will explore: Explain API request handling and user data lineage. The analysis is strictly grounded in the verified static revision of sample_project.",
+      "start_ms": 0,
+      "end_ms": 1500
+    },
+    {
+      "scene_id": "scene_308475ff3d68bddeb05e",
+      "text": "To keep state predictable and prevent loose dictionaries from circulating across modules, the application defines the User data model. Notice on screen how it establishes a strongly-typed in-memory contract: downstream functions can confidently rely on its attributes without writing defensive runtime assertions everywhere. Whenever you extend this model, maintain this structure so dependent services remain intact.",
+      "start_ms": 1500,
+      "end_ms": 3000
+    },
+    {
+      "scene_id": "scene_053cf442187fada452a5",
+      "text": "Next, load_user coordinates domain processing by orchestrating calls to sym_e59d8678a1341cfa2534. Rather than performing raw data manipulation itself, it acts as an intermediate business coordinator, delegating specific retrieval tasks while guaranteeing that downstream components receive verified arguments.",
+      "start_ms": 3000,
+      "end_ms": 4500
+    },
+    {
+      "scene_id": "scene_4a7fe1e695da536a1763",
+      "text": "Next, get_user coordinates domain processing by orchestrating calls to sym_2403baf2102d3932ebcd. Rather than performing raw data manipulation itself, it acts as an intermediate business coordinator, delegating specific retrieval tasks while guaranteeing that downstream components receive verified arguments.",
+      "start_ms": 4500,
+      "end_ms": 6000
+    },
+    {
+      "scene_id": "scene_48f3cd5328f5f190dabe",
+      "text": "Let's examine how user_route functions as the external gateway for this workflow. Rather than coupling network transport with internal database operations, its primary job is to accept name, validate the incoming payload, and immediately hand off control to domain services. By keeping this gateway lean, changes to HTTP endpoints or web protocols won't destabilize your core business logic.",
+      "start_ms": 6000,
+      "end_ms": 7500
+    },
+    {
+      "scene_id": "scene_c625033718c2e3fbbac7",
+      "text": "Now, let's trace the complete lifecycle of a request as it travels through the application. Execution begins at user_route. Notice how data transitions across each architectural boundary: then request reaches user_route in api.py with name: str., then user_route invokes get_user in app.py., then get_user invokes load_user in app.py., then load_user instantiates class user.. Finally, the terminal result\u2014dict[str, str]\u2014is returned safely to the caller, ensuring a predictable execution lifecycle.",
+      "start_ms": 7500,
+      "end_ms": 9000
+    },
+    {
+      "scene_id": "scene_e2661c1946a8914d40b2",
+      "text": "In summary, verified static relationships establish the call sequence and data transformations. Runtime database connectivity and network latency remain unverified without live telemetry.",
+      "start_ms": 9000,
+      "end_ms": 10500
+    }
+  ],
+  "chapters": [
+    {
+      "title": "Learning Objective & System Scope",
+      "start_ms": 0,
+      "end_ms": 1500,
+      "scene_id": "scene_9fec6a1e97ed283d0bf0"
+    },
+    {
+      "title": "Domain Model: User",
+      "start_ms": 1500,
+      "end_ms": 3000,
+      "scene_id": "scene_308475ff3d68bddeb05e"
+    },
+    {
+      "title": "Service Delegation: load_user",
+      "start_ms": 3000,
+      "end_ms": 4500,
+      "scene_id": "scene_053cf442187fada452a5"
+    },
+    {
+      "title": "Service Delegation: get_user",
+      "start_ms": 4500,
+      "end_ms": 6000,
+      "scene_id": "scene_4a7fe1e695da536a1763"
+    },
+    {
+      "title": "API Interface: user_route",
+      "start_ms": 6000,
+      "end_ms": 7500,
+      "scene_id": "scene_48f3cd5328f5f190dabe"
+    },
+    {
+      "title": "Complete Execution Flow",
+      "start_ms": 7500,
+      "end_ms": 9000,
+      "scene_id": "scene_c625033718c2e3fbbac7"
+    },
+    {
+      "title": "Verified Architecture & Limitations",
+      "start_ms": 9000,
+      "end_ms": 10500,
+      "scene_id": "scene_e2661c1946a8914d40b2"
+    }
+  ],
+  "render": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "codec": "h264",
+    "audio_codec": "aac"
+  },
+  "scope": "learning_lesson",
+  "generation_provider": "unknown",
+  "estimated_duration_ms": null,
+  "storyboard": null,
+  "transcript_validation": {
+    "is_valid": false,
+    "quality_score": 80.0,
+    "issues": [
+      {
+        "severity": "error",
+        "segment_id": "segment_8413e05a1bfa27cbaa05",
+        "issue_type": "duplicate_narration",
+        "message": "Narration heavily duplicates segment 3 (94% token overlap).",
+        "suggestion": "Ensure each scene conveys distinct pedagogical progress."
+      },
+      {
+        "severity": "info",
+        "segment_id": "segment_c91faa3c8a9ca9c64aa3",
+        "issue_type": "abrupt_transition",
+        "message": "Context switched between files without explicit architectural transition cue.",
+        "suggestion": "Clarify how execution or data moved between components."
+      }
+    ],
+    "cleaned_segments": [
+      {
+        "id": "segment_d9c8fbe47938d0422f80",
+        "scene_id": "scene_9fec6a1e97ed283d0bf0",
+        "lesson_section": "chapter_024407b85bfcc636e0bd",
+        "spoken_text": "In this guided technical lesson, we will explore: Explain API request handling and user data lineage. The analysis is strictly grounded in the verified static revision of sample_project.",
+        "educational_purpose": "Learning Objective & System Scope",
+        "source_files": [
+          "README.md",
+          "api.py"
+        ],
+        "symbols": [],
+        "line_refs": [],
+        "diagram_nodes": [],
+        "terms": [],
+        "pronunciation_hints": {},
+        "estimated_duration": 12.02,
+        "segment_type": "summary"
+      },
+      {
+        "id": "segment_358f216f02d5e5f0b7d4",
+        "scene_id": "scene_308475ff3d68bddeb05e",
+        "lesson_section": "chapter_024407b85bfcc636e0bd",
+        "spoken_text": "To keep state predictable and prevent loose dictionaries from circulating across modules, the application defines the User data model. Notice on screen how it establishes a strongly-typed in-memory contract: downstream functions can confidently rely on its attributes without writing defensive runtime assertions everywhere. Whenever you extend this model, maintain this structure so dependent services remain intact.",
+        "educational_purpose": "Domain Model: User",
+        "source_files": [
+          "app.py"
+        ],
+        "symbols": [],
+        "line_refs": [
+          "app.py:5-6"
+        ],
+        "diagram_nodes": [],
+        "terms": [],
+        "pronunciation_hints": {},
+        "estimated_duration": 24.03,
+        "segment_type": "code_walkthrough"
+      },
+      {
+        "id": "segment_4389bc21bd1083313b6a",
+        "scene_id": "scene_053cf442187fada452a5",
+        "lesson_section": "chapter_024407b85bfcc636e0bd",
+        "spoken_text": "Next, load_user coordinates domain processing by orchestrating calls to sym_e59d8678a1341cfa2534. Rather than performing raw data manipulation itself, it acts as an intermediate business coordinator, delegating specific retrieval tasks while guaranteeing that downstream components receive verified arguments.",
+        "educational_purpose": "Service Delegation: load_user",
+        "source_files": [
+          "app.py"
+        ],
+        "symbols": [],
+        "line_refs": [
+          "app.py:9-10"
+        ],
+        "diagram_nodes": [],
+        "terms": [],
+        "pronunciation_hints": {},
+        "estimated_duration": 15.45,
+        "segment_type": "code_walkthrough"
+      },
+      {
+        "id": "segment_8413e05a1bfa27cbaa05",
+        "scene_id": "scene_4a7fe1e695da536a1763",
+        "lesson_section": "chapter_024407b85bfcc636e0bd",
+        "spoken_text": "Next, get_user coordinates domain processing by orchestrating calls to sym_2403baf2102d3932ebcd. Rather than performing raw data manipulation itself, it acts as an intermediate business coordinator, delegating specific retrieval tasks while guaranteeing that downstream components receive verified arguments.",
+        "educational_purpose": "Service Delegation: get_user",
+        "source_files": [
+          "app.py"
+        ],
+        "symbols": [],
+        "line_refs": [
+          "app.py:13-14"
+        ],
+        "diagram_nodes": [],
+        "terms": [],
+        "pronunciation_hints": {},
+        "estimated_duration": 15.45,
+        "segment_type": "code_walkthrough"
+      },
+      {
+        "id": "segment_c91faa3c8a9ca9c64aa3",
+        "scene_id": "scene_48f3cd5328f5f190dabe",
+        "lesson_section": "chapter_024407b85bfcc636e0bd",
+        "spoken_text": "Let's examine how user_route functions as the external gateway for this workflow. Rather than coupling network transport with internal database operations, its primary job is to accept name, validate the incoming payload, and immediately hand off control to domain services. By keeping this gateway lean, changes to HTTP endpoints or web protocols won't destabilize your core business logic.",
+        "educational_purpose": "API Interface: user_route",
+        "source_files": [
+          "api.py"
+        ],
+        "symbols": [],
+        "line_refs": [
+          "api.py:4-6"
+        ],
+        "diagram_nodes": [],
+        "terms": [],
+        "pronunciation_hints": {},
+        "estimated_duration": 24.89,
+        "segment_type": "code_walkthrough"
+      },
+      {
+        "id": "segment_2424ea190d628c96655d",
+        "scene_id": "scene_c625033718c2e3fbbac7",
+        "lesson_section": "chapter_90c0b3cfc4aaa0e55d3d",
+        "spoken_text": "Now, let's trace the complete lifecycle of a request as it travels through the application. Execution begins at user_route. Notice how data transitions across each architectural boundary: then request reaches user_route in api.py with name: str., then user_route invokes get_user in app.py., then get_user invokes load_user in app.py., then load_user instantiates class user.. Finally, the terminal result\u2014dict[str, str]\u2014is returned safely to the caller, ensuring a predictable execution lifecycle.",
+        "educational_purpose": "Complete Execution Flow",
+        "source_files": [
+          "api.py",
+          "app.py"
+        ],
+        "symbols": [],
+        "line_refs": [],
+        "diagram_nodes": [],
+        "terms": [],
+        "pronunciation_hints": {},
+        "estimated_duration": 29.18,
+        "segment_type": "data_flow"
+      },
+      {
+        "id": "segment_82799dc7f6b64f9ab256",
+        "scene_id": "scene_e2661c1946a8914d40b2",
+        "lesson_section": "chapter_e2661c1946a8914d40b2",
+        "spoken_text": "In summary, verified static relationships establish the call sequence and data transformations. Runtime database connectivity and network latency remain unverified without live telemetry.",
+        "educational_purpose": "Verified Architecture & Limitations",
+        "source_files": [],
+        "symbols": [],
+        "line_refs": [],
+        "diagram_nodes": [],
+        "terms": [],
+        "pronunciation_hints": {},
+        "estimated_duration": 9.87,
+        "segment_type": "summary"
+      }
+    ]
+  },
+  "transcript_segments": [
+    {
+      "id": "segment_d9c8fbe47938d0422f80",
+      "scene_id": "scene_9fec6a1e97ed283d0bf0",
+      "lesson_section": "chapter_024407b85bfcc636e0bd",
+      "spoken_text": "In this guided technical lesson, we will explore: Explain API request handling and user data lineage. The analysis is strictly grounded in the verified static revision of sample_project.",
+      "educational_purpose": "Learning Objective & System Scope",
+      "source_files": [
+        "README.md",
+        "api.py"
+      ],
+      "symbols": [],
+      "line_refs": [],
+      "diagram_nodes": [],
+      "terms": [],
+      "pronunciation_hints": {},
+      "estimated_duration": 12.02,
+      "segment_type": "summary"
+    },
+    {
+      "id": "segment_358f216f02d5e5f0b7d4",
+      "scene_id": "scene_308475ff3d68bddeb05e",
+      "lesson_section": "chapter_024407b85bfcc636e0bd",
+      "spoken_text": "To keep state predictable and prevent loose dictionaries from circulating across modules, the application defines the User data model. Notice on screen how it establishes a strongly-typed in-memory contract: downstream functions can confidently rely on its attributes without writing defensive runtime assertions everywhere. Whenever you extend this model, maintain this structure so dependent services remain intact.",
+      "educational_purpose": "Domain Model: User",
+      "source_files": [
+        "app.py"
+      ],
+      "symbols": [],
+      "line_refs": [
+        "app.py:5-6"
+      ],
+      "diagram_nodes": [],
+      "terms": [],
+      "pronunciation_hints": {},
+      "estimated_duration": 24.03,
+      "segment_type": "code_walkthrough"
+    },
+    {
+      "id": "segment_4389bc21bd1083313b6a",
+      "scene_id": "scene_053cf442187fada452a5",
+      "lesson_section": "chapter_024407b85bfcc636e0bd",
+      "spoken_text": "Next, load_user coordinates domain processing by orchestrating calls to sym_e59d8678a1341cfa2534. Rather than performing raw data manipulation itself, it acts as an intermediate business coordinator, delegating specific retrieval tasks while guaranteeing that downstream components receive verified arguments.",
+      "educational_purpose": "Service Delegation: load_user",
+      "source_files": [
+        "app.py"
+      ],
+      "symbols": [],
+      "line_refs": [
+        "app.py:9-10"
+      ],
+      "diagram_nodes": [],
+      "terms": [],
+      "pronunciation_hints": {},
+      "estimated_duration": 15.45,
+      "segment_type": "code_walkthrough"
+    },
+    {
+      "id": "segment_8413e05a1bfa27cbaa05",
+      "scene_id": "scene_4a7fe1e695da536a1763",
+      "lesson_section": "chapter_024407b85bfcc636e0bd",
+      "spoken_text": "Next, get_user coordinates domain processing by orchestrating calls to sym_2403baf2102d3932ebcd. Rather than performing raw data manipulation itself, it acts as an intermediate business coordinator, delegating specific retrieval tasks while guaranteeing that downstream components receive verified arguments.",
+      "educational_purpose": "Service Delegation: get_user",
+      "source_files": [
+        "app.py"
+      ],
+      "symbols": [],
+      "line_refs": [
+        "app.py:13-14"
+      ],
+      "diagram_nodes": [],
+      "terms": [],
+      "pronunciation_hints": {},
+      "estimated_duration": 15.45,
+      "segment_type": "code_walkthrough"
+    },
+    {
+      "id": "segment_c91faa3c8a9ca9c64aa3",
+      "scene_id": "scene_48f3cd5328f5f190dabe",
+      "lesson_section": "chapter_024407b85bfcc636e0bd",
+      "spoken_text": "Let's examine how user_route functions as the external gateway for this workflow. Rather than coupling network transport with internal database operations, its primary job is to accept name, validate the incoming payload, and immediately hand off control to domain services. By keeping this gateway lean, changes to HTTP endpoints or web protocols won't destabilize your core business logic.",
+      "educational_purpose": "API Interface: user_route",
+      "source_files": [
+        "api.py"
+      ],
+      "symbols": [],
+      "line_refs": [
+        "api.py:4-6"
+      ],
+      "diagram_nodes": [],
+      "terms": [],
+      "pronunciation_hints": {},
+      "estimated_duration": 24.89,
+      "segment_type": "code_walkthrough"
+    },
+    {
+      "id": "segment_2424ea190d628c96655d",
+      "scene_id": "scene_c625033718c2e3fbbac7",
+      "lesson_section": "chapter_90c0b3cfc4aaa0e55d3d",
+      "spoken_text": "Now, let's trace the complete lifecycle of a request as it travels through the application. Execution begins at user_route. Notice how data transitions across each architectural boundary: then request reaches user_route in api.py with name: str., then user_route invokes get_user in app.py., then get_user invokes load_user in app.py., then load_user instantiates class user.. Finally, the terminal result\u2014dict[str, str]\u2014is returned safely to the caller, ensuring a predictable execution lifecycle.",
+      "educational_purpose": "Complete Execution Flow",
+      "source_files": [
+        "api.py",
+        "app.py"
+      ],
+      "symbols": [],
+      "line_refs": [],
+      "diagram_nodes": [],
+      "terms": [],
+      "pronunciation_hints": {},
+      "estimated_duration": 29.18,
+      "segment_type": "data_flow"
+    },
+    {
+      "id": "segment_82799dc7f6b64f9ab256",
+      "scene_id": "scene_e2661c1946a8914d40b2",
+      "lesson_section": "chapter_e2661c1946a8914d40b2",
+      "spoken_text": "In summary, verified static relationships establish the call sequence and data transformations. Runtime database connectivity and network latency remain unverified without live telemetry.",
+      "educational_purpose": "Verified Architecture & Limitations",
+      "source_files": [],
+      "symbols": [],
+      "line_refs": [],
+      "diagram_nodes": [],
+      "terms": [],
+      "pronunciation_hints": {},
+      "estimated_duration": 9.87,
+      "segment_type": "summary"
+    }
+  ],
+  "actual_duration_ms": 10500,
+  "video_status": "playable",
+  "video_path": "C:\\Users\\KOYA ROHITH\\RepoFlowAI\\output\\e2e_video_test\\lesson.mp4",
+  "renderer": "remotion"
+}

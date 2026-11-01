@@ -16,12 +16,8 @@ class PocketNarrator:
         self.voice = voice
 
     def available(self) -> bool:
-        try:
-            import pocket_tts  # noqa: F401
-            import scipy  # noqa: F401
-            return True
-        except ImportError:
-            return False
+        import importlib.util
+        return importlib.util.find_spec("pocket_tts") is not None and importlib.util.find_spec("scipy") is not None
 
     def _load(self) -> tuple[Any, Any]:
         if self._model is not None and self._voice is not None:

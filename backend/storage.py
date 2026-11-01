@@ -104,29 +104,29 @@ class PkmStore:
                  repo.created_at.isoformat(), None, repo.isolation_key),
             )
             db.execute(
-                "INSERT INTO revisions VALUES (?, ?, ?, ?, ?, ?, ?)",
+                "INSERT OR REPLACE INTO revisions VALUES (?, ?, ?, ?, ?, ?, ?)",
                 (snapshot.revision.pkm_revision_id, snapshot.revision.repository_id,
                  snapshot.revision.parent_revision_id, snapshot.revision.source_snapshot_id,
                  snapshot.revision.analysis_run_id, snapshot.revision.status.value,
                  snapshot.revision.model_dump_json()),
             )
             for file_item in snapshot.files:
-                db.execute("INSERT INTO files VALUES (?, ?, ?, ?, ?, ?, ?)",
+                db.execute("INSERT OR REPLACE INTO files VALUES (?, ?, ?, ?, ?, ?, ?)",
                            (file_item.file_id, file_item.repository_id, file_item.pkm_revision_id, file_item.path,
                             file_item.content_hash, file_item.language, file_item.model_dump_json()))
             for symbol_item in snapshot.symbols:
-                db.execute("INSERT INTO symbols VALUES (?, ?, ?, ?, ?)",
+                db.execute("INSERT OR REPLACE INTO symbols VALUES (?, ?, ?, ?, ?)",
                            (symbol_item.symbol_id, symbol_item.repository_id, symbol_item.pkm_revision_id, symbol_item.file_id,
                             symbol_item.model_dump_json()))
             for fact_item in snapshot.facts:
-                db.execute("INSERT INTO facts VALUES (?, ?, ?, ?)",
+                db.execute("INSERT OR REPLACE INTO facts VALUES (?, ?, ?, ?)",
                            (fact_item.fact_id, fact_item.repository_id, fact_item.pkm_revision_id, fact_item.model_dump_json()))
             for evidence_item in snapshot.evidence:
-                db.execute("INSERT INTO evidence VALUES (?, ?, ?, ?, ?)",
+                db.execute("INSERT OR REPLACE INTO evidence VALUES (?, ?, ?, ?, ?)",
                            (evidence_item.evidence_id, evidence_item.repository_id, evidence_item.pkm_revision_id,
                             evidence_item.source_path, evidence_item.model_dump_json()))
             for relationship_item in snapshot.relationships:
-                db.execute("INSERT INTO relationships VALUES (?, ?, ?, ?, ?, ?)",
+                db.execute("INSERT OR REPLACE INTO relationships VALUES (?, ?, ?, ?, ?, ?)",
                            (relationship_item.relationship_id, relationship_item.repository_id, relationship_item.pkm_revision_id,
                             relationship_item.source_id, relationship_item.target_id, relationship_item.model_dump_json()))
             db.execute("UPDATE repositories SET latest_published_revision_id=? WHERE repository_id=?",

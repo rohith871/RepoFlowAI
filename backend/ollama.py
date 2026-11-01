@@ -25,6 +25,20 @@ class OllamaProvider:
     def configured_model(self) -> str:
         return self.model
 
+    def call_json(self, prompt: str, validator: Any) -> dict[str, Any] | None:
+        try:
+            response = httpx.post(
+                f"{self.base_url}/api/chat",
+                json={"model": self.model, "stream": False, "format": "json", "messages": [{"role": "user", "content": prompt}]},
+                timeout=max(self.timeout_seconds, 45),
+            )
+            response.raise_for_status()
+            content = response.json().get("message", {}).get("content")
+            result = json.loads(content) if isinstance(content, str) else None
+            return result if isinstance(result, dict) and validator(result) else None
+        except (httpx.HTTPError, ValueError, TypeError, KeyError):
+            return None
+
     def explain(self, question: str, context: list[dict[str, Any]]) -> dict[str, Any] | None:
         evidence_ids = {evidence_id for item in context for evidence_id in item.get("evidence_ids", [])}
         prompt = """You are RepoFlow AI's source-grounded repository tutor.

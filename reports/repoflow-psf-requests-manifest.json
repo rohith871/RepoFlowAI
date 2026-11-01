@@ -1,0 +1,1453 @@
+{
+  "lesson_id": "explanation_e04f46a3f72593451c96",
+  "status": "preview_ready",
+  "frames": [
+    "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/scene-000.svg",
+    "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/scene-001.svg",
+    "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/scene-002.svg",
+    "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/scene-003.svg",
+    "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/scene-004.svg",
+    "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/scene-005.svg",
+    "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/scene-006.svg",
+    "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/scene-007.svg",
+    "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/scene-008.svg",
+    "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/scene-009.svg",
+    "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/scene-010.svg",
+    "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/scene-011.svg",
+    "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/scene-012.svg",
+    "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/scene-013.svg",
+    "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/scene-014.svg",
+    "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/scene-015.svg",
+    "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/scene-016.svg",
+    "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/scene-017.svg",
+    "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/scene-018.svg"
+  ],
+  "narration": {
+    "status": "generated",
+    "voice": "alba",
+    "segments": [
+      {
+        "scene_id": "story-d402b2da-repository-000",
+        "text": "This explanation covers 127 analyzed files, 844 extracted symbols, and 96 evidence-backed relationships. The visuals show only structures recovered from the pinned static-analysis revision.",
+        "path": "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/audio/scene-000.wav",
+        "duration_ms": 12160,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-001",
+        "text": "The module flask_theme_support is declared at docs/_themes/flask_theme_support.py:1-86. Its qualified name is docs/_themes/flask_theme_support.py. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "path": "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/audio/scene-001.wav",
+        "duration_ms": 16240,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-002",
+        "text": "The class FlaskyStyle is declared at docs/_themes/flask_theme_support.py:7-86. Its qualified name is docs/_themes/flask_theme_support.py:FlaskyStyle. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "path": "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/audio/scene-002.wav",
+        "duration_ms": 18800,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-003",
+        "text": "The module conf is declared at docs/conf.py:1-385. Its qualified name is docs/conf.py. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "path": "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/audio/scene-003.wav",
+        "duration_ms": 12640,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-004",
+        "text": "The module setup is declared at setup.py:1-9. Its qualified name is setup.py. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "path": "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/audio/scene-004.wav",
+        "duration_ms": 11120,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-005",
+        "text": "The module __init__ is declared at src/requests/__init__.py:1-219. Its qualified name is src/requests/__init__.py. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "path": "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/audio/scene-005.wav",
+        "duration_ms": 15200,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-006",
+        "text": "The function check_compatibility is declared at src/requests/__init__.py:60-96. Its qualified name is src/requests/__init__.py:check_compatibility. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "path": "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/audio/scene-006.wav",
+        "duration_ms": 16160,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-007",
+        "text": "The function _check_cryptography is declared at src/requests/__init__.py:99-108. Its qualified name is src/requests/__init__.py:_check_cryptography. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "path": "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/audio/scene-007.wav",
+        "duration_ms": 15440,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-008",
+        "text": "The module __version__ is declared at src/requests/__version__.py:1-14. Its qualified name is src/requests/__version__.py. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "path": "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/audio/scene-008.wav",
+        "duration_ms": 14480,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-009",
+        "text": "The function merge_setting is declared at src/requests/sessions.py:76-105. Its qualified name is src/requests/sessions.py:merge_setting. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "path": "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/audio/scene-009.wav",
+        "duration_ms": 14560,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-010",
+        "text": "The function merge_hooks is declared at src/requests/sessions.py:108-124. Its qualified name is src/requests/sessions.py:merge_hooks. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "path": "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/audio/scene-010.wav",
+        "duration_ms": 14400,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-011",
+        "text": "The function prepare_request is declared at src/requests/sessions.py:511-555. Its qualified name is src/requests/sessions.py:prepare_request. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "path": "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/audio/scene-011.wav",
+        "duration_ms": 16160,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-012",
+        "text": "The function merge_environment_settings is declared at src/requests/sessions.py:831-868. Its qualified name is src/requests/sessions.py:merge_environment_settings. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "path": "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/audio/scene-012.wav",
+        "duration_ms": 16640,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-013",
+        "text": "Static analysis links src/requests/sessions.py:merge_hooks to src/requests/sessions.py:merge_setting through a calls relationship. It is marked verified with 1 supporting evidence record(s).",
+        "path": "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/audio/scene-013.wav",
+        "duration_ms": 11760,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-014",
+        "text": "Static analysis links src/requests/sessions.py:prepare_request to src/requests/sessions.py:merge_setting through a calls relationship. It is marked verified with 1 supporting evidence record(s).",
+        "path": "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/audio/scene-014.wav",
+        "duration_ms": 12000,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-015",
+        "text": "Static analysis links src/requests/sessions.py:prepare_request to src/requests/sessions.py:merge_setting through a calls relationship. It is marked verified with 1 supporting evidence record(s).",
+        "path": "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/audio/scene-015.wav",
+        "duration_ms": 11600,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-016",
+        "text": "Static analysis links src/requests/sessions.py:prepare_request to src/requests/sessions.py:merge_setting through a calls relationship. It is marked verified with 1 supporting evidence record(s).",
+        "path": "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/audio/scene-016.wav",
+        "duration_ms": 11440,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-017",
+        "text": "Static analysis links src/requests/sessions.py:merge_environment_settings to src/requests/sessions.py:merge_setting through a calls relationship. It is marked verified with 1 supporting evidence record(s).",
+        "path": "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/audio/scene-017.wav",
+        "duration_ms": 11600,
+        "status": "generated"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-018",
+        "text": "The final summary distinguishes parser-verified declarations and relationships from behavior that would require runtime observation. Use the cited source locations to continue the investigation.",
+        "path": "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/audio/scene-018.wav",
+        "duration_ms": 9600,
+        "status": "generated"
+      }
+    ]
+  },
+  "captions": [
+    {
+      "scene_id": "story-d402b2da-repository-000",
+      "text": "This explanation covers 127 analyzed files, 844 extracted symbols, and 96 evidence-backed relationships. The visuals show only structures recovered from the pinned static-analysis revision.",
+      "start_ms": 0,
+      "end_ms": 12160
+    },
+    {
+      "scene_id": "story-d402b2da-repository-001",
+      "text": "The module flask_theme_support is declared at docs/_themes/flask_theme_support.py:1-86. Its qualified name is docs/_themes/flask_theme_support.py. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+      "start_ms": 12160,
+      "end_ms": 28400
+    },
+    {
+      "scene_id": "story-d402b2da-repository-002",
+      "text": "The class FlaskyStyle is declared at docs/_themes/flask_theme_support.py:7-86. Its qualified name is docs/_themes/flask_theme_support.py:FlaskyStyle. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+      "start_ms": 28400,
+      "end_ms": 47200
+    },
+    {
+      "scene_id": "story-d402b2da-repository-003",
+      "text": "The module conf is declared at docs/conf.py:1-385. Its qualified name is docs/conf.py. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+      "start_ms": 47200,
+      "end_ms": 59840
+    },
+    {
+      "scene_id": "story-d402b2da-repository-004",
+      "text": "The module setup is declared at setup.py:1-9. Its qualified name is setup.py. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+      "start_ms": 59840,
+      "end_ms": 70960
+    },
+    {
+      "scene_id": "story-d402b2da-repository-005",
+      "text": "The module __init__ is declared at src/requests/__init__.py:1-219. Its qualified name is src/requests/__init__.py. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+      "start_ms": 70960,
+      "end_ms": 86160
+    },
+    {
+      "scene_id": "story-d402b2da-repository-006",
+      "text": "The function check_compatibility is declared at src/requests/__init__.py:60-96. Its qualified name is src/requests/__init__.py:check_compatibility. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+      "start_ms": 86160,
+      "end_ms": 102320
+    },
+    {
+      "scene_id": "story-d402b2da-repository-007",
+      "text": "The function _check_cryptography is declared at src/requests/__init__.py:99-108. Its qualified name is src/requests/__init__.py:_check_cryptography. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+      "start_ms": 102320,
+      "end_ms": 117760
+    },
+    {
+      "scene_id": "story-d402b2da-repository-008",
+      "text": "The module __version__ is declared at src/requests/__version__.py:1-14. Its qualified name is src/requests/__version__.py. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+      "start_ms": 117760,
+      "end_ms": 132240
+    },
+    {
+      "scene_id": "story-d402b2da-repository-009",
+      "text": "The function merge_setting is declared at src/requests/sessions.py:76-105. Its qualified name is src/requests/sessions.py:merge_setting. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+      "start_ms": 132240,
+      "end_ms": 146800
+    },
+    {
+      "scene_id": "story-d402b2da-repository-010",
+      "text": "The function merge_hooks is declared at src/requests/sessions.py:108-124. Its qualified name is src/requests/sessions.py:merge_hooks. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+      "start_ms": 146800,
+      "end_ms": 161200
+    },
+    {
+      "scene_id": "story-d402b2da-repository-011",
+      "text": "The function prepare_request is declared at src/requests/sessions.py:511-555. Its qualified name is src/requests/sessions.py:prepare_request. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+      "start_ms": 161200,
+      "end_ms": 177360
+    },
+    {
+      "scene_id": "story-d402b2da-repository-012",
+      "text": "The function merge_environment_settings is declared at src/requests/sessions.py:831-868. Its qualified name is src/requests/sessions.py:merge_environment_settings. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+      "start_ms": 177360,
+      "end_ms": 194000
+    },
+    {
+      "scene_id": "story-d402b2da-repository-013",
+      "text": "Static analysis links src/requests/sessions.py:merge_hooks to src/requests/sessions.py:merge_setting through a calls relationship. It is marked verified with 1 supporting evidence record(s).",
+      "start_ms": 194000,
+      "end_ms": 205760
+    },
+    {
+      "scene_id": "story-d402b2da-repository-014",
+      "text": "Static analysis links src/requests/sessions.py:prepare_request to src/requests/sessions.py:merge_setting through a calls relationship. It is marked verified with 1 supporting evidence record(s).",
+      "start_ms": 205760,
+      "end_ms": 217760
+    },
+    {
+      "scene_id": "story-d402b2da-repository-015",
+      "text": "Static analysis links src/requests/sessions.py:prepare_request to src/requests/sessions.py:merge_setting through a calls relationship. It is marked verified with 1 supporting evidence record(s).",
+      "start_ms": 217760,
+      "end_ms": 229360
+    },
+    {
+      "scene_id": "story-d402b2da-repository-016",
+      "text": "Static analysis links src/requests/sessions.py:prepare_request to src/requests/sessions.py:merge_setting through a calls relationship. It is marked verified with 1 supporting evidence record(s).",
+      "start_ms": 229360,
+      "end_ms": 240800
+    },
+    {
+      "scene_id": "story-d402b2da-repository-017",
+      "text": "Static analysis links src/requests/sessions.py:merge_environment_settings to src/requests/sessions.py:merge_setting through a calls relationship. It is marked verified with 1 supporting evidence record(s).",
+      "start_ms": 240800,
+      "end_ms": 252400
+    },
+    {
+      "scene_id": "story-d402b2da-repository-018",
+      "text": "The final summary distinguishes parser-verified declarations and relationships from behavior that would require runtime observation. Use the cited source locations to continue the investigation.",
+      "start_ms": 252400,
+      "end_ms": 262000
+    }
+  ],
+  "chapters": [
+    {
+      "title": "Repository architecture",
+      "start_ms": 0,
+      "end_ms": 12160,
+      "scene_id": "story-d402b2da-repository-000"
+    },
+    {
+      "title": "flask_theme_support",
+      "start_ms": 12160,
+      "end_ms": 28400,
+      "scene_id": "story-d402b2da-repository-001"
+    },
+    {
+      "title": "FlaskyStyle",
+      "start_ms": 28400,
+      "end_ms": 47200,
+      "scene_id": "story-d402b2da-repository-002"
+    },
+    {
+      "title": "conf",
+      "start_ms": 47200,
+      "end_ms": 59840,
+      "scene_id": "story-d402b2da-repository-003"
+    },
+    {
+      "title": "setup",
+      "start_ms": 59840,
+      "end_ms": 70960,
+      "scene_id": "story-d402b2da-repository-004"
+    },
+    {
+      "title": "__init__",
+      "start_ms": 70960,
+      "end_ms": 86160,
+      "scene_id": "story-d402b2da-repository-005"
+    },
+    {
+      "title": "check_compatibility",
+      "start_ms": 86160,
+      "end_ms": 102320,
+      "scene_id": "story-d402b2da-repository-006"
+    },
+    {
+      "title": "_check_cryptography",
+      "start_ms": 102320,
+      "end_ms": 117760,
+      "scene_id": "story-d402b2da-repository-007"
+    },
+    {
+      "title": "__version__",
+      "start_ms": 117760,
+      "end_ms": 132240,
+      "scene_id": "story-d402b2da-repository-008"
+    },
+    {
+      "title": "merge_setting",
+      "start_ms": 132240,
+      "end_ms": 146800,
+      "scene_id": "story-d402b2da-repository-009"
+    },
+    {
+      "title": "merge_hooks",
+      "start_ms": 146800,
+      "end_ms": 161200,
+      "scene_id": "story-d402b2da-repository-010"
+    },
+    {
+      "title": "prepare_request",
+      "start_ms": 161200,
+      "end_ms": 177360,
+      "scene_id": "story-d402b2da-repository-011"
+    },
+    {
+      "title": "merge_environment_settings",
+      "start_ms": 177360,
+      "end_ms": 194000,
+      "scene_id": "story-d402b2da-repository-012"
+    },
+    {
+      "title": "merge_hooks \u2192 merge_setting",
+      "start_ms": 194000,
+      "end_ms": 205760,
+      "scene_id": "story-d402b2da-repository-013"
+    },
+    {
+      "title": "prepare_request \u2192 merge_setting",
+      "start_ms": 205760,
+      "end_ms": 217760,
+      "scene_id": "story-d402b2da-repository-014"
+    },
+    {
+      "title": "prepare_request \u2192 merge_setting",
+      "start_ms": 217760,
+      "end_ms": 229360,
+      "scene_id": "story-d402b2da-repository-015"
+    },
+    {
+      "title": "prepare_request \u2192 merge_setting",
+      "start_ms": 229360,
+      "end_ms": 240800,
+      "scene_id": "story-d402b2da-repository-016"
+    },
+    {
+      "title": "merge_environment_settings \u2192 merge_setting",
+      "start_ms": 240800,
+      "end_ms": 252400,
+      "scene_id": "story-d402b2da-repository-017"
+    },
+    {
+      "title": "What the evidence establishes",
+      "start_ms": 252400,
+      "end_ms": 262000,
+      "scene_id": "story-d402b2da-repository-018"
+    }
+  ],
+  "render": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "codec": "h264",
+    "audio_codec": "aac"
+  },
+  "scope": "repository",
+  "generation_provider": "deterministic-evidence-storyboard",
+  "estimated_duration_ms": 203043,
+  "storyboard": {
+    "storyboard_version": "1.0",
+    "repository_id": "repo_0d1a89c543bad402b2da",
+    "pkm_revision_id": "pkmrev_51a44819fe162d4eb7b4",
+    "scope": "repository",
+    "question": "",
+    "detail": "summary",
+    "title": "Repository architecture",
+    "chapters": [
+      {
+        "chapter_id": "chapter-overview",
+        "title": "Architecture overview",
+        "scene_ids": [
+          "story-d402b2da-repository-000"
+        ]
+      },
+      {
+        "chapter_id": "chapter-components",
+        "title": "Important components",
+        "scene_ids": [
+          "story-d402b2da-repository-001",
+          "story-d402b2da-repository-002",
+          "story-d402b2da-repository-003",
+          "story-d402b2da-repository-004",
+          "story-d402b2da-repository-005",
+          "story-d402b2da-repository-006",
+          "story-d402b2da-repository-007",
+          "story-d402b2da-repository-008",
+          "story-d402b2da-repository-009",
+          "story-d402b2da-repository-010",
+          "story-d402b2da-repository-011",
+          "story-d402b2da-repository-012"
+        ]
+      },
+      {
+        "chapter_id": "chapter-flow",
+        "title": "Execution and data flow",
+        "scene_ids": [
+          "story-d402b2da-repository-013",
+          "story-d402b2da-repository-014",
+          "story-d402b2da-repository-015",
+          "story-d402b2da-repository-016",
+          "story-d402b2da-repository-017"
+        ]
+      },
+      {
+        "chapter_id": "chapter-recap",
+        "title": "Evidence recap",
+        "scene_ids": [
+          "story-d402b2da-repository-018"
+        ]
+      }
+    ],
+    "scenes": [
+      {
+        "scene_id": "story-d402b2da-repository-000",
+        "chapter_id": "chapter-overview",
+        "order": 1,
+        "kind": "architecture_overview",
+        "title": "Repository architecture",
+        "objective": "Orient the viewer using the extracted repository structure.",
+        "narration": "This explanation covers 127 analyzed files, 844 extracted symbols, and 96 evidence-backed relationships. The visuals show only structures recovered from the pinned static-analysis revision.",
+        "source_refs": [
+          ".coveragerc",
+          ".git-blame-ignore-revs",
+          ".github/AI_POLICY.md",
+          ".github/CODEOWNERS",
+          ".github/CODE_OF_CONDUCT.md",
+          ".github/CONTRIBUTING.md",
+          ".github/FUNDING.yml",
+          ".github/ISSUE_TEMPLATE.md"
+        ],
+        "node_ids": [
+          "sym_574dd15a199793491c31",
+          "sym_ef450094f5e1eecabb49",
+          "sym_8f7c86678c6601888fc1",
+          "sym_be2639a2f16262342e28",
+          "sym_992900e8115588b98b51",
+          "sym_2cfef513f0c01e28cb52",
+          "sym_21cbcedc1d03cd3ef76f",
+          "sym_094a466ab3300b401ed5",
+          "sym_0584849f25b75d40da70",
+          "sym_eca20b4a55275bdd1a0f",
+          "sym_f36d50798c8e32442beb",
+          "sym_bd84e592cfbd48ea73cd"
+        ],
+        "edge_ids": [
+          "rel_58b447779901c6979d8b",
+          "rel_0c3e59fab082ef2dd30f",
+          "rel_5bb3451cf446467aae7c",
+          "rel_f333ad3013bd2689754d",
+          "rel_9214d6597e6f61a63c60",
+          "rel_928cf6a8288bdf8d7540"
+        ],
+        "visual_nodes": [
+          {
+            "id": "sym_574dd15a199793491c31",
+            "label": "flask_theme_support",
+            "kind": "module"
+          },
+          {
+            "id": "sym_ef450094f5e1eecabb49",
+            "label": "FlaskyStyle",
+            "kind": "class"
+          },
+          {
+            "id": "sym_8f7c86678c6601888fc1",
+            "label": "conf",
+            "kind": "module"
+          },
+          {
+            "id": "sym_be2639a2f16262342e28",
+            "label": "setup",
+            "kind": "module"
+          },
+          {
+            "id": "sym_992900e8115588b98b51",
+            "label": "__init__",
+            "kind": "module"
+          },
+          {
+            "id": "sym_2cfef513f0c01e28cb52",
+            "label": "check_compatibility",
+            "kind": "function"
+          },
+          {
+            "id": "sym_21cbcedc1d03cd3ef76f",
+            "label": "_check_cryptography",
+            "kind": "function"
+          },
+          {
+            "id": "sym_094a466ab3300b401ed5",
+            "label": "__version__",
+            "kind": "module"
+          },
+          {
+            "id": "sym_0584849f25b75d40da70",
+            "label": "merge_setting",
+            "kind": "function"
+          },
+          {
+            "id": "sym_eca20b4a55275bdd1a0f",
+            "label": "merge_hooks",
+            "kind": "function"
+          },
+          {
+            "id": "sym_f36d50798c8e32442beb",
+            "label": "prepare_request",
+            "kind": "function"
+          },
+          {
+            "id": "sym_bd84e592cfbd48ea73cd",
+            "label": "merge_environment_settings",
+            "kind": "function"
+          }
+        ],
+        "visual_edges": [
+          {
+            "source": "sym_eca20b4a55275bdd1a0f",
+            "target": "sym_0584849f25b75d40da70",
+            "type": "calls"
+          },
+          {
+            "source": "sym_f36d50798c8e32442beb",
+            "target": "sym_0584849f25b75d40da70",
+            "type": "calls"
+          },
+          {
+            "source": "sym_f36d50798c8e32442beb",
+            "target": "sym_0584849f25b75d40da70",
+            "type": "calls"
+          },
+          {
+            "source": "sym_f36d50798c8e32442beb",
+            "target": "sym_0584849f25b75d40da70",
+            "type": "calls"
+          },
+          {
+            "source": "sym_bd84e592cfbd48ea73cd",
+            "target": "sym_0584849f25b75d40da70",
+            "type": "calls"
+          },
+          {
+            "source": "sym_bd84e592cfbd48ea73cd",
+            "target": "sym_0584849f25b75d40da70",
+            "type": "calls"
+          }
+        ],
+        "visual_type": "architecture",
+        "transition": "progressive-build",
+        "highlight_lines": []
+      },
+      {
+        "scene_id": "story-d402b2da-repository-001",
+        "chapter_id": "chapter-components",
+        "order": 2,
+        "kind": "code_walkthrough",
+        "title": "flask_theme_support",
+        "objective": "Understand the module flask_theme_support and its source location.",
+        "narration": "The module flask_theme_support is declared at docs/_themes/flask_theme_support.py:1-86. Its qualified name is docs/_themes/flask_theme_support.py. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "source_refs": [
+          "docs/_themes/flask_theme_support.py:1-86"
+        ],
+        "node_ids": [
+          "sym_574dd15a199793491c31"
+        ],
+        "edge_ids": [],
+        "code_excerpt": "# flasky extensions.  flasky pygments style based on tango style\nfrom pygments.style import Style\nfrom pygments.token import Keyword, Name, Comment, String, Error, \\\n",
+        "visual_nodes": [
+          {
+            "id": "sym_574dd15a199793491c31",
+            "label": "flask_theme_support",
+            "kind": "module"
+          }
+        ],
+        "visual_edges": [],
+        "highlight_lines": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "visual_type": "code",
+        "transition": "focus-zoom"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-002",
+        "chapter_id": "chapter-components",
+        "order": 3,
+        "kind": "code_walkthrough",
+        "title": "FlaskyStyle",
+        "objective": "Understand the class FlaskyStyle and its source location.",
+        "narration": "The class FlaskyStyle is declared at docs/_themes/flask_theme_support.py:7-86. Its qualified name is docs/_themes/flask_theme_support.py:FlaskyStyle. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "source_refs": [
+          "docs/_themes/flask_theme_support.py:7-86"
+        ],
+        "node_ids": [
+          "sym_ef450094f5e1eecabb49"
+        ],
+        "edge_ids": [],
+        "code_excerpt": "class FlaskyStyle(Style):\n    background_color = \"#f8f8f8\"\n    default_style = \"\"\n\n    styles = {\n        # No corresponding class for the following:\n        #Text:                     \"\", # class:  ''\n        Whitespace:                \"underline #f8f8f8\",      # class: 'w'\n        Error:                     \"#a40000 border:#ef2929\", # class: 'err'\n        Other:                     \"#000000\",                # class 'x'\n\n        Comment:                   \"italic #8f5902\", # class: 'c'\n        Comment.Preproc:           \"noitalic\",       # class: 'cp'\n\n        Keyword:                   \"bold #004461\",   # class: 'k'\n        Keyword.Constant:          \"bold #004461\",   # class: 'kc'\n        Keyword.Declaration:       \"bold #004461\",   # class: 'kd'\n        Keyword.Namespace:         \"bold #004461\",   # class: 'kn'\n        Keyword.Pseudo:            \"bold #004461\",   # class: 'kp'\n        Keyword.Reserved:          \"bold #004461\",   # class: 'kr'\n        Keyword.Type:              \"bold #004461\",   # class: 'kt'\n\n        Operator:                  \"#582800\",   # class: 'o'\n        Operator.Word:             \"bold #004461\",   # class: 'ow' - like keywords\n\n        Punctuation:               \"bold #000000\",   # class: 'p'\n\n        # because special names such as Name.Class, Name.Function, etc.\n        # are not recognized as such later in the parsing, we choose them\n        # to look the same as ordinary variables.\n        Name:                      \"#000000\",        # class: 'n'\n        Name.Attribute:            \"#c4a000\",        # class: 'na' - to be revised\n        Name.Builtin:              \"#004461\",        # class: 'nb'\n        Name.Builtin.Pseudo:       \"#3465a4\",        # class: 'bp'\n        Name.Class:                \"#000000\",        # class: 'nc' - to be revised\n        Name.Constant:             \"#000000\",        # class: 'no' - to be revised\n        Name.Decorator:            \"#888\",           # class: 'nd' - to be revised\n        Name.Entity:               \"#ce5c00\",        # class: 'ni'\n        Name.Exception:            \"bold #cc0000\",   # class: 'ne'\n        Name.Function:             \"#000000\",        # class: 'nf'\n        Name.Property:             \"#000000\",        # class: 'py'\n        Name.Label:                \"#f57900\",        # class: 'nl'\n        Name.Namespace:            \"#000000\",        # class: 'nn' - to be revised\n        Name.",
+        "visual_nodes": [
+          {
+            "id": "sym_ef450094f5e1eecabb49",
+            "label": "FlaskyStyle",
+            "kind": "class"
+          }
+        ],
+        "visual_edges": [],
+        "highlight_lines": [
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "visual_type": "code",
+        "transition": "focus-zoom"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-003",
+        "chapter_id": "chapter-components",
+        "order": 4,
+        "kind": "code_walkthrough",
+        "title": "conf",
+        "objective": "Understand the module conf and its source location.",
+        "narration": "The module conf is declared at docs/conf.py:1-385. Its qualified name is docs/conf.py. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "source_refs": [
+          "docs/conf.py:1-385"
+        ],
+        "node_ids": [
+          "sym_8f7c86678c6601888fc1"
+        ],
+        "edge_ids": [],
+        "code_excerpt": "# -*- coding: utf-8 -*-\n#\n# Requests documentation build configuration file, created by\n",
+        "visual_nodes": [
+          {
+            "id": "sym_8f7c86678c6601888fc1",
+            "label": "conf",
+            "kind": "module"
+          }
+        ],
+        "visual_edges": [],
+        "highlight_lines": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "visual_type": "code",
+        "transition": "focus-zoom"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-004",
+        "chapter_id": "chapter-components",
+        "order": 5,
+        "kind": "code_walkthrough",
+        "title": "setup",
+        "objective": "Understand the module setup and its source location.",
+        "narration": "The module setup is declared at setup.py:1-9. Its qualified name is setup.py. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "source_refs": [
+          "setup.py:1-9"
+        ],
+        "node_ids": [
+          "sym_be2639a2f16262342e28"
+        ],
+        "edge_ids": [],
+        "code_excerpt": "import sys\n\nif sys.version_info < (3, 10):  # noqa: UP036\n",
+        "visual_nodes": [
+          {
+            "id": "sym_be2639a2f16262342e28",
+            "label": "setup",
+            "kind": "module"
+          }
+        ],
+        "visual_edges": [],
+        "highlight_lines": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "visual_type": "code",
+        "transition": "focus-zoom"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-005",
+        "chapter_id": "chapter-components",
+        "order": 6,
+        "kind": "code_walkthrough",
+        "title": "__init__",
+        "objective": "Understand the module __init__ and its source location.",
+        "narration": "The module __init__ is declared at src/requests/__init__.py:1-219. Its qualified name is src/requests/__init__.py. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "source_refs": [
+          "src/requests/__init__.py:1-219"
+        ],
+        "node_ids": [
+          "sym_992900e8115588b98b51"
+        ],
+        "edge_ids": [],
+        "code_excerpt": "#   __\n#  /__)  _  _     _   _ _/   _\n# / (   (- (/ (/ (- _)  /  _)\n",
+        "visual_nodes": [
+          {
+            "id": "sym_992900e8115588b98b51",
+            "label": "__init__",
+            "kind": "module"
+          }
+        ],
+        "visual_edges": [],
+        "highlight_lines": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "visual_type": "code",
+        "transition": "focus-zoom"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-006",
+        "chapter_id": "chapter-components",
+        "order": 7,
+        "kind": "code_walkthrough",
+        "title": "check_compatibility",
+        "objective": "Understand the function check_compatibility and its source location.",
+        "narration": "The function check_compatibility is declared at src/requests/__init__.py:60-96. Its qualified name is src/requests/__init__.py:check_compatibility. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "source_refs": [
+          "src/requests/__init__.py:60-96"
+        ],
+        "node_ids": [
+          "sym_2cfef513f0c01e28cb52"
+        ],
+        "edge_ids": [],
+        "code_excerpt": "def check_compatibility(\n    urllib3_version: str,\n    chardet_version: str | None,\n    charset_normalizer_version: str | None,\n) -> None:\n    urllib3_version_list = urllib3_version.split(\".\")[:3]\n    assert urllib3_version_list != [\"dev\"]  # Verify urllib3 isn't installed from git.\n\n    # Sometimes, urllib3 only reports its version as 16.1.\n    if len(urllib3_version_list) == 2:\n        urllib3_version_list.append(\"0\")\n\n    # Check urllib3 for compatibility.\n    major, minor, patch = urllib3_version_list  # noqa: F811\n    major, minor, patch = int(major), int(minor), int(patch)\n    # urllib3 >= 1.21.1\n    assert major >= 1\n    if major == 1:\n        assert minor >= 21\n\n    # Check charset_normalizer for compatibility.\n    if chardet_version:\n        major, minor, patch = chardet_version.split(\".\")[:3]\n        major, minor, patch = int(major), int(minor), int(patch)\n        # chardet_version >= 3.0.2, < 8.0.0\n        assert (3, 0, 2) <= (major, minor, patch) < (8, 0, 0)\n    elif charset_normalizer_version:\n        major, minor, patch = charset_normalizer_version.split(\".\")[:3]\n        major, minor, patch = int(major), int(minor), int(patch)\n        # charset_normalizer >= 2.0.0 < 4.0.0\n        assert (2, 0, 0) <= (major, minor, patch) < (4, 0, 0)\n    else:\n        warnings.warn(\n            \"Unable to find acceptable character detection dependency \"\n            \"(chardet or charset_normalizer).\",\n            RequestsDependencyWarning,\n        )\n",
+        "visual_nodes": [
+          {
+            "id": "sym_2cfef513f0c01e28cb52",
+            "label": "check_compatibility",
+            "kind": "function"
+          }
+        ],
+        "visual_edges": [],
+        "highlight_lines": [
+          60,
+          61,
+          62,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68
+        ],
+        "visual_type": "code",
+        "transition": "focus-zoom"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-007",
+        "chapter_id": "chapter-components",
+        "order": 8,
+        "kind": "code_walkthrough",
+        "title": "_check_cryptography",
+        "objective": "Understand the function _check_cryptography and its source location.",
+        "narration": "The function _check_cryptography is declared at src/requests/__init__.py:99-108. Its qualified name is src/requests/__init__.py:_check_cryptography. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "source_refs": [
+          "src/requests/__init__.py:99-108"
+        ],
+        "node_ids": [
+          "sym_21cbcedc1d03cd3ef76f"
+        ],
+        "edge_ids": [],
+        "code_excerpt": "def _check_cryptography(cryptography_version: str) -> None:\n    # cryptography < 1.3.4\n    try:\n        cryptography_version_list = list(map(int, cryptography_version.split(\".\")))\n    except ValueError:\n        return\n\n    if cryptography_version_list < [1, 3, 4]:\n        warning = f\"Old version of cryptography ({cryptography_version_list}) may cause slowdown.\"\n        warnings.warn(warning, RequestsDependencyWarning)\n",
+        "visual_nodes": [
+          {
+            "id": "sym_21cbcedc1d03cd3ef76f",
+            "label": "_check_cryptography",
+            "kind": "function"
+          }
+        ],
+        "visual_edges": [],
+        "highlight_lines": [
+          99,
+          100,
+          101,
+          102,
+          103,
+          104,
+          105,
+          106,
+          107
+        ],
+        "visual_type": "code",
+        "transition": "focus-zoom"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-008",
+        "chapter_id": "chapter-components",
+        "order": 9,
+        "kind": "code_walkthrough",
+        "title": "__version__",
+        "objective": "Understand the module __version__ and its source location.",
+        "narration": "The module __version__ is declared at src/requests/__version__.py:1-14. Its qualified name is src/requests/__version__.py. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "source_refs": [
+          "src/requests/__version__.py:1-14"
+        ],
+        "node_ids": [
+          "sym_094a466ab3300b401ed5"
+        ],
+        "edge_ids": [],
+        "code_excerpt": "# .-. .-. .-. . . .-. .-. .-. .-.\n# |(  |-  |.| | | |-  `-.  |  `-.\n# ' ' `-' `-`.`-' `-' `-'  '  `-'\n",
+        "visual_nodes": [
+          {
+            "id": "sym_094a466ab3300b401ed5",
+            "label": "__version__",
+            "kind": "module"
+          }
+        ],
+        "visual_edges": [],
+        "highlight_lines": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "visual_type": "code",
+        "transition": "focus-zoom"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-009",
+        "chapter_id": "chapter-components",
+        "order": 10,
+        "kind": "code_walkthrough",
+        "title": "merge_setting",
+        "objective": "Understand the function merge_setting and its source location.",
+        "narration": "The function merge_setting is declared at src/requests/sessions.py:76-105. Its qualified name is src/requests/sessions.py:merge_setting. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "source_refs": [
+          "src/requests/sessions.py:76-105"
+        ],
+        "node_ids": [
+          "sym_0584849f25b75d40da70"
+        ],
+        "edge_ids": [
+          "rel_58b447779901c6979d8b",
+          "rel_0c3e59fab082ef2dd30f",
+          "rel_5bb3451cf446467aae7c",
+          "rel_f333ad3013bd2689754d",
+          "rel_9214d6597e6f61a63c60",
+          "rel_928cf6a8288bdf8d7540"
+        ],
+        "code_excerpt": "def merge_setting(\n    request_setting: Any, session_setting: Any, dict_class: type = OrderedDict\n) -> Any:\n    \"\"\"Determines appropriate setting for a given request, taking into account\n    the explicit setting on that request, and the setting in the session. If a\n    setting is a dictionary, they will be merged together using `dict_class`\n    \"\"\"\n\n    if session_setting is None:\n        return request_setting\n\n    if request_setting is None:\n        return session_setting\n\n    # Bypass if not a dictionary (e.g. verify)\n    if not (\n        isinstance(session_setting, Mapping) and isinstance(request_setting, Mapping)\n    ):\n        return request_setting\n\n    merged_setting = dict_class(to_key_val_list(session_setting))  # type: ignore[arg-type]  # isinstance narrows Any to Mapping[Unknown]\n    merged_setting.update(to_key_val_list(request_setting))  # type: ignore[arg-type]\n\n    # Remove keys that are set to None. Extract keys first to avoid altering\n    # the dictionary during iteration.\n    none_keys = [k for (k, v) in merged_setting.items() if v is None]\n    for key in none_keys:\n        del merged_setting[key]\n\n    return merged_setting\n",
+        "visual_nodes": [
+          {
+            "id": "sym_0584849f25b75d40da70",
+            "label": "merge_setting",
+            "kind": "function"
+          }
+        ],
+        "visual_edges": [],
+        "highlight_lines": [
+          76,
+          77,
+          78,
+          79,
+          80,
+          81,
+          82,
+          83,
+          84
+        ],
+        "visual_type": "code",
+        "transition": "focus-zoom"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-010",
+        "chapter_id": "chapter-components",
+        "order": 11,
+        "kind": "code_walkthrough",
+        "title": "merge_hooks",
+        "objective": "Understand the function merge_hooks and its source location.",
+        "narration": "The function merge_hooks is declared at src/requests/sessions.py:108-124. Its qualified name is src/requests/sessions.py:merge_hooks. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "source_refs": [
+          "src/requests/sessions.py:108-124"
+        ],
+        "node_ids": [
+          "sym_eca20b4a55275bdd1a0f"
+        ],
+        "edge_ids": [
+          "rel_58b447779901c6979d8b"
+        ],
+        "code_excerpt": "def merge_hooks(\n    request_hooks: _t.HooksType,\n    session_hooks: _t.HooksType,\n    dict_class: type = OrderedDict,\n) -> _t.HooksType:\n    \"\"\"Properly merges both requests and session hooks.\n\n    This is necessary because when request_hooks == {'response': []}, the\n    merge breaks Session hooks entirely.\n    \"\"\"\n    if session_hooks is None or session_hooks.get(\"response\") == []:\n        return request_hooks\n\n    if request_hooks is None or request_hooks.get(\"response\") == []:\n        return session_hooks\n\n    return merge_setting(request_hooks, session_hooks, dict_class)\n",
+        "visual_nodes": [
+          {
+            "id": "sym_eca20b4a55275bdd1a0f",
+            "label": "merge_hooks",
+            "kind": "function"
+          }
+        ],
+        "visual_edges": [],
+        "highlight_lines": [
+          108,
+          109,
+          110,
+          111,
+          112,
+          113,
+          114,
+          115,
+          116
+        ],
+        "visual_type": "code",
+        "transition": "focus-zoom"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-011",
+        "chapter_id": "chapter-components",
+        "order": 12,
+        "kind": "code_walkthrough",
+        "title": "prepare_request",
+        "objective": "Understand the function prepare_request and its source location.",
+        "narration": "The function prepare_request is declared at src/requests/sessions.py:511-555. Its qualified name is src/requests/sessions.py:prepare_request. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "source_refs": [
+          "src/requests/sessions.py:511-555"
+        ],
+        "node_ids": [
+          "sym_f36d50798c8e32442beb"
+        ],
+        "edge_ids": [
+          "rel_0c3e59fab082ef2dd30f",
+          "rel_5bb3451cf446467aae7c",
+          "rel_f333ad3013bd2689754d"
+        ],
+        "code_excerpt": "    def prepare_request(self, request: Request) -> PreparedRequest:\n        \"\"\"Constructs a :class:`PreparedRequest <PreparedRequest>` for\n        transmission and returns it. The :class:`PreparedRequest` has settings\n        merged from the :class:`Request <Request>` instance and those of the\n        :class:`Session`.\n\n        :param request: :class:`Request` instance to prepare with this\n            session's settings.\n        :rtype: requests.PreparedRequest\n        \"\"\"\n        url = cast(\"_t.UriType\", request.url)\n        method = cast(str, request.method)\n\n        cookies = request.cookies or {}\n\n        # Bootstrap CookieJar.\n        if not isinstance(cookies, cookielib.CookieJar):\n            cookies = cookiejar_from_dict(cookies)\n\n        # Merge with session cookies\n        merged_cookies = merge_cookies(\n            merge_cookies(RequestsCookieJar(), self.cookies), cookies\n        )\n\n        # Set environment's basic authentication if not explicitly set.\n        auth = request.auth\n        if self.trust_env and not auth and not self.auth:\n            auth = get_netrc_auth(url)\n\n        p = PreparedRequest()\n        p.prepare(\n            method=method.upper(),\n            url=url,\n            files=request.files,\n            data=request.data,\n            json=request.json,\n            headers=merge_setting(\n                request.headers, self.headers, dict_class=CaseInsensitiveDict\n            ),\n            params=merge_setting(request.params, self.params),\n            auth=merge_setting(auth, self.auth),\n            cookies=merged_cookies,\n            hooks=merge_hooks(request.hooks, self.hooks),\n        )\n        return p\n",
+        "visual_nodes": [
+          {
+            "id": "sym_f36d50798c8e32442beb",
+            "label": "prepare_request",
+            "kind": "function"
+          }
+        ],
+        "visual_edges": [],
+        "highlight_lines": [
+          511,
+          512,
+          513,
+          514,
+          515,
+          516,
+          517,
+          518,
+          519
+        ],
+        "visual_type": "code",
+        "transition": "focus-zoom"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-012",
+        "chapter_id": "chapter-components",
+        "order": 13,
+        "kind": "code_walkthrough",
+        "title": "merge_environment_settings",
+        "objective": "Understand the function merge_environment_settings and its source location.",
+        "narration": "The function merge_environment_settings is declared at src/requests/sessions.py:831-868. Its qualified name is src/requests/sessions.py:merge_environment_settings. The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed.",
+        "source_refs": [
+          "src/requests/sessions.py:831-868"
+        ],
+        "node_ids": [
+          "sym_bd84e592cfbd48ea73cd"
+        ],
+        "edge_ids": [
+          "rel_9214d6597e6f61a63c60",
+          "rel_928cf6a8288bdf8d7540"
+        ],
+        "code_excerpt": "    def merge_environment_settings(\n        self,\n        url: str,\n        proxies: dict[str, str] | None,\n        stream: bool | None,\n        verify: _t.VerifyType | None,\n        cert: _t.CertType,\n    ) -> dict[str, Any]:\n        \"\"\"\n        Check the environment and merge it with some settings.\n\n        :rtype: dict\n        \"\"\"\n        # Gather clues from the surrounding environment.\n        if self.trust_env:\n            # Set environment's proxies.\n            no_proxy = proxies.get(\"no_proxy\") if proxies is not None else None\n            env_proxies = get_environ_proxies(url, no_proxy=no_proxy)\n            if proxies is not None:\n                for k, v in env_proxies.items():\n                    proxies.setdefault(k, v)\n\n            # Look for requests environment configuration\n            # and be compatible with cURL.\n            if verify is True or verify is None:\n                verify = (\n                    os.environ.get(\"REQUESTS_CA_BUNDLE\")\n                    or os.environ.get(\"CURL_CA_BUNDLE\")\n                    or verify\n                )\n\n        # Merge all the kwargs.\n        proxies = merge_setting(proxies, self.proxies)\n        stream = merge_setting(stream, self.stream)\n        verify = merge_setting(verify, self.verify)\n        cert = merge_setting(cert, self.cert)\n\n        return {\"proxies\": proxies, \"stream\": stream, \"verify\": verify, \"cert\": cert}\n",
+        "visual_nodes": [
+          {
+            "id": "sym_bd84e592cfbd48ea73cd",
+            "label": "merge_environment_settings",
+            "kind": "function"
+          }
+        ],
+        "visual_edges": [],
+        "highlight_lines": [
+          831,
+          832,
+          833,
+          834,
+          835,
+          836,
+          837,
+          838,
+          839
+        ],
+        "visual_type": "code",
+        "transition": "focus-zoom"
+      },
+      {
+        "scene_id": "story-d402b2da-repository-013",
+        "chapter_id": "chapter-flow",
+        "order": 14,
+        "kind": "execution_flow",
+        "title": "merge_hooks \u2192 merge_setting",
+        "objective": "Trace the statically verified calls relationship.",
+        "narration": "Static analysis links src/requests/sessions.py:merge_hooks to src/requests/sessions.py:merge_setting through a calls relationship. It is marked verified with 1 supporting evidence record(s).",
+        "source_refs": [
+          "src/requests/sessions.py"
+        ],
+        "node_ids": [
+          "sym_eca20b4a55275bdd1a0f",
+          "sym_0584849f25b75d40da70"
+        ],
+        "edge_ids": [
+          "rel_58b447779901c6979d8b"
+        ],
+        "flow_nodes": [
+          "merge_hooks",
+          "merge_setting"
+        ],
+        "flow_edges": [
+          "rel_58b447779901c6979d8b"
+        ],
+        "visual_nodes": [
+          {
+            "id": "sym_eca20b4a55275bdd1a0f",
+            "label": "merge_hooks",
+            "kind": "function"
+          },
+          {
+            "id": "sym_0584849f25b75d40da70",
+            "label": "merge_setting",
+            "kind": "function"
+          }
+        ],
+        "visual_edges": [
+          {
+            "source": "sym_eca20b4a55275bdd1a0f",
+            "target": "sym_0584849f25b75d40da70",
+            "type": "calls"
+          }
+        ],
+        "visual_type": "flow",
+        "transition": "draw-connection",
+        "highlight_lines": []
+      },
+      {
+        "scene_id": "story-d402b2da-repository-014",
+        "chapter_id": "chapter-flow",
+        "order": 15,
+        "kind": "execution_flow",
+        "title": "prepare_request \u2192 merge_setting",
+        "objective": "Trace the statically verified calls relationship.",
+        "narration": "Static analysis links src/requests/sessions.py:prepare_request to src/requests/sessions.py:merge_setting through a calls relationship. It is marked verified with 1 supporting evidence record(s).",
+        "source_refs": [
+          "src/requests/sessions.py"
+        ],
+        "node_ids": [
+          "sym_f36d50798c8e32442beb",
+          "sym_0584849f25b75d40da70"
+        ],
+        "edge_ids": [
+          "rel_0c3e59fab082ef2dd30f"
+        ],
+        "flow_nodes": [
+          "prepare_request",
+          "merge_setting"
+        ],
+        "flow_edges": [
+          "rel_0c3e59fab082ef2dd30f"
+        ],
+        "visual_nodes": [
+          {
+            "id": "sym_f36d50798c8e32442beb",
+            "label": "prepare_request",
+            "kind": "function"
+          },
+          {
+            "id": "sym_0584849f25b75d40da70",
+            "label": "merge_setting",
+            "kind": "function"
+          }
+        ],
+        "visual_edges": [
+          {
+            "source": "sym_f36d50798c8e32442beb",
+            "target": "sym_0584849f25b75d40da70",
+            "type": "calls"
+          }
+        ],
+        "visual_type": "flow",
+        "transition": "draw-connection",
+        "highlight_lines": []
+      },
+      {
+        "scene_id": "story-d402b2da-repository-015",
+        "chapter_id": "chapter-flow",
+        "order": 16,
+        "kind": "execution_flow",
+        "title": "prepare_request \u2192 merge_setting",
+        "objective": "Trace the statically verified calls relationship.",
+        "narration": "Static analysis links src/requests/sessions.py:prepare_request to src/requests/sessions.py:merge_setting through a calls relationship. It is marked verified with 1 supporting evidence record(s).",
+        "source_refs": [
+          "src/requests/sessions.py"
+        ],
+        "node_ids": [
+          "sym_f36d50798c8e32442beb",
+          "sym_0584849f25b75d40da70"
+        ],
+        "edge_ids": [
+          "rel_5bb3451cf446467aae7c"
+        ],
+        "flow_nodes": [
+          "prepare_request",
+          "merge_setting"
+        ],
+        "flow_edges": [
+          "rel_5bb3451cf446467aae7c"
+        ],
+        "visual_nodes": [
+          {
+            "id": "sym_f36d50798c8e32442beb",
+            "label": "prepare_request",
+            "kind": "function"
+          },
+          {
+            "id": "sym_0584849f25b75d40da70",
+            "label": "merge_setting",
+            "kind": "function"
+          }
+        ],
+        "visual_edges": [
+          {
+            "source": "sym_f36d50798c8e32442beb",
+            "target": "sym_0584849f25b75d40da70",
+            "type": "calls"
+          }
+        ],
+        "visual_type": "flow",
+        "transition": "draw-connection",
+        "highlight_lines": []
+      },
+      {
+        "scene_id": "story-d402b2da-repository-016",
+        "chapter_id": "chapter-flow",
+        "order": 17,
+        "kind": "execution_flow",
+        "title": "prepare_request \u2192 merge_setting",
+        "objective": "Trace the statically verified calls relationship.",
+        "narration": "Static analysis links src/requests/sessions.py:prepare_request to src/requests/sessions.py:merge_setting through a calls relationship. It is marked verified with 1 supporting evidence record(s).",
+        "source_refs": [
+          "src/requests/sessions.py"
+        ],
+        "node_ids": [
+          "sym_f36d50798c8e32442beb",
+          "sym_0584849f25b75d40da70"
+        ],
+        "edge_ids": [
+          "rel_f333ad3013bd2689754d"
+        ],
+        "flow_nodes": [
+          "prepare_request",
+          "merge_setting"
+        ],
+        "flow_edges": [
+          "rel_f333ad3013bd2689754d"
+        ],
+        "visual_nodes": [
+          {
+            "id": "sym_f36d50798c8e32442beb",
+            "label": "prepare_request",
+            "kind": "function"
+          },
+          {
+            "id": "sym_0584849f25b75d40da70",
+            "label": "merge_setting",
+            "kind": "function"
+          }
+        ],
+        "visual_edges": [
+          {
+            "source": "sym_f36d50798c8e32442beb",
+            "target": "sym_0584849f25b75d40da70",
+            "type": "calls"
+          }
+        ],
+        "visual_type": "flow",
+        "transition": "draw-connection",
+        "highlight_lines": []
+      },
+      {
+        "scene_id": "story-d402b2da-repository-017",
+        "chapter_id": "chapter-flow",
+        "order": 18,
+        "kind": "execution_flow",
+        "title": "merge_environment_settings \u2192 merge_setting",
+        "objective": "Trace the statically verified calls relationship.",
+        "narration": "Static analysis links src/requests/sessions.py:merge_environment_settings to src/requests/sessions.py:merge_setting through a calls relationship. It is marked verified with 1 supporting evidence record(s).",
+        "source_refs": [
+          "src/requests/sessions.py"
+        ],
+        "node_ids": [
+          "sym_bd84e592cfbd48ea73cd",
+          "sym_0584849f25b75d40da70"
+        ],
+        "edge_ids": [
+          "rel_9214d6597e6f61a63c60"
+        ],
+        "flow_nodes": [
+          "merge_environment_settings",
+          "merge_setting"
+        ],
+        "flow_edges": [
+          "rel_9214d6597e6f61a63c60"
+        ],
+        "visual_nodes": [
+          {
+            "id": "sym_bd84e592cfbd48ea73cd",
+            "label": "merge_environment_settings",
+            "kind": "function"
+          },
+          {
+            "id": "sym_0584849f25b75d40da70",
+            "label": "merge_setting",
+            "kind": "function"
+          }
+        ],
+        "visual_edges": [
+          {
+            "source": "sym_bd84e592cfbd48ea73cd",
+            "target": "sym_0584849f25b75d40da70",
+            "type": "calls"
+          }
+        ],
+        "visual_type": "flow",
+        "transition": "draw-connection",
+        "highlight_lines": []
+      },
+      {
+        "scene_id": "story-d402b2da-repository-018",
+        "chapter_id": "chapter-recap",
+        "order": 19,
+        "kind": "recap",
+        "title": "What the evidence establishes",
+        "objective": "Separate verified structure from runtime uncertainty.",
+        "narration": "The final summary distinguishes parser-verified declarations and relationships from behavior that would require runtime observation. Use the cited source locations to continue the investigation.",
+        "source_refs": [
+          ".github/SECURITY.md",
+          ".github/workflows/publish.yml",
+          ".github/workflows/run-tests.yml",
+          ".github/workflows/typecheck.yml",
+          "AUTHORS.rst",
+          "HISTORY.md"
+        ],
+        "node_ids": [
+          "sym_574dd15a199793491c31",
+          "sym_ef450094f5e1eecabb49",
+          "sym_8f7c86678c6601888fc1",
+          "sym_be2639a2f16262342e28",
+          "sym_992900e8115588b98b51",
+          "sym_2cfef513f0c01e28cb52",
+          "sym_21cbcedc1d03cd3ef76f",
+          "sym_094a466ab3300b401ed5",
+          "sym_0584849f25b75d40da70",
+          "sym_eca20b4a55275bdd1a0f",
+          "sym_f36d50798c8e32442beb",
+          "sym_bd84e592cfbd48ea73cd"
+        ],
+        "edge_ids": [
+          "rel_58b447779901c6979d8b",
+          "rel_0c3e59fab082ef2dd30f",
+          "rel_5bb3451cf446467aae7c",
+          "rel_f333ad3013bd2689754d",
+          "rel_9214d6597e6f61a63c60",
+          "rel_928cf6a8288bdf8d7540"
+        ],
+        "visual_nodes": [
+          {
+            "id": "sym_574dd15a199793491c31",
+            "label": "flask_theme_support",
+            "kind": "module"
+          },
+          {
+            "id": "sym_ef450094f5e1eecabb49",
+            "label": "FlaskyStyle",
+            "kind": "class"
+          },
+          {
+            "id": "sym_8f7c86678c6601888fc1",
+            "label": "conf",
+            "kind": "module"
+          },
+          {
+            "id": "sym_be2639a2f16262342e28",
+            "label": "setup",
+            "kind": "module"
+          },
+          {
+            "id": "sym_992900e8115588b98b51",
+            "label": "__init__",
+            "kind": "module"
+          },
+          {
+            "id": "sym_2cfef513f0c01e28cb52",
+            "label": "check_compatibility",
+            "kind": "function"
+          },
+          {
+            "id": "sym_21cbcedc1d03cd3ef76f",
+            "label": "_check_cryptography",
+            "kind": "function"
+          },
+          {
+            "id": "sym_094a466ab3300b401ed5",
+            "label": "__version__",
+            "kind": "module"
+          },
+          {
+            "id": "sym_0584849f25b75d40da70",
+            "label": "merge_setting",
+            "kind": "function"
+          },
+          {
+            "id": "sym_eca20b4a55275bdd1a0f",
+            "label": "merge_hooks",
+            "kind": "function"
+          },
+          {
+            "id": "sym_f36d50798c8e32442beb",
+            "label": "prepare_request",
+            "kind": "function"
+          },
+          {
+            "id": "sym_bd84e592cfbd48ea73cd",
+            "label": "merge_environment_settings",
+            "kind": "function"
+          }
+        ],
+        "visual_edges": [
+          {
+            "source": "sym_eca20b4a55275bdd1a0f",
+            "target": "sym_0584849f25b75d40da70",
+            "type": "calls"
+          },
+          {
+            "source": "sym_f36d50798c8e32442beb",
+            "target": "sym_0584849f25b75d40da70",
+            "type": "calls"
+          },
+          {
+            "source": "sym_f36d50798c8e32442beb",
+            "target": "sym_0584849f25b75d40da70",
+            "type": "calls"
+          },
+          {
+            "source": "sym_f36d50798c8e32442beb",
+            "target": "sym_0584849f25b75d40da70",
+            "type": "calls"
+          },
+          {
+            "source": "sym_bd84e592cfbd48ea73cd",
+            "target": "sym_0584849f25b75d40da70",
+            "type": "calls"
+          },
+          {
+            "source": "sym_bd84e592cfbd48ea73cd",
+            "target": "sym_0584849f25b75d40da70",
+            "type": "calls"
+          }
+        ],
+        "visual_type": "summary",
+        "transition": "fade-out",
+        "highlight_lines": []
+      }
+    ],
+    "estimated_duration_ms": 203043,
+    "generation_provider": "deterministic-evidence-storyboard"
+  },
+  "actual_duration_ms": 262000,
+  "video_status": "playable",
+  "video_path": "/tmp/repoflow-github-e2e4/media/explanation_e04f46a3f72593451c96/lesson.mp4"
+}

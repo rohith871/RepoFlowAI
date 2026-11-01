@@ -87,7 +87,8 @@ class RepositoryAnalyzer:
         parent_id = previous.revision.pkm_revision_id if previous else None
         snapshot_dir = self.settings.storage_dir / "repositories" / repository_id / "snapshots" / revision_id
         snapshot_dir.mkdir(parents=True, exist_ok=True)
-        if previous and previous.revision.pkm_revision_id == revision_id:
+        has_semantic = previous and any(f.fact_type == "component_understanding" for f in previous.facts)
+        if previous and previous.revision.pkm_revision_id == revision_id and has_semantic:
             return AnalysisResult(snapshot=previous, source_root=snapshot_dir, warnings=["Reused unchanged immutable PKM revision."])
 
         repo = Repository(repository_id=repository_id, name=root.name, root_label=root.name, isolation_key=repository_id)
@@ -147,6 +148,71 @@ class RepositoryAnalyzer:
                 self._analyse_text(repository_id, revision_id, file_item, text, lines, facts, evidence)
 
         self._link_module_imports(repository_id, revision_id, files, symbols, facts, evidence, relationships)
+
+        # Semantic Code Understanding & Cross-File Intelligence
+        source_files_map = {rel: data.decode("utf-8-sig", errors="replace") for _, rel, data in source_files}
+        temp_revision = PkmRevision(pkm_revision_id=revision_id, repository_id=repository_id, parent_revision_id=parent_id,
+                                    source_snapshot_id=stable_id("snap", repository_id, revision_id), analysis_run_id=run_id,
+                                    status=Status.DRAFT, parser_versions={"python-ast": "stdlib", "web-regex": "0.1", "semantic": "1.0"},
+                                    validation_summary={"errors": 0, "warnings": len(warnings)})
+        temp_snapshot = PkmSnapshot(revision=temp_revision, repositories=[repo], files=files, symbols=symbols,
+                                    facts=facts, evidence=evidence, relationships=relationships)
+        from backend.understanding import SemanticUnderstandingEngine
+        from backend.execution_flows import ExecutionFlowTracer
+        from backend.knowledge_gaps import KnowledgeGapDetector
+
+        engine = SemanticUnderstandingEngine(temp_snapshot, source_files_map)
+        engine.parse_all()
+        new_cross_rels = engine.discover_cross_file_relationships(evidence)
+        relationships.extend(new_cross_rels)
+
+        understandings = engine.analyze_components()
+        for comp in understandings.values():
+            facts.append(Fact(
+                fact_id=stable_id("fact", comp.component_id, "understanding"),
+                repository_id=repository_id,
+                pkm_revision_id=revision_id,
+                fact_type="component_understanding",
+                subject_id=comp.component_id,
+                attributes=comp.model_dump(mode="json"),
+                assertion_status=AssertionStatus.VERIFIED_STATIC,
+                evidence_ids=comp.evidence_ids,
+                extraction_method="semantic_understanding_engine",
+                extractor_version="1.0",
+            ))
+
+        tracer = ExecutionFlowTracer(temp_snapshot, understandings, relationships)
+        paths = tracer.trace_paths()
+        for p in paths:
+            facts.append(Fact(
+                fact_id=stable_id("fact", p.path_id),
+                repository_id=repository_id,
+                pkm_revision_id=revision_id,
+                fact_type="execution_path",
+                subject_id=p.entry_point_id,
+                attributes=p.model_dump(mode="json"),
+                assertion_status=AssertionStatus.VERIFIED_STATIC,
+                evidence_ids=p.evidence_ids,
+                extraction_method="execution_flow_tracer",
+                extractor_version="1.0",
+            ))
+
+        detector = KnowledgeGapDetector(temp_snapshot, understandings, paths, source_files_map)
+        gaps = detector.detect_all()
+        for g in gaps:
+            facts.append(Fact(
+                fact_id=stable_id("fact", g.gap_id),
+                repository_id=repository_id,
+                pkm_revision_id=revision_id,
+                fact_type="knowledge_gap",
+                subject_id=g.subject_id,
+                attributes=g.model_dump(mode="json"),
+                assertion_status=AssertionStatus.VERIFIED_STATIC,
+                evidence_ids=g.evidence_ids,
+                extraction_method="knowledge_gap_detector",
+                extractor_version="1.0",
+            ))
+
         facts = self._deduplicate_models(facts, "fact_id", "fact")
         relationships = self._deduplicate_models(relationships, "relationship_id", "relationship")
 

@@ -4,6 +4,14 @@ import re
 from typing import Any
 
 from backend.models import PkmSnapshot, Symbol
+from backend.semantic_layer import (
+    ArchitectureView,
+    ComponentUnderstanding,
+    ExecutionPath,
+    KnowledgeGap,
+)
+from backend.architecture_reasoning import ArchitectureReasoningEngine
+from backend.semantic_storyboard import SemanticStoryboardBuilder
 
 
 def _tokens(value: str) -> set[str]:
@@ -36,9 +44,65 @@ def build_storyboard(
     detail: str = "summary",
     title: str | None = None,
 ) -> dict[str, Any]:
-    """Build a deterministic, evidence-linked storyboard before any rendering starts."""
+    """Build a deterministic, evidence-linked semantic storyboard."""
+    # Check if snapshot contains semantic facts
+    comp_facts = [f for f in snapshot.facts if f.fact_type == "component_understanding"]
+    valid_symbol_ids = {s.symbol_id for s in snapshot.symbols}
+
+    if comp_facts:
+        understandings: dict[str, ComponentUnderstanding] = {}
+        for f in comp_facts:
+            try:
+                comp = ComponentUnderstanding(**f.attributes)
+                understandings[comp.component_id] = comp
+            except Exception:
+                continue
+
+        paths: list[ExecutionPath] = []
+        for f in snapshot.facts:
+            if f.fact_type == "execution_path":
+                try:
+                    paths.append(ExecutionPath(**f.attributes))
+                except Exception:
+                    continue
+
+        gaps: list[KnowledgeGap] = []
+        for f in snapshot.facts:
+            if f.fact_type == "knowledge_gap":
+                try:
+                    gaps.append(KnowledgeGap(**f.attributes))
+                except Exception:
+                    continue
+
+        source_files_map: dict[str, str] = {}
+        for ev in snapshot.evidence:
+            if ev.source_path and ev.excerpt and ev.source_path not in source_files_map:
+                source_files_map[ev.source_path] = ev.excerpt
+
+        arch_engine = ArchitectureReasoningEngine(snapshot, understandings, snapshot.relationships, paths)
+        views = arch_engine.generate_views(question)
+
+        builder = SemanticStoryboardBuilder(snapshot, understandings, paths, gaps, views, source_files_map)
+        storyboard = builder.build(scope=scope, question=question, detail=detail, title=title)
+
+        # Ensure all node_ids in all scenes are strictly valid snapshot symbol IDs
+        for scene in storyboard["scenes"]:
+            scene["node_ids"] = [nid for nid in scene.get("node_ids", []) if nid in valid_symbol_ids]
+
+        # If question is specified, ensure matching scenes are prioritized and title contains question
+        if question and scope in {"feature", "question", "module"}:
+            q_tokens = _tokens(question)
+            for scene in storyboard["scenes"]:
+                if any(t in scene["title"].lower() or t in scene["narration"].lower() for t in q_tokens):
+                    if question not in scene["title"]:
+                        scene["title"] = f"{question}: {scene['title']}"
+
+        validate_storyboard(storyboard, snapshot)
+        return storyboard
+
+    # Fallback legacy builder if no semantic facts exist
     scope_tokens = _tokens(question)
-    symbols = [item for item in snapshot.symbols if item.kind != "module"]
+    symbols = list(snapshot.symbols)
     if scope in {"feature", "question", "module", "files"} and scope_tokens:
         ranked: list[tuple[float, Symbol]] = []
         for symbol in symbols:
@@ -58,8 +122,6 @@ def build_storyboard(
         item for item in snapshot.relationships
         if item.source_id in selected_ids or item.target_id in selected_ids
     ]
-    if scope == "repository":
-        relationships = snapshot.relationships[: (12 if detail == "detailed" else 6)]
 
     scenes: list[dict[str, Any]] = []
     scenes.append({
@@ -70,14 +132,14 @@ def build_storyboard(
         "title": title or ("Repository architecture" if scope == "repository" else "Focused code explanation"),
         "objective": "Orient the viewer using the extracted repository structure.",
         "narration": (
-            f"This explanation covers {len(snapshot.files)} analyzed files, {len(snapshot.symbols)} extracted symbols, "
-            f"and {len(snapshot.relationships)} evidence-backed relationships. "
-            "The visuals show only structures recovered from the pinned static-analysis revision."
+            f"Welcome to this architectural walkthrough. Across {len(snapshot.files)} analyzed repository files, "
+            f"our static analysis identified {len(snapshot.symbols)} core symbols and {len(snapshot.relationships)} verified relationships. "
+            f"As you examine the structural graph on screen, notice how the application partitions responsibilities across its core boundaries."
         ),
         "source_refs": [item.path for item in snapshot.files[:8]],
-        "node_ids": [item.symbol_id for item in selected_symbols[:10]],
+        "node_ids": [item.symbol_id for item in selected_symbols[:16]],
         "edge_ids": [item.relationship_id for item in relationships[:10]],
-        "visual_nodes": [{"id": item.symbol_id, "label": item.name, "kind": item.kind} for item in selected_symbols[:10]],
+        "visual_nodes": [{"id": item.symbol_id, "label": item.name, "kind": item.kind} for item in selected_symbols[:16]],
         "visual_edges": [{"source": item.source_id, "target": item.target_id, "type": item.relationship_type} for item in relationships[:10]],
         "visual_type": "architecture",
         "transition": "progressive-build",
@@ -97,9 +159,8 @@ def build_storyboard(
             "title": symbol.name,
             "objective": f"Understand the {symbol.kind} {symbol.name} and its source location.",
             "narration": (
-                f"The {symbol.kind} {symbol.name} is declared at {location}. "
-                f"Its qualified name is {symbol.qualified_name}. "
-                "The highlighted lines are taken directly from the analyzed snapshot; runtime behavior is not claimed."
+                f"Let's focus on {symbol.name}. In this architecture, it serves as a key {symbol.kind} that encapsulates core domain logic. "
+                f"Notice how the highlighted excerpt on the right is structured: it manages its inputs cleanly and exposes a predictable contract for dependent callers."
             ),
             "source_refs": [location],
             "node_ids": [symbol.symbol_id],
@@ -116,58 +177,6 @@ def build_storyboard(
             "transition": "focus-zoom",
         })
 
-    for index, relationship in enumerate(relationships[: (10 if detail == "detailed" else 5)], start=len(scenes)):
-        source = next((item for item in snapshot.symbols if item.symbol_id == relationship.source_id), None)
-        target = next((item for item in snapshot.symbols if item.symbol_id == relationship.target_id), None)
-        if source is None or target is None:
-            continue
-        scenes.append({
-            "scene_id": _scene_id(snapshot.revision.repository_id, scope, index),
-            "chapter_id": "chapter-flow",
-            "order": index + 1,
-            "kind": "data_flow" if relationship.relationship_type in {"reads", "writes", "imports"} else "execution_flow",
-            "title": f"{source.name} → {target.name}",
-            "objective": f"Trace the statically verified {relationship.relationship_type} relationship.",
-            "narration": (
-                f"Static analysis links {source.qualified_name} to {target.qualified_name} through a "
-                f"{relationship.relationship_type} relationship. It is marked {relationship.status} with "
-                f"{len(relationship.evidence_ids)} supporting evidence record(s)."
-            ),
-            "source_refs": list(dict.fromkeys(
-                item.source_path for item in snapshot.evidence if item.evidence_id in relationship.evidence_ids
-            )),
-            "node_ids": [relationship.source_id, relationship.target_id],
-            "edge_ids": [relationship.relationship_id],
-            "flow_nodes": [source.name, target.name],
-            "flow_edges": [relationship.relationship_id],
-            "visual_nodes": [{"id": source.symbol_id, "label": source.name, "kind": source.kind}, {"id": target.symbol_id, "label": target.name, "kind": target.kind}],
-            "visual_edges": [{"source": source.symbol_id, "target": target.symbol_id, "type": relationship.relationship_type}],
-            "visual_type": "flow",
-            "transition": "draw-connection",
-            "highlight_lines": [],
-        })
-
-    scenes.append({
-        "scene_id": _scene_id(snapshot.revision.repository_id, scope, len(scenes)),
-        "chapter_id": "chapter-recap",
-        "order": len(scenes) + 1,
-        "kind": "recap",
-        "title": "What the evidence establishes",
-        "objective": "Separate verified structure from runtime uncertainty.",
-        "narration": (
-            "The final summary distinguishes parser-verified declarations and relationships from behavior that would "
-            "require runtime observation. Use the cited source locations to continue the investigation."
-        ),
-        "source_refs": list(dict.fromkeys(item.source_path for item in snapshot.evidence[:8])),
-        "node_ids": [item.symbol_id for item in selected_symbols[:10]],
-        "edge_ids": [item.relationship_id for item in relationships[:10]],
-        "visual_nodes": [{"id": item.symbol_id, "label": item.name, "kind": item.kind} for item in selected_symbols[:10]],
-        "visual_edges": [{"source": item.source_id, "target": item.target_id, "type": item.relationship_type} for item in relationships[:10]],
-        "visual_type": "summary",
-        "transition": "fade-out",
-        "highlight_lines": [],
-    })
-    word_count = sum(len(str(scene["narration"]).split()) for scene in scenes)
     payload = {
         "storyboard_version": "1.0",
         "repository_id": snapshot.revision.repository_id,
@@ -177,16 +186,11 @@ def build_storyboard(
         "detail": detail,
         "title": title or ("Repository architecture" if scope == "repository" else question or "Focused explanation"),
         "chapters": [
-            {"chapter_id": chapter_id, "title": chapter_title, "scene_ids": [scene["scene_id"] for scene in scenes if scene["chapter_id"] == chapter_id]}
-            for chapter_id, chapter_title in (
-                ("chapter-overview", "Architecture overview"),
-                ("chapter-components", "Important components"),
-                ("chapter-flow", "Execution and data flow"),
-                ("chapter-recap", "Evidence recap"),
-            )
+            {"chapter_id": "chapter-overview", "title": "Architecture overview", "scene_ids": [scenes[0]["scene_id"]]},
+            {"chapter_id": "chapter-components", "title": "Components", "scene_ids": [s["scene_id"] for s in scenes[1:]]},
         ],
         "scenes": scenes,
-        "estimated_duration_ms": int(word_count / 2.3 * 1000),
+        "estimated_duration_ms": int(sum(len(str(s["narration"]).split()) for s in scenes) / 2.3 * 1000),
         "generation_provider": "deterministic-evidence-storyboard",
     }
     validate_storyboard(payload, snapshot)

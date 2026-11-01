@@ -4,7 +4,7 @@ RepoFlow AI turns real source repositories into evidence-grounded, narrated, ani
 
 ## Current status
 
-The working product now supports static repository analysis, persistent evidence-linked knowledge models, local and GitHub import jobs, source-grounded Ollama questions, persisted lessons and learner progress, a separately trained PyTorch teaching policy, Pocket TTS `alba` narration, and FFmpeg MP4 rendering with captions and chapters. Repository code is analyzed statically and is never executed. The configured primary model is `qwen2.5-coder:7b`; when Ollama is unavailable, the UI and job metadata identify the deterministic evidence fallback.
+The working product now supports static repository analysis, persistent evidence-linked knowledge models, local and GitHub import jobs, source-grounded Groq-first questions with local Ollama `qwen2.5-coder:7b` fallback, persisted lessons and learner progress, a separately trained PyTorch teaching policy, Pocket TTS `alba` narration, and FFmpeg MP4 rendering with captions and chapters. Repository code is analyzed statically and is never executed. Provider and model metadata are recorded; when both hosted and local providers are unavailable, the UI and job metadata identify the deterministic evidence fallback.
 
 ## Local setup
 
@@ -32,6 +32,8 @@ npm run dev
 ```
 
 Open the Vite URL shown by the frontend command. The frontend expects the API at `http://127.0.0.1:8000`.
+
+For provider routing, copy `.env.example` to `.env` and set `GROQ_API_KEY` locally. The key is never read from repository files or logged. `LLM_PRIMARY_PROVIDER=groq` and `LLM_FALLBACK_ENABLED=true` select Groq first and Ollama second.
 
 ## Verification
 

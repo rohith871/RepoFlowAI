@@ -1,0 +1,364 @@
+{
+  "lesson_id": "lesson_6a2e3778eb7fd2c9b372",
+  "title": "Explain API request handling and user data lineage",
+  "repository_id": "repo_acb028d900f37f34a321",
+  "scenes": [
+    {
+      "scene_id": "scene_9fec6a1e97ed283d0bf0",
+      "chapter_id": "chapter_024407b85bfcc636e0bd",
+      "order": 1,
+      "kind": "orientation",
+      "visual_type": "summary",
+      "title": "Learning Objective & System Scope",
+      "narration": "In this guided technical lesson, we will explore: Explain API request handling and user data lineage. The analysis is strictly grounded in the verified static revision of sample_project.",
+      "evidence_ids": [
+        "evidence_48d5cc8f1ab9785f6d50",
+        "evidence_12775fa68c1513daeeae",
+        "evidence_47d785eeb4b79e5df7d0"
+      ],
+      "source_refs": [
+        "README.md",
+        "api.py"
+      ],
+      "duration_ms": 1500,
+      "invariants": [
+        "Evidence is derived from static syntax and call graph analysis",
+        "Component responsibilities separate routing, business logic, and data entities"
+      ],
+      "limitations": [
+        "Dynamic runtime behaviors and external network calls require live telemetry"
+      ],
+      "audio_url": null
+    },
+    {
+      "scene_id": "scene_308475ff3d68bddeb05e",
+      "chapter_id": "chapter_024407b85bfcc636e0bd",
+      "order": 2,
+      "kind": "code_walkthrough",
+      "visual_type": "code_walkthrough",
+      "title": "Domain Model: User",
+      "narration": "To keep state predictable and prevent loose dictionaries from circulating across modules, the application defines the User data model. Notice on screen how it establishes a strongly-typed in-memory contract: downstream functions can confidently rely on its attributes without writing defensive runtime assertions everywhere. Whenever you extend this model, maintain this structure so dependent services remain intact.",
+      "evidence_ids": [
+        "evidence_fe2e2d8e3cf25a63b5ca"
+      ],
+      "source_refs": [
+        "app.py:5-6"
+      ],
+      "code_excerpt": "",
+      "takeaway": "The User entity provides a typed structure for user attributes (name).",
+      "highlight_line": 2,
+      "counterfactual": "[HYPOTHETICAL] If a field in User were renamed or made mandatory without default values, all instantiation sites across callers would fail at runtime with a TypeError.",
+      "duration_ms": 1500,
+      "audio_url": null
+    },
+    {
+      "scene_id": "scene_053cf442187fada452a5",
+      "chapter_id": "chapter_024407b85bfcc636e0bd",
+      "order": 3,
+      "kind": "code_walkthrough",
+      "visual_type": "code_walkthrough",
+      "title": "Service Delegation: load_user",
+      "narration": "Next, load_user coordinates domain processing by orchestrating calls to sym_e59d8678a1341cfa2534. Rather than performing raw data manipulation itself, it acts as an intermediate business coordinator, delegating specific retrieval tasks while guaranteeing that downstream components receive verified arguments.",
+      "evidence_ids": [
+        "evidence_2257428b2768c16009fe"
+      ],
+      "source_refs": [
+        "app.py:9-10"
+      ],
+      "code_excerpt": "",
+      "takeaway": "load_user cleanly separates entity construction from API transport protocols.",
+      "highlight_line": 2,
+      "counterfactual": "[HYPOTHETICAL] If load_user returned None instead of a valid entity instance, upstream callers accessing entity attributes would encounter an AttributeError.",
+      "duration_ms": 1500,
+      "audio_url": null
+    },
+    {
+      "scene_id": "scene_4a7fe1e695da536a1763",
+      "chapter_id": "chapter_024407b85bfcc636e0bd",
+      "order": 4,
+      "kind": "code_walkthrough",
+      "visual_type": "code_walkthrough",
+      "title": "Service Delegation: get_user",
+      "narration": "Next, get_user coordinates domain processing by orchestrating calls to sym_2403baf2102d3932ebcd. Rather than performing raw data manipulation itself, it acts as an intermediate business coordinator, delegating specific retrieval tasks while guaranteeing that downstream components receive verified arguments.",
+      "evidence_ids": [
+        "evidence_cf6c26b440fb55890206"
+      ],
+      "source_refs": [
+        "app.py:13-14"
+      ],
+      "code_excerpt": "",
+      "takeaway": "get_user cleanly separates entity construction from API transport protocols.",
+      "highlight_line": 2,
+      "counterfactual": "[HYPOTHETICAL] If get_user returned None instead of a valid entity instance, upstream callers accessing entity attributes would encounter an AttributeError.",
+      "duration_ms": 1500,
+      "audio_url": null
+    },
+    {
+      "scene_id": "scene_48f3cd5328f5f190dabe",
+      "chapter_id": "chapter_024407b85bfcc636e0bd",
+      "order": 5,
+      "kind": "code_walkthrough",
+      "visual_type": "code_walkthrough",
+      "title": "API Interface: user_route",
+      "narration": "Let's examine how user_route functions as the external gateway for this workflow. Rather than coupling network transport with internal database operations, its primary job is to accept name, validate the incoming payload, and immediately hand off control to domain services. By keeping this gateway lean, changes to HTTP endpoints or web protocols won't destabilize your core business logic.",
+      "evidence_ids": [
+        "evidence_47d785eeb4b79e5df7d0"
+      ],
+      "source_refs": [
+        "api.py:4-6"
+      ],
+      "code_excerpt": "",
+      "takeaway": "user_route acts as the boundary between client requests and internal services.",
+      "highlight_line": 2,
+      "counterfactual": "[HYPOTHETICAL] Modifying the return contract of user_route would require updating all dependent functions that consume its output.",
+      "duration_ms": 1500,
+      "checkpoint": {
+        "checkpoint_id": "chk_0e622d41d03e8d7137a7",
+        "scene_id": "scene_48f3cd5328f5f190dabe",
+        "checkpoint_type": "data_transformation",
+        "question_text": "What data transformation is performed by `user_route`?",
+        "options": [
+          {
+            "id": "dt_1",
+            "text": "Transforms input parameters via: user = get_user(name)",
+            "is_correct": true,
+            "explanation": "Matches verified AST transformation in user_route: user = get_user(name)"
+          },
+          {
+            "id": "dt_2",
+            "text": "Mutates global environment variables without producing a return value.",
+            "is_correct": false,
+            "explanation": "Incorrect. Static analysis shows structured return values without global mutation."
+          },
+          {
+            "id": "dt_3",
+            "text": "Bypasses validation and passes unparsed raw bytes.",
+            "is_correct": false,
+            "explanation": "Incorrect. Input parameters are explicitly typed and unpacked."
+          }
+        ],
+        "correct_answer_explanation": "`user_route` transforms inputs into structured outputs.",
+        "source_ref": "api.py:4",
+        "pause_duration_ms": 12000,
+        "associated_component_ids": [
+          "sym_1e125e125281874eae0b"
+        ]
+      },
+      "audio_url": null
+    },
+    {
+      "scene_id": "scene_c625033718c2e3fbbac7",
+      "chapter_id": "chapter_90c0b3cfc4aaa0e55d3d",
+      "order": 6,
+      "kind": "data_flow",
+      "visual_type": "data_flow",
+      "title": "Complete Execution Flow",
+      "narration": "Now, let's trace the complete lifecycle of a request as it travels through the application. Execution begins at user_route. Notice how data transitions across each architectural boundary: then request reaches user_route in api.py with name: str., then user_route invokes get_user in app.py., then get_user invokes load_user in app.py., then load_user instantiates class user.. Finally, the terminal result\u2014dict[str, str]\u2014is returned safely to the caller, ensuring a predictable execution lifecycle.",
+      "evidence_ids": [
+        "evidence_47d785eeb4b79e5df7d0",
+        "evidence_cf6c26b440fb55890206",
+        "evidence_2257428b2768c16009fe",
+        "evidence_fe2e2d8e3cf25a63b5ca"
+      ],
+      "source_refs": [
+        "api.py",
+        "app.py"
+      ],
+      "flow_nodes": [
+        "user_route",
+        "User",
+        "load_user",
+        "get_user"
+      ],
+      "execution_steps": [
+        {
+          "step_number": 1,
+          "component_name": "user_route",
+          "operation_type": "entry_call",
+          "description": "Request reaches user_route in api.py with name: str.",
+          "source_ref": "api.py:4"
+        },
+        {
+          "step_number": 2,
+          "component_name": "get_user",
+          "operation_type": "call",
+          "description": "user_route invokes get_user in app.py.",
+          "source_ref": "api.py:4"
+        },
+        {
+          "step_number": 3,
+          "component_name": "load_user",
+          "operation_type": "call",
+          "description": "get_user invokes load_user in app.py.",
+          "source_ref": "app.py:13"
+        },
+        {
+          "step_number": 4,
+          "component_name": "User",
+          "operation_type": "instantiates",
+          "description": "load_user instantiates class User.",
+          "source_ref": "app.py:9"
+        },
+        {
+          "step_number": 5,
+          "component_name": "user_route",
+          "operation_type": "return",
+          "description": "user_route returns: Returns constructed value: {'name': user.name}",
+          "source_ref": "api.py:4"
+        }
+      ],
+      "takeaway": "Data enters the route handler, flows into domain services for entity construction, and returns formatted as an API payload.",
+      "duration_ms": 1500,
+      "checkpoint": {
+        "checkpoint_id": "chk_467d315ec075a726a37b",
+        "scene_id": "scene_c625033718c2e3fbbac7",
+        "checkpoint_type": "predict_next",
+        "question_text": "After entering the entry point, what component does execution transition to next?",
+        "options": [
+          {
+            "id": "opt_1",
+            "text": "Calls `load_user` to handle domain logic or data retrieval.",
+            "is_correct": true,
+            "explanation": "Directly verified by call relationship from sym_1e125e125281874eae0b to sym_2403baf2102d3932ebcd."
+          },
+          {
+            "id": "opt_2",
+            "text": "Immediately serializes the raw request body directly to the HTTP socket.",
+            "is_correct": false,
+            "explanation": "Incorrect. The verified static path traverses intermediate domain components first."
+          },
+          {
+            "id": "opt_3",
+            "text": "Aborts execution because no route handlers are registered.",
+            "is_correct": false,
+            "explanation": "Incorrect. The route is registered and triggers domain functions."
+          }
+        ],
+        "correct_answer_explanation": "The verified AST establishes that execution delegates to `load_user`.",
+        "source_ref": "api.py:4",
+        "pause_duration_ms": 12000,
+        "associated_component_ids": [
+          "sym_1e125e125281874eae0b",
+          "sym_2403baf2102d3932ebcd"
+        ]
+      },
+      "audio_url": null
+    },
+    {
+      "scene_id": "scene_e2661c1946a8914d40b2",
+      "chapter_id": "chapter_e2661c1946a8914d40b2",
+      "order": 7,
+      "kind": "recap",
+      "visual_type": "summary",
+      "title": "Verified Architecture & Limitations",
+      "narration": "In summary, verified static relationships establish the call sequence and data transformations. Runtime database connectivity and network latency remain unverified without live telemetry.",
+      "evidence_ids": [],
+      "source_refs": [],
+      "invariants": [
+        "Typed entity models enforce strict parameter contracts",
+        "Gateway routes isolate HTTP interfaces from underlying business domain logic"
+      ],
+      "limitations": [
+        "Asynchronous external HTTP delays and exceptions are unmodeled",
+        "Database connection pools are not statically observable"
+      ],
+      "duration_ms": 1500,
+      "audio_url": null
+    }
+  ],
+  "captions": [
+    {
+      "scene_id": "scene_9fec6a1e97ed283d0bf0",
+      "text": "In this guided technical lesson, we will explore: Explain API request handling and user data lineage. The analysis is strictly grounded in the verified static revision of sample_project.",
+      "start_ms": 0,
+      "end_ms": 1500
+    },
+    {
+      "scene_id": "scene_308475ff3d68bddeb05e",
+      "text": "To keep state predictable and prevent loose dictionaries from circulating across modules, the application defines the User data model. Notice on screen how it establishes a strongly-typed in-memory contract: downstream functions can confidently rely on its attributes without writing defensive runtime assertions everywhere. Whenever you extend this model, maintain this structure so dependent services remain intact.",
+      "start_ms": 1500,
+      "end_ms": 3000
+    },
+    {
+      "scene_id": "scene_053cf442187fada452a5",
+      "text": "Next, load_user coordinates domain processing by orchestrating calls to sym_e59d8678a1341cfa2534. Rather than performing raw data manipulation itself, it acts as an intermediate business coordinator, delegating specific retrieval tasks while guaranteeing that downstream components receive verified arguments.",
+      "start_ms": 3000,
+      "end_ms": 4500
+    },
+    {
+      "scene_id": "scene_4a7fe1e695da536a1763",
+      "text": "Next, get_user coordinates domain processing by orchestrating calls to sym_2403baf2102d3932ebcd. Rather than performing raw data manipulation itself, it acts as an intermediate business coordinator, delegating specific retrieval tasks while guaranteeing that downstream components receive verified arguments.",
+      "start_ms": 4500,
+      "end_ms": 6000
+    },
+    {
+      "scene_id": "scene_48f3cd5328f5f190dabe",
+      "text": "Let's examine how user_route functions as the external gateway for this workflow. Rather than coupling network transport with internal database operations, its primary job is to accept name, validate the incoming payload, and immediately hand off control to domain services. By keeping this gateway lean, changes to HTTP endpoints or web protocols won't destabilize your core business logic.",
+      "start_ms": 6000,
+      "end_ms": 7500
+    },
+    {
+      "scene_id": "scene_c625033718c2e3fbbac7",
+      "text": "Now, let's trace the complete lifecycle of a request as it travels through the application. Execution begins at user_route. Notice how data transitions across each architectural boundary: then request reaches user_route in api.py with name: str., then user_route invokes get_user in app.py., then get_user invokes load_user in app.py., then load_user instantiates class user.. Finally, the terminal result\u2014dict[str, str]\u2014is returned safely to the caller, ensuring a predictable execution lifecycle.",
+      "start_ms": 7500,
+      "end_ms": 9000
+    },
+    {
+      "scene_id": "scene_e2661c1946a8914d40b2",
+      "text": "In summary, verified static relationships establish the call sequence and data transformations. Runtime database connectivity and network latency remain unverified without live telemetry.",
+      "start_ms": 9000,
+      "end_ms": 10500
+    }
+  ],
+  "chapters": [
+    {
+      "title": "Learning Objective & System Scope",
+      "start_ms": 0,
+      "end_ms": 1500,
+      "scene_id": "scene_9fec6a1e97ed283d0bf0"
+    },
+    {
+      "title": "Domain Model: User",
+      "start_ms": 1500,
+      "end_ms": 3000,
+      "scene_id": "scene_308475ff3d68bddeb05e"
+    },
+    {
+      "title": "Service Delegation: load_user",
+      "start_ms": 3000,
+      "end_ms": 4500,
+      "scene_id": "scene_053cf442187fada452a5"
+    },
+    {
+      "title": "Service Delegation: get_user",
+      "start_ms": 4500,
+      "end_ms": 6000,
+      "scene_id": "scene_4a7fe1e695da536a1763"
+    },
+    {
+      "title": "API Interface: user_route",
+      "start_ms": 6000,
+      "end_ms": 7500,
+      "scene_id": "scene_48f3cd5328f5f190dabe"
+    },
+    {
+      "title": "Complete Execution Flow",
+      "start_ms": 7500,
+      "end_ms": 9000,
+      "scene_id": "scene_c625033718c2e3fbbac7"
+    },
+    {
+      "title": "Verified Architecture & Limitations",
+      "start_ms": 9000,
+      "end_ms": 10500,
+      "scene_id": "scene_e2661c1946a8914d40b2"
+    }
+  ],
+  "render": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "codec": "h264",
+    "audio_codec": "aac"
+  }
+}

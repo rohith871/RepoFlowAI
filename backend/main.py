@@ -18,9 +18,9 @@ from backend.ids import stable_id
 from backend.jobs import JobManager
 from backend.learning import LearningStore, evaluate_baselines, rule_policy
 from backend.lessons import plan_lesson
+from backend.llm import LLMRouter
 from backend.media import render_lesson
 from backend.narration import PocketNarrator
-from backend.ollama import OllamaProvider
 from backend.retrieval import EvidenceRetriever, build_deterministic_explanation
 from backend.storage import PkmStore
 from backend.storyboard import build_storyboard, validate_storyboard
@@ -34,7 +34,7 @@ learning_store = LearningStore(settings.database_path)
 app_store = AppStore(settings.database_path)
 analyzer = RepositoryAnalyzer(settings, pkm_store)
 retriever = EvidenceRetriever()
-ollama = OllamaProvider(settings.ollama_url, settings.ollama_model)
+llm = LLMRouter(settings)
 trained_policy = TrainedTeachingPolicy(settings.policy_checkpoint)
 narrator = PocketNarrator(settings.pocket_tts_voice)
 jobs = JobManager(app_store)
@@ -85,15 +85,23 @@ class HintRequest(BaseModel):
     step_id: str
 
 
+class CheckpointResponseRequest(BaseModel):
+    checkpoint_id: str
+    selected_option_id: str
+
+
 @app.get("/health")
 def health() -> dict[str, str]:
     import shutil
     torch_status = "available" if importlib.util.find_spec("torch") else "unavailable"
+    llm_status = llm.status()
     return {"status": "ok", "service": "repoflow-api", "version": app.version,
             "torch": torch_status, "ffmpeg": "available" if shutil.which("ffmpeg") else "managed-or-unavailable",
-            "ollama": "available" if ollama.available() else "unavailable", "ollama_model": settings.ollama_model,
+            "ollama": "available" if llm_status["ollama_available"] else "unavailable", "ollama_model": settings.ollama_model,
             "pocket_tts": "available" if narrator.available() else "unavailable", "policy": trained_policy.version,
-            "llm_provider": "ollama", "llm_model_configured": settings.ollama_model}
+            "llm_provider": settings.llm_primary_provider, "llm_model_configured": settings.groq_model if settings.llm_primary_provider == "groq" else settings.ollama_model,
+            "groq": "configured" if llm_status["groq_configured"] else "missing-key",
+            "fallback_enabled": str(settings.llm_fallback_enabled).lower()}
 
 
 @app.get("/api/repositories")
@@ -235,6 +243,105 @@ def repository_graph(repository_id: str, revision_id: str | None = None, limit: 
     return {"repository_id": repository_id, "revision_id": snapshot.revision.pkm_revision_id, "nodes": nodes, "edges": edges, "node_count": len(symbols)}
 
 
+@app.get("/api/repositories/{repository_id}/views")
+def repository_views(repository_id: str, question: str = "") -> list[dict[str, Any]]:
+    snapshot = pkm_store.get_snapshot(repository_id)
+    if snapshot is None:
+        raise HTTPException(status_code=404, detail={"code": "PKM_NOT_FOUND", "message": "Analyse the repository first"})
+    from backend.understanding import SemanticUnderstandingEngine
+    from backend.execution_flows import ExecutionFlowTracer
+    from backend.architecture_reasoning import ArchitectureReasoningEngine
+
+    source_root = settings.storage_dir / "repositories" / repository_id / "snapshots" / snapshot.revision.pkm_revision_id
+    files_map = {f.path: (source_root / f.path).read_text(encoding="utf-8", errors="replace") for f in snapshot.files if (source_root / f.path).is_file()}
+    engine = SemanticUnderstandingEngine(snapshot, files_map)
+    engine.parse_all()
+    understandings = engine.analyze_components()
+    tracer = ExecutionFlowTracer(snapshot, understandings, snapshot.relationships)
+    paths = tracer.trace_paths()
+    arch_engine = ArchitectureReasoningEngine(snapshot, understandings, snapshot.relationships, paths)
+    views = arch_engine.generate_views(question)
+    return [v.model_dump(mode="json") for v in views]
+
+
+@app.get("/api/repositories/{repository_id}/flows")
+def repository_flows(repository_id: str) -> list[dict[str, Any]]:
+    snapshot = pkm_store.get_snapshot(repository_id)
+    if snapshot is None:
+        raise HTTPException(status_code=404, detail={"code": "PKM_NOT_FOUND", "message": "Analyse the repository first"})
+    from backend.understanding import SemanticUnderstandingEngine
+    from backend.execution_flows import ExecutionFlowTracer
+
+    source_root = settings.storage_dir / "repositories" / repository_id / "snapshots" / snapshot.revision.pkm_revision_id
+    files_map = {f.path: (source_root / f.path).read_text(encoding="utf-8", errors="replace") for f in snapshot.files if (source_root / f.path).is_file()}
+    engine = SemanticUnderstandingEngine(snapshot, files_map)
+    engine.parse_all()
+    understandings = engine.analyze_components()
+    tracer = ExecutionFlowTracer(snapshot, understandings, snapshot.relationships)
+    paths = tracer.trace_paths()
+    return [p.model_dump(mode="json") for p in paths]
+
+
+@app.get("/api/repositories/{repository_id}/gaps")
+def repository_gaps(repository_id: str) -> list[dict[str, Any]]:
+    snapshot = pkm_store.get_snapshot(repository_id)
+    if snapshot is None:
+        raise HTTPException(status_code=404, detail={"code": "PKM_NOT_FOUND", "message": "Analyse the repository first"})
+    from backend.understanding import SemanticUnderstandingEngine
+    from backend.execution_flows import ExecutionFlowTracer
+    from backend.knowledge_gaps import KnowledgeGapDetector
+
+    source_root = settings.storage_dir / "repositories" / repository_id / "snapshots" / snapshot.revision.pkm_revision_id
+    files_map = {f.path: (source_root / f.path).read_text(encoding="utf-8", errors="replace") for f in snapshot.files if (source_root / f.path).is_file()}
+    engine = SemanticUnderstandingEngine(snapshot, files_map)
+    engine.parse_all()
+    understandings = engine.analyze_components()
+    tracer = ExecutionFlowTracer(snapshot, understandings, snapshot.relationships)
+    paths = tracer.trace_paths()
+    detector = KnowledgeGapDetector(snapshot, understandings, paths, files_map)
+    gaps = detector.detect_all()
+    return [g.model_dump(mode="json") for g in gaps]
+
+
+@app.get("/api/repositories/{repository_id}/benchmark")
+def repository_benchmark(repository_id: str) -> dict[str, Any]:
+    snapshot = pkm_store.get_snapshot(repository_id)
+    if snapshot is None:
+        raise HTTPException(status_code=404, detail={"code": "PKM_NOT_FOUND", "message": "Analyse the repository first"})
+    from backend.evaluation import PipelineEvaluator
+
+    source_root = settings.storage_dir / "repositories" / repository_id / "snapshots" / snapshot.revision.pkm_revision_id
+    files_map = {f.path: (source_root / f.path).read_text(encoding="utf-8", errors="replace") for f in snapshot.files if (source_root / f.path).is_file()}
+    evaluator = PipelineEvaluator(snapshot, files_map)
+    report = evaluator.run_benchmark()
+    return report.model_dump(mode="json")
+
+
+@app.get("/api/repositories/{repository_id}/verify")
+def repository_verify(repository_id: str) -> dict[str, Any]:
+    snapshot = pkm_store.get_snapshot(repository_id)
+    if snapshot is None:
+        raise HTTPException(status_code=404, detail={"code": "PKM_NOT_FOUND", "message": "Analyse the repository first"})
+    from backend.understanding import SemanticUnderstandingEngine
+    from backend.execution_flows import ExecutionFlowTracer
+    from backend.architecture_reasoning import ArchitectureReasoningEngine
+    from backend.consistency_verifier import EndToEndConsistencyVerifier
+
+    source_root = settings.storage_dir / "repositories" / repository_id / "snapshots" / snapshot.revision.pkm_revision_id
+    files_map = {f.path: (source_root / f.path).read_text(encoding="utf-8", errors="replace") for f in snapshot.files if (source_root / f.path).is_file()}
+    engine = SemanticUnderstandingEngine(snapshot, files_map)
+    engine.parse_all()
+    understandings = engine.analyze_components()
+    tracer = ExecutionFlowTracer(snapshot, understandings, snapshot.relationships)
+    paths = tracer.trace_paths()
+    arch_engine = ArchitectureReasoningEngine(snapshot, understandings, snapshot.relationships, paths)
+    views = arch_engine.generate_views()
+    storyboard = build_storyboard(snapshot, scope="repository")
+    verifier = EndToEndConsistencyVerifier(snapshot, understandings, paths, files_map)
+    report = verifier.verify(storyboard, views)
+    return report.model_dump(mode="json")
+
+
 @app.get("/api/repositories/{repository_id}/files")
 def repository_files(repository_id: str, revision_id: str | None = None) -> list[dict[str, Any]]:
     snapshot = pkm_store.get_snapshot(repository_id, revision_id)
@@ -319,18 +426,27 @@ def create_lesson(request: LessonRequest) -> dict[str, Any]:
     if snapshot is None:
         raise HTTPException(status_code=404, detail={"code": "PKM_NOT_FOUND", "message": "Analyse the repository first"})
     lesson = plan_lesson(snapshot, request.goal)
-    payload: dict[str, Any] = {"lesson_id": lesson.lesson_id, "repository_id": lesson.repository_id, "pkm_revision_id": lesson.pkm_revision_id, "title": lesson.title, "chapters": lesson.chapters, "scenes": lesson.scenes, "steps": lesson.steps, "validation_status": lesson.validation_status}
-    if ollama.available():
-        generated = ollama.generate_lesson_copy(request.goal, payload["scenes"])
-        if generated:
-            for scene in payload["scenes"]:
-                copy = next((item for item in generated.get("scene_copy", []) if item.get("scene_id") == scene["scene_id"]), None)
-                if copy and set(copy.get("evidence_ids", [])).issubset(set(scene.get("evidence_ids", []))):
-                    scene["narration"] = copy["narration"]
-                    scene["generation_provider"] = f"ollama:{settings.ollama_model}"
-            payload["introduction"] = generated.get("introduction")
-            payload["conclusion"] = generated.get("conclusion")
-            payload["generation_provider"] = f"ollama:{settings.ollama_model}"
+    payload: dict[str, Any] = {
+        "lesson_id": lesson.lesson_id,
+        "repository_id": lesson.repository_id,
+        "pkm_revision_id": lesson.pkm_revision_id,
+        "title": lesson.title,
+        "chapters": lesson.chapters,
+        "scenes": lesson.scenes,
+        "steps": lesson.steps,
+        "validation_status": lesson.validation_status,
+        "checkpoints": getattr(lesson, "checkpoints", []),
+    }
+    generated = llm.generate_lesson_copy(request.goal, payload["scenes"])
+    if generated:
+        for scene in payload["scenes"]:
+            copy = next((item for item in generated.payload.get("scene_copy", []) if item.get("scene_id") == scene["scene_id"]), None)
+            if copy and set(copy.get("evidence_ids", [])).issubset(set(scene.get("evidence_ids", []))):
+                scene["narration"] = copy["narration"]
+                scene["generation_provider"] = f"{generated.provider}:{generated.model}"
+        payload["introduction"] = generated.payload.get("introduction")
+        payload["conclusion"] = generated.payload.get("conclusion")
+        payload["generation_provider"] = f"{generated.provider}:{generated.model}"
     payload.setdefault("generation_provider", "deterministic-evidence-planner")
     learning_store.save_lesson(payload)
     return payload
@@ -401,7 +517,8 @@ def progress(enrollment_id: str) -> dict[str, Any]:
     features = learning_store.state_features(enrollment_id, lesson)
     valid_actions = ["replay_scene", "show_source_excerpt", "hint_concept", "ask_guided_question", "ask_transfer_question"]
     decision = trained_policy.select_action(features, valid_actions) if trained_policy.available else rule_policy(features, valid_actions)
-    learning_store.record_event(stable_id("event", enrollment_id, "policy", str(len(state["attempts"]))), enrollment_id, "policy_decision", decision.__dict__)
+    policy_event_id = stable_id("event", enrollment_id, "policy", str(len(state["attempts"])), str(state.get("checkpoint_progress", {}).get("total_answered", 0)))
+    learning_store.record_event(policy_event_id, enrollment_id, "policy_decision", decision.__dict__)
     policy_status = "trained" if trained_policy.available else None
     return {**state, "learner_state": features, "policy_decision": decision.__dict__, "policy_evaluation": evaluate_baselines(policy_status)}
 
@@ -438,6 +555,58 @@ def hint(enrollment_id: str, request: HintRequest) -> dict[str, Any]:
     return {"action": "hint_concept", "message": "Start by naming one source-backed component and cite its file path. A hint supports the task but does not complete it.", "step_id": request.step_id}
 
 
+@app.post("/api/enrollments/{enrollment_id}/checkpoint-response")
+def submit_checkpoint_response(enrollment_id: str, request: CheckpointResponseRequest) -> dict[str, Any]:
+    import sqlite3
+    from backend.checkpoints import ActiveLearningCheckpoint, evaluate_checkpoint_response
+
+    with sqlite3.connect(learning_store.path) as db:
+        row = db.execute("SELECT lesson_id FROM enrollments WHERE enrollment_id=?", (enrollment_id,)).fetchone()
+    if row is None:
+        raise HTTPException(status_code=404, detail={"code": "ENROLLMENT_NOT_FOUND", "message": "Enrollment not found"})
+    lesson = learning_store.get_lesson(row[0])
+    if lesson is None:
+        raise HTTPException(status_code=404, detail={"code": "LESSON_NOT_FOUND", "message": "Lesson not found"})
+
+    # Find checkpoint in lesson
+    checkpoints = lesson.get("checkpoints", [])
+    matching_chk = next((c for c in checkpoints if c.get("checkpoint_id") == request.checkpoint_id), None)
+    if not matching_chk:
+        for s in lesson.get("scenes", []):
+            if s.get("checkpoint", {}).get("checkpoint_id") == request.checkpoint_id:
+                matching_chk = s["checkpoint"]
+                break
+
+    if not matching_chk:
+        raise HTTPException(status_code=404, detail={"code": "CHECKPOINT_NOT_FOUND", "message": "Checkpoint not found in lesson"})
+
+    chk_model = ActiveLearningCheckpoint(**matching_chk)
+    eval_result = evaluate_checkpoint_response(chk_model, request.selected_option_id)
+
+    event_id = stable_id("event", enrollment_id, "checkpoint", request.checkpoint_id)
+    learning_store.record_event(event_id, enrollment_id, "checkpoint_answered", {
+        "checkpoint_id": request.checkpoint_id,
+        "is_correct": eval_result.is_correct,
+        "selected_option_id": request.selected_option_id,
+        "recommended_action": eval_result.recommended_action,
+    })
+
+    return eval_result.model_dump(mode="json")
+
+
+def _retrieval_context(snapshot: Any, items: list[Any]) -> list[dict[str, Any]]:
+    evidence_by_id = {item.evidence_id: item for item in snapshot.evidence}
+    symbols_by_id = {item.symbol_id: item for item in snapshot.symbols}
+    relationships_by_id = {item.relationship_id: item for item in snapshot.relationships}
+    context: list[dict[str, Any]] = []
+    for item in items:
+        evidence = [evidence_by_id[eid].model_dump(mode="json") for eid in item.evidence_ids if eid in evidence_by_id]
+        related_symbols = [symbol.model_dump(mode="json") for symbol in symbols_by_id.values() if symbol.symbol_id == item.item_id]
+        related_relationships = [rel.model_dump(mode="json") for rel in relationships_by_id.values() if rel.relationship_id == item.item_id]
+        context.append({**item.__dict__, "evidence": evidence, "symbols": related_symbols, "relationships": related_relationships})
+    return context
+
+
 @app.post("/api/lessons/{lesson_id}/questions")
 def ask_question(lesson_id: str, request: QuestionRequest) -> dict[str, Any]:
     lesson = learning_store.get_lesson(lesson_id)
@@ -448,8 +617,9 @@ def ask_question(lesson_id: str, request: QuestionRequest) -> dict[str, Any]:
         raise HTTPException(status_code=409, detail={"code": "PKM_NOT_FOUND", "message": "Pinned PKM revision is unavailable"})
     result = retriever.retrieve(snapshot, request.question)
     explanation = build_deterministic_explanation(snapshot, request.question, result)
-    model_explanation = ollama.explain(request.question, [item.__dict__ for item in result.items]) if ollama.available() else None
-    response = {"question": request.question, "provider": "ollama" if model_explanation else "deterministic-fallback", "evidence_items": [item.__dict__ for item in result.items], **(model_explanation or explanation)}
+    model_result = llm.explain(request.question, _retrieval_context(snapshot, result.items))
+    model_explanation = model_result.payload if model_result else None
+    response = {"question": request.question, "provider": f"{model_result.provider}:{model_result.model}" if model_result else "deterministic-fallback", "evidence_items": _retrieval_context(snapshot, result.items), **(model_explanation or explanation)}
     app_store.add_message(stable_id("message", lesson_id, request.question), lesson["repository_id"], "user", request.question, [item.__dict__ for item in result.items], lesson_id)
     app_store.add_message(stable_id("message", lesson_id, request.question, "answer"), lesson["repository_id"], "assistant", str(response.get("answer", "")), [item.__dict__ for item in result.items], lesson_id)
     return response
@@ -462,8 +632,10 @@ def ask_repository_question(repository_id: str, request: QuestionRequest) -> dic
         raise HTTPException(status_code=404, detail={"code": "PKM_NOT_FOUND", "message": "Analyse the repository first"})
     result = retriever.retrieve(snapshot, request.question)
     explanation = build_deterministic_explanation(snapshot, request.question, result)
-    model_explanation = ollama.explain(request.question, [item.__dict__ for item in result.items]) if ollama.available() else None
-    response = {"question": request.question, "provider": "ollama" if model_explanation else "deterministic-fallback", "evidence_items": [item.__dict__ for item in result.items], **(model_explanation or explanation)}
+    context = _retrieval_context(snapshot, result.items)
+    model_result = llm.explain(request.question, context)
+    model_explanation = model_result.payload if model_result else None
+    response = {"question": request.question, "provider": f"{model_result.provider}:{model_result.model}" if model_result else "deterministic-fallback", "evidence_items": context, **(model_explanation or explanation)}
     app_store.add_message(stable_id("message", repository_id, request.question), repository_id, "user", request.question, [item.__dict__ for item in result.items])
     app_store.add_message(stable_id("message", repository_id, request.question, "answer"), repository_id, "assistant", str(response.get("answer", "")), [item.__dict__ for item in result.items])
     return response
@@ -475,8 +647,9 @@ def _build_video_explanation(repository_id: str, request: VideoRequest) -> dict[
         raise HTTPException(status_code=404, detail={"code": "PKM_NOT_FOUND", "message": "Analyse the repository first"})
     storyboard = build_storyboard(snapshot, scope=request.scope, question=request.question, detail=request.detail, title=request.title)
     model_used = "deterministic-evidence-storyboard"
-    if ollama.available():
-        overlay = ollama.generate_storyboard(request.model_dump(), [item.model_dump(mode="json") for item in snapshot.evidence])
+    model_result = llm.generate_storyboard(request.model_dump(), storyboard, [item.model_dump(mode="json") for item in snapshot.evidence])
+    if model_result:
+        overlay = model_result.payload
         if overlay:
             by_id = {scene["scene_id"]: scene for scene in storyboard["scenes"]}
             for scene in overlay.get("scenes", []):
@@ -487,10 +660,30 @@ def _build_video_explanation(repository_id: str, request: VideoRequest) -> dict[
                 base["objective"] = scene.get("objective", base["objective"])
                 base["visual_type"] = scene.get("visual_type", base["visual_type"])
                 base["highlight_lines"] = scene.get("highlight_lines", base.get("highlight_lines", []))
-            storyboard["generation_provider"] = f"ollama:{settings.ollama_model}"
-            model_used = f"ollama:{settings.ollama_model}"
+            storyboard["generation_provider"] = f"{model_result.provider}:{model_result.model}"
+            model_used = f"{model_result.provider}:{model_result.model}"
     validate_storyboard(storyboard, snapshot)
     storyboard["estimated_duration_ms"] = int(sum(len(str(scene["narration"]).split()) for scene in storyboard["scenes"]) / 2.3 * 1000)
+
+    # Run End-to-End Consistency Verifier
+    from backend.understanding import SemanticUnderstandingEngine
+    from backend.execution_flows import ExecutionFlowTracer
+    from backend.architecture_reasoning import ArchitectureReasoningEngine
+    from backend.consistency_verifier import EndToEndConsistencyVerifier
+
+    source_root = settings.storage_dir / "repositories" / repository_id / "snapshots" / snapshot.revision.pkm_revision_id
+    files_map = {f.path: (source_root / f.path).read_text(encoding="utf-8", errors="replace") for f in snapshot.files if (source_root / f.path).is_file()}
+    engine = SemanticUnderstandingEngine(snapshot, files_map)
+    engine.parse_all()
+    understandings = engine.analyze_components()
+    tracer = ExecutionFlowTracer(snapshot, understandings, snapshot.relationships)
+    paths = tracer.trace_paths()
+    arch_engine = ArchitectureReasoningEngine(snapshot, understandings, snapshot.relationships, paths)
+    views = arch_engine.generate_views(request.question)
+    verifier = EndToEndConsistencyVerifier(snapshot, understandings, paths, files_map)
+    consistency_rep = verifier.verify(storyboard, views)
+    validation_status = "validated" if consistency_rep.is_valid else "warning"
+
     payload = {
         "lesson_id": stable_id("explanation", repository_id, request.scope, request.question, request.detail),
         "repository_id": repository_id,
@@ -499,7 +692,8 @@ def _build_video_explanation(repository_id: str, request: VideoRequest) -> dict[
         "chapters": storyboard["chapters"],
         "scenes": storyboard["scenes"],
         "steps": [],
-        "validation_status": "validated",
+        "validation_status": validation_status,
+        "consistency_report": consistency_rep.model_dump(mode="json"),
         "generation_provider": model_used,
         "storyboard": storyboard,
         "scope": request.scope,
@@ -537,8 +731,8 @@ def create_repository_video_job(repository_id: str, request: VideoRequest) -> di
         "repository_id": repository_id,
         "scope": request.scope,
         "estimated_duration_ms": estimate,
-        "model": settings.ollama_model,
-        "model_available": ollama.available(),
+        "model": settings.groq_model if settings.llm_primary_provider == "groq" else settings.ollama_model,
+        "model_available": bool(llm.status()["groq_configured"] or llm.status()["ollama_available"]),
     }
 
 
