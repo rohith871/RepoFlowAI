@@ -46,4 +46,4 @@ cd frontend; npm run typecheck; npm run build
 
 The generated policy checkpoint and evaluation report are written under `storage/models/`. Rendered lessons are written under `storage/media/<lesson_id>/`; a successful narrated render produces `lesson.mp4`, `captions.vtt`, and `manifest.json`.
 
-Do not put repositories, media, models, credentials, or `.env` files in Git.
+
