@@ -137,9 +137,27 @@ def list_repositories() -> list[dict[str, Any]]:
     for repo in pkm_store.list_repositories():
         item = stored.get(repo.repository_id, repo.model_dump(mode="json"))
         snapshot = pkm_store.get_snapshot(repo.repository_id)
+        repo_name = repo.name
+        if repo_name in ("source", "", None):
+            source_url = item.get("source_url")
+            source_path = item.get("source_path")
+            if source_url:
+                parts = [p for p in urlparse(source_url).path.strip("/").split("/") if p]
+                if len(parts) >= 2:
+                    repo_name = f"{parts[0]}/{parts[1].removesuffix('.git')}"
+                elif len(parts) == 1:
+                    repo_name = parts[0].removesuffix('.git')
+            elif source_path:
+                sp = Path(source_path)
+                if sp.name == "source" and sp.parent.name.startswith("repo_"):
+                    repo_name = f"Repo {sp.parent.name[:12]}"
+                else:
+                    repo_name = sp.name
         if snapshot:
-            item = {**item, "name": repo.name, "latest_published_revision_id": repo.latest_published_revision_id,
+            item = {**item, "name": repo_name, "latest_published_revision_id": repo.latest_published_revision_id,
                     "summary": {"files": len(snapshot.files), "symbols": len(snapshot.symbols), "facts": len(snapshot.facts), "relationships": len(snapshot.relationships), "evidence": len(snapshot.evidence)}}
+        else:
+            item = {**item, "name": repo_name}
         output.append(item)
     return output
 

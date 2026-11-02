@@ -503,15 +503,22 @@ export function App() {
             Active Repository
           </small>
           <select
-            style={{ width: "100%", background: "#0a1727", color: "#e6f2ff", border: "1px solid #1e3852", borderRadius: "8px", padding: "8px", fontSize: "12px" }}
+            style={{ width: "100%", background: "#0a1727", color: "#e6f2ff", border: "1px solid #1e3852", borderRadius: "8px", padding: "8px", fontSize: "12px", cursor: "pointer", outline: "none" }}
             value={selectedRepoId}
             onChange={(e) => setSelectedRepoId(e.target.value)}
+            title="Switch the active repository for architecture, flows, and source exploration"
           >
-            {repositories.map((r) => (
-              <option key={r.repository_id} value={r.repository_id}>
-                {r.name ?? r.repository_id}
-              </option>
-            ))}
+            {repositories.map((r) => {
+              const displayName = r.name && r.name !== "source" ? r.name : r.repository_id;
+              const fileCount = r.summary?.files;
+              const langStr = r.languages && r.languages.length > 0 ? ` · ${r.languages.slice(0, 2).join(", ")}` : "";
+              const label = `${displayName}${fileCount ? ` (${fileCount} files${langStr})` : ""}`;
+              return (
+                <option key={r.repository_id} value={r.repository_id}>
+                  {label}
+                </option>
+              );
+            })}
           </select>
         </div>
 
