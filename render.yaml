@@ -1,0 +1,45 @@
+services:
+  # ---------------------------------------------------------------------------
+  # 1. RepoFlow AI Backend Web Service (FastAPI)
+  # ---------------------------------------------------------------------------
+  - type: web
+    name: repoflow-backend
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: REPOFLOW_STORAGE_DIR
+        value: /var/data/repoflow
+      - key: LLM_PRIMARY_PROVIDER
+        value: groq
+      - key: LLM_FALLBACK_ENABLED
+        value: "true"
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile
+      - key: FRONTEND_ORIGINS
+        sync: false
+    disk:
+      name: repoflow-data
+      mountPath: /var/data/repoflow
+      sizeGB: 10
+
+  # ---------------------------------------------------------------------------
+  # 2. RepoFlow AI Frontend Static Site (Vite + React)
+  # ---------------------------------------------------------------------------
+  - type: web
+    name: repoflow-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        sync: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

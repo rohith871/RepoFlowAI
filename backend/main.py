@@ -1,4 +1,5 @@
 import importlib.util
+import os
 import shutil
 import subprocess
 from pathlib import Path
@@ -28,7 +29,18 @@ from backend.storyboard import build_storyboard, validate_storyboard
 settings = Settings()
 settings.ensure_directories()
 app = FastAPI(title="RepoFlow AI", version="0.1.0")
-app.add_middleware(CORSMiddleware, allow_origins=["http://127.0.0.1:5173", "http://localhost:5173"], allow_methods=["*"], allow_headers=["*"])
+
+default_origins = ["http://127.0.0.1:5173", "http://localhost:5173", "http://127.0.0.1:4173", "http://localhost:4173"]
+extra_origins = [o.strip() for o in os.getenv("FRONTEND_ORIGINS", "").split(",") if o.strip()]
+allowed_origins = list(dict.fromkeys(default_origins + extra_origins))
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 pkm_store = PkmStore(settings.database_path)
 learning_store = LearningStore(settings.database_path)
 from backend.learner_profile import LearnerProfileStore
