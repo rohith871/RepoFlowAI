@@ -1,0 +1,255 @@
+{
+  "lesson_id": "production_showcase_001",
+  "title": "RepoFlow AI Architecture & Data Lineage Deep Dive",
+  "repository_id": "",
+  "scenes": [
+    {
+      "scene_id": "sc_orient",
+      "title": "Gateway Boundary & Public Entry",
+      "kind": "orientation",
+      "visual_type": "summary",
+      "narration": "Welcome to RepoFlow AI's deep dive. We trace how external HTTP queries enter the system at the API gateway.",
+      "source_refs": [
+        "api.py:1-15"
+      ],
+      "duration_ms": 1500,
+      "audio_url": null
+    },
+    {
+      "scene_id": "sc_code",
+      "title": "API Handler Implementation",
+      "kind": "code_walkthrough",
+      "visual_type": "code",
+      "narration": "Here the user_route function extracts the name parameter and hands execution directly to get_user.",
+      "code_path": "api.py",
+      "code_excerpt": "def user_route(name: str):\n    # Extract parameter and delegate\n    user = get_user(name)\n    return {'name': user.name, 'status': 'active'}",
+      "highlight_lines": [
+        3,
+        4
+      ],
+      "key_takeaway": "Transport handlers strictly decouple network routing from domain persistence logic.",
+      "failure_mode": "[HYPOTHETICAL] Inlining database access here couples HTTP controllers directly to schema definitions.",
+      "source_refs": [
+        "api.py:3-5"
+      ],
+      "duration_ms": 2000,
+      "audio_url": null
+    },
+    {
+      "scene_id": "sc_arch",
+      "title": "Subsystem Architectural Boundaries",
+      "kind": "architecture_view",
+      "visual_type": "architecture",
+      "narration": "Examining the system view: the Gateway communicates strictly with the Domain layer, while Domain logic reads Models.",
+      "nodes": [
+        {
+          "id": "n1",
+          "label": "API Gateway",
+          "role": "request_handler",
+          "status": "verified_static"
+        },
+        {
+          "id": "n2",
+          "label": "Domain Service",
+          "role": "business_logic",
+          "status": "verified_static"
+        },
+        {
+          "id": "n3",
+          "label": "User Model",
+          "role": "entity_model",
+          "status": "verified_static"
+        }
+      ],
+      "edges": [
+        {
+          "source": "n1",
+          "target": "n2",
+          "label": "calls",
+          "status": "verified_static"
+        },
+        {
+          "source": "n2",
+          "target": "n3",
+          "label": "instantiates",
+          "status": "verified_static"
+        }
+      ],
+      "source_refs": [
+        "api.py",
+        "app.py",
+        "models.py"
+      ],
+      "duration_ms": 2000,
+      "audio_url": null
+    },
+    {
+      "scene_id": "sc_dataflow",
+      "title": "End-to-End Data Lifecycle",
+      "kind": "data_flow",
+      "visual_type": "data_flow",
+      "narration": "Data transitions across 5 verified stages: Raw string input is validated, passed to the domain loader, instantiated as a typed User entity, and returned.",
+      "pipeline_stages": [
+        {
+          "id": "p1",
+          "name": "Raw Query",
+          "sub": "HTTP GET",
+          "type": "input",
+          "detail": "name='alice'"
+        },
+        {
+          "id": "p2",
+          "name": "user_route",
+          "sub": "Validation",
+          "type": "gateway",
+          "detail": "api.py:3"
+        },
+        {
+          "id": "p3",
+          "name": "get_user",
+          "sub": "Domain Logic",
+          "type": "service",
+          "detail": "app.py:8"
+        },
+        {
+          "id": "p4",
+          "name": "User Model",
+          "sub": "Typed Entity",
+          "type": "model",
+          "detail": "models.py:4"
+        },
+        {
+          "id": "p5",
+          "name": "JSON Out",
+          "sub": "Response Dict",
+          "type": "output",
+          "detail": "{'name': 'alice'}"
+        }
+      ],
+      "active_packet_label": "User Record Payload",
+      "source_refs": [
+        "api.py",
+        "app.py",
+        "models.py"
+      ],
+      "duration_ms": 2500,
+      "audio_url": null
+    },
+    {
+      "scene_id": "sc_exec",
+      "title": "Causal Execution Sequence",
+      "kind": "execution_trace",
+      "visual_type": "execution_flow",
+      "narration": "Execution flows deterministically from step 1 entry call to step 5 serialization return.",
+      "steps": [
+        {
+          "step_number": 1,
+          "operation": "ENTRY_CALL",
+          "symbol": "api.py:user_route",
+          "summary": "Unpack query parameters"
+        },
+        {
+          "step_number": 2,
+          "operation": "CROSS_CALL",
+          "symbol": "app.py:get_user",
+          "summary": "Invoke domain service"
+        },
+        {
+          "step_number": 3,
+          "operation": "INSTANTIATE",
+          "symbol": "models.py:User",
+          "summary": "Construct typed domain entity"
+        },
+        {
+          "step_number": 4,
+          "operation": "RETURN",
+          "symbol": "app.py:get_user",
+          "summary": "Yield User instance"
+        },
+        {
+          "step_number": 5,
+          "operation": "SERIALIZE",
+          "symbol": "api.py:user_route",
+          "summary": "Format response JSON"
+        }
+      ],
+      "source_refs": [
+        "api.py",
+        "app.py"
+      ],
+      "duration_ms": 2000,
+      "audio_url": null
+    }
+  ],
+  "captions": [
+    {
+      "scene_id": "sc_orient",
+      "text": "Welcome to RepoFlow AI's deep dive. We trace how external HTTP queries enter the system at the API gateway.",
+      "start_ms": 0,
+      "end_ms": 1500
+    },
+    {
+      "scene_id": "sc_code",
+      "text": "Here the user_route function extracts the name parameter and hands execution directly to get_user.",
+      "start_ms": 1500,
+      "end_ms": 3500
+    },
+    {
+      "scene_id": "sc_arch",
+      "text": "Examining the system view: the Gateway communicates strictly with the Domain layer, while Domain logic reads Models.",
+      "start_ms": 3500,
+      "end_ms": 5500
+    },
+    {
+      "scene_id": "sc_dataflow",
+      "text": "Data transitions across 5 verified stages: Raw string input is validated, passed to the domain loader, instantiated as a typed User entity, and returned.",
+      "start_ms": 5500,
+      "end_ms": 8000
+    },
+    {
+      "scene_id": "sc_exec",
+      "text": "Execution flows deterministically from step 1 entry call to step 5 serialization return.",
+      "start_ms": 8000,
+      "end_ms": 10000
+    }
+  ],
+  "chapters": [
+    {
+      "title": "Gateway Boundary & Public Entry",
+      "start_ms": 0,
+      "end_ms": 1500,
+      "scene_id": "sc_orient"
+    },
+    {
+      "title": "API Handler Implementation",
+      "start_ms": 1500,
+      "end_ms": 3500,
+      "scene_id": "sc_code"
+    },
+    {
+      "title": "Subsystem Architectural Boundaries",
+      "start_ms": 3500,
+      "end_ms": 5500,
+      "scene_id": "sc_arch"
+    },
+    {
+      "title": "End-to-End Data Lifecycle",
+      "start_ms": 5500,
+      "end_ms": 8000,
+      "scene_id": "sc_dataflow"
+    },
+    {
+      "title": "Causal Execution Sequence",
+      "start_ms": 8000,
+      "end_ms": 10000,
+      "scene_id": "sc_exec"
+    }
+  ],
+  "render": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "codec": "h264",
+    "audio_codec": "aac"
+  }
+}

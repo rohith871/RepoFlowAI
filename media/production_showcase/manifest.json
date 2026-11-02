@@ -1,0 +1,328 @@
+{
+  "lesson_id": "production_showcase_001",
+  "status": "preview_ready",
+  "frames": [
+    "C:\\Users\\KOYA ROHITH\\RepoFlowAI\\media\\production_showcase\\scene-000.svg",
+    "C:\\Users\\KOYA ROHITH\\RepoFlowAI\\media\\production_showcase\\scene-001.svg",
+    "C:\\Users\\KOYA ROHITH\\RepoFlowAI\\media\\production_showcase\\scene-002.svg",
+    "C:\\Users\\KOYA ROHITH\\RepoFlowAI\\media\\production_showcase\\scene-003.svg",
+    "C:\\Users\\KOYA ROHITH\\RepoFlowAI\\media\\production_showcase\\scene-004.svg"
+  ],
+  "narration": {
+    "status": "fallback_text_only",
+    "voice": "alba",
+    "segments": [
+      {
+        "scene_id": "sc_orient",
+        "text": "Welcome to RepoFlow AI's deep dive. We trace how external HTTP queries enter the system at the API gateway.",
+        "path": null,
+        "duration_ms": 1500,
+        "status": "unavailable"
+      },
+      {
+        "scene_id": "sc_code",
+        "text": "Here the user_route function extracts the name parameter and hands execution directly to get_user.",
+        "path": null,
+        "duration_ms": 2000,
+        "status": "unavailable"
+      },
+      {
+        "scene_id": "sc_arch",
+        "text": "Examining the system view: the Gateway communicates strictly with the Domain layer, while Domain logic reads Models.",
+        "path": null,
+        "duration_ms": 2000,
+        "status": "unavailable"
+      },
+      {
+        "scene_id": "sc_dataflow",
+        "text": "Data transitions across 5 verified stages: Raw string input is validated, passed to the domain loader, instantiated as a typed User entity, and returned.",
+        "path": null,
+        "duration_ms": 2500,
+        "status": "unavailable"
+      },
+      {
+        "scene_id": "sc_exec",
+        "text": "Execution flows deterministically from step 1 entry call to step 5 serialization return.",
+        "path": null,
+        "duration_ms": 2000,
+        "status": "unavailable"
+      }
+    ]
+  },
+  "captions": [
+    {
+      "scene_id": "sc_orient",
+      "text": "Welcome to RepoFlow AI's deep dive. We trace how external HTTP queries enter the system at the API gateway.",
+      "start_ms": 0,
+      "end_ms": 1500
+    },
+    {
+      "scene_id": "sc_code",
+      "text": "Here the user_route function extracts the name parameter and hands execution directly to get_user.",
+      "start_ms": 1500,
+      "end_ms": 3500
+    },
+    {
+      "scene_id": "sc_arch",
+      "text": "Examining the system view: the Gateway communicates strictly with the Domain layer, while Domain logic reads Models.",
+      "start_ms": 3500,
+      "end_ms": 5500
+    },
+    {
+      "scene_id": "sc_dataflow",
+      "text": "Data transitions across 5 verified stages: Raw string input is validated, passed to the domain loader, instantiated as a typed User entity, and returned.",
+      "start_ms": 5500,
+      "end_ms": 8000
+    },
+    {
+      "scene_id": "sc_exec",
+      "text": "Execution flows deterministically from step 1 entry call to step 5 serialization return.",
+      "start_ms": 8000,
+      "end_ms": 10000
+    }
+  ],
+  "chapters": [
+    {
+      "title": "Gateway Boundary & Public Entry",
+      "start_ms": 0,
+      "end_ms": 1500,
+      "scene_id": "sc_orient"
+    },
+    {
+      "title": "API Handler Implementation",
+      "start_ms": 1500,
+      "end_ms": 3500,
+      "scene_id": "sc_code"
+    },
+    {
+      "title": "Subsystem Architectural Boundaries",
+      "start_ms": 3500,
+      "end_ms": 5500,
+      "scene_id": "sc_arch"
+    },
+    {
+      "title": "End-to-End Data Lifecycle",
+      "start_ms": 5500,
+      "end_ms": 8000,
+      "scene_id": "sc_dataflow"
+    },
+    {
+      "title": "Causal Execution Sequence",
+      "start_ms": 8000,
+      "end_ms": 10000,
+      "scene_id": "sc_exec"
+    }
+  ],
+  "render": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "codec": "h264",
+    "audio_codec": "aac"
+  },
+  "scope": "learning_lesson",
+  "generation_provider": "unknown",
+  "estimated_duration_ms": null,
+  "storyboard": null,
+  "transcript_validation": {
+    "is_valid": true,
+    "quality_score": 100.0,
+    "issues": [],
+    "cleaned_segments": [
+      {
+        "id": "segment_a023f76ccf5fcae99f55",
+        "scene_id": "sc_orient",
+        "lesson_section": "main",
+        "spoken_text": "Welcome to RepoFlow AI's deep dive. We trace how external HTTP queries enter the system at the API gateway.",
+        "educational_purpose": "Gateway Boundary & Public Entry",
+        "source_files": [
+          "api.py"
+        ],
+        "symbols": [],
+        "line_refs": [
+          "api.py:1-15"
+        ],
+        "diagram_nodes": [],
+        "terms": [],
+        "pronunciation_hints": {},
+        "estimated_duration": 8.15,
+        "segment_type": "summary"
+      },
+      {
+        "id": "segment_6b886d56990117ac9a36",
+        "scene_id": "sc_code",
+        "lesson_section": "main",
+        "spoken_text": "Here the user_route function extracts the name parameter and hands execution directly to get_user.",
+        "educational_purpose": "API Handler Implementation",
+        "source_files": [
+          "api.py"
+        ],
+        "symbols": [],
+        "line_refs": [
+          "api.py:3-5"
+        ],
+        "diagram_nodes": [],
+        "terms": [],
+        "pronunciation_hints": {},
+        "estimated_duration": 6.01,
+        "segment_type": "code"
+      },
+      {
+        "id": "segment_f863f702bcc3c64cf5b9",
+        "scene_id": "sc_arch",
+        "lesson_section": "main",
+        "spoken_text": "Examining the system view: the Gateway communicates strictly with the Domain layer, while Domain logic reads Models.",
+        "educational_purpose": "Subsystem Architectural Boundaries",
+        "source_files": [
+          "api.py",
+          "app.py",
+          "models.py"
+        ],
+        "symbols": [],
+        "line_refs": [],
+        "diagram_nodes": [],
+        "terms": [],
+        "pronunciation_hints": {},
+        "estimated_duration": 7.3,
+        "segment_type": "architecture"
+      },
+      {
+        "id": "segment_b6779e207c62eabb596d",
+        "scene_id": "sc_dataflow",
+        "lesson_section": "main",
+        "spoken_text": "Data transitions across 5 verified stages: Raw string input is validated, passed to the domain loader, instantiated as a typed User entity, and returned.",
+        "educational_purpose": "End-to-End Data Lifecycle",
+        "source_files": [
+          "api.py",
+          "app.py",
+          "models.py"
+        ],
+        "symbols": [],
+        "line_refs": [],
+        "diagram_nodes": [],
+        "terms": [],
+        "pronunciation_hints": {},
+        "estimated_duration": 10.3,
+        "segment_type": "data_flow"
+      },
+      {
+        "id": "segment_e4b4486964bb3c726f64",
+        "scene_id": "sc_exec",
+        "lesson_section": "main",
+        "spoken_text": "Execution flows deterministically from step 1 entry call to step 5 serialization return.",
+        "educational_purpose": "Causal Execution Sequence",
+        "source_files": [
+          "api.py",
+          "app.py"
+        ],
+        "symbols": [],
+        "line_refs": [],
+        "diagram_nodes": [],
+        "terms": [],
+        "pronunciation_hints": {},
+        "estimated_duration": 5.58,
+        "segment_type": "execution_flow"
+      }
+    ]
+  },
+  "transcript_segments": [
+    {
+      "id": "segment_a023f76ccf5fcae99f55",
+      "scene_id": "sc_orient",
+      "lesson_section": "main",
+      "spoken_text": "Welcome to RepoFlow AI's deep dive. We trace how external HTTP queries enter the system at the API gateway.",
+      "educational_purpose": "Gateway Boundary & Public Entry",
+      "source_files": [
+        "api.py"
+      ],
+      "symbols": [],
+      "line_refs": [
+        "api.py:1-15"
+      ],
+      "diagram_nodes": [],
+      "terms": [],
+      "pronunciation_hints": {},
+      "estimated_duration": 8.15,
+      "segment_type": "summary"
+    },
+    {
+      "id": "segment_6b886d56990117ac9a36",
+      "scene_id": "sc_code",
+      "lesson_section": "main",
+      "spoken_text": "Here the user_route function extracts the name parameter and hands execution directly to get_user.",
+      "educational_purpose": "API Handler Implementation",
+      "source_files": [
+        "api.py"
+      ],
+      "symbols": [],
+      "line_refs": [
+        "api.py:3-5"
+      ],
+      "diagram_nodes": [],
+      "terms": [],
+      "pronunciation_hints": {},
+      "estimated_duration": 6.01,
+      "segment_type": "code"
+    },
+    {
+      "id": "segment_f863f702bcc3c64cf5b9",
+      "scene_id": "sc_arch",
+      "lesson_section": "main",
+      "spoken_text": "Examining the system view: the Gateway communicates strictly with the Domain layer, while Domain logic reads Models.",
+      "educational_purpose": "Subsystem Architectural Boundaries",
+      "source_files": [
+        "api.py",
+        "app.py",
+        "models.py"
+      ],
+      "symbols": [],
+      "line_refs": [],
+      "diagram_nodes": [],
+      "terms": [],
+      "pronunciation_hints": {},
+      "estimated_duration": 7.3,
+      "segment_type": "architecture"
+    },
+    {
+      "id": "segment_b6779e207c62eabb596d",
+      "scene_id": "sc_dataflow",
+      "lesson_section": "main",
+      "spoken_text": "Data transitions across 5 verified stages: Raw string input is validated, passed to the domain loader, instantiated as a typed User entity, and returned.",
+      "educational_purpose": "End-to-End Data Lifecycle",
+      "source_files": [
+        "api.py",
+        "app.py",
+        "models.py"
+      ],
+      "symbols": [],
+      "line_refs": [],
+      "diagram_nodes": [],
+      "terms": [],
+      "pronunciation_hints": {},
+      "estimated_duration": 10.3,
+      "segment_type": "data_flow"
+    },
+    {
+      "id": "segment_e4b4486964bb3c726f64",
+      "scene_id": "sc_exec",
+      "lesson_section": "main",
+      "spoken_text": "Execution flows deterministically from step 1 entry call to step 5 serialization return.",
+      "educational_purpose": "Causal Execution Sequence",
+      "source_files": [
+        "api.py",
+        "app.py"
+      ],
+      "symbols": [],
+      "line_refs": [],
+      "diagram_nodes": [],
+      "terms": [],
+      "pronunciation_hints": {},
+      "estimated_duration": 5.58,
+      "segment_type": "execution_flow"
+    }
+  ],
+  "actual_duration_ms": 10000,
+  "video_status": "playable",
+  "video_path": "C:\\Users\\KOYA ROHITH\\RepoFlowAI\\media\\production_showcase\\lesson.mp4",
+  "renderer": "remotion"
+}

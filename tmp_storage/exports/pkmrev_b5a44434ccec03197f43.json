@@ -1,0 +1,1197 @@
+{
+  "schema_version": "pkm-1.0",
+  "revision": {
+    "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+    "repository_id": "repo_acb028d900f37f34a321",
+    "parent_revision_id": null,
+    "source_snapshot_id": "snap_8848386ec66e17a96143",
+    "analysis_run_id": "run_8848386ec66e17a96143",
+    "status": "published",
+    "parser_versions": {
+      "python-ast": "stdlib",
+      "web-regex": "0.1"
+    },
+    "created_at": "2026-11-01T16:24:16.653525Z",
+    "validation_summary": {
+      "errors": 0,
+      "warnings": 0
+    }
+  },
+  "repositories": [
+    {
+      "schema_version": "pkm-1.0",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "name": "sample_project",
+      "source_kind": "local_directory",
+      "root_label": "sample_project",
+      "created_at": "2026-11-01T16:24:16.635964Z",
+      "latest_published_revision_id": null,
+      "isolation_key": "repo_acb028d900f37f34a321"
+    }
+  ],
+  "files": [
+    {
+      "file_id": "file_c033c89731964b13056d",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "path": "api.py",
+      "content_hash": "sha256:7760e0127589b704eb7972331b95d1c01f396755dc026c621f105ebdefc236d8",
+      "language": "python",
+      "size_bytes": 129,
+      "analysis_status": "analysed",
+      "unsupported_reason": null,
+      "line_count": 6
+    },
+    {
+      "file_id": "file_845f1e4dbd5ac5d60ae9",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "path": "app.py",
+      "content_hash": "sha256:4f321992f244957b8b916f4844baa5b492806981dc17d45535d5e0ace1bc9368",
+      "language": "python",
+      "size_bytes": 198,
+      "analysis_status": "analysed",
+      "unsupported_reason": null,
+      "line_count": 14
+    },
+    {
+      "file_id": "file_96382daa8aeb333c0445",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "path": "README.md",
+      "content_hash": "sha256:56b4923578798a616c64c144a254b7d618adf4a08f01c0d02b1fd25d7721edbe",
+      "language": "markdown",
+      "size_bytes": 97,
+      "analysis_status": "analysed",
+      "unsupported_reason": null,
+      "line_count": 3
+    },
+    {
+      "file_id": "file_925dc3b58f4a266a45bc",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "path": "schema.sql",
+      "content_hash": "sha256:3e545f61425b9535926a4d3fc63f4f332667dd94b0d2ab5e8c50ffa438236787",
+      "language": "sql",
+      "size_bytes": 68,
+      "analysis_status": "analysed",
+      "unsupported_reason": null,
+      "line_count": 2
+    }
+  ],
+  "symbols": [
+    {
+      "symbol_id": "sym_382c447d30669f919662",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "file_id": "file_c033c89731964b13056d",
+      "kind": "module",
+      "qualified_name": "api.py",
+      "name": "api",
+      "signature": null,
+      "line_start": 1,
+      "line_end": 6,
+      "language_metadata": {
+        "path": "api.py",
+        "evidence_id": "evidence_12775fa68c1513daeeae"
+      }
+    },
+    {
+      "symbol_id": "sym_1e125e125281874eae0b",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "file_id": "file_c033c89731964b13056d",
+      "kind": "function",
+      "qualified_name": "api.py:user_route",
+      "name": "user_route",
+      "signature": "name: str",
+      "line_start": 4,
+      "line_end": 6,
+      "language_metadata": {}
+    },
+    {
+      "symbol_id": "sym_9dec53ca8453ecb9f3e6",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "file_id": "file_845f1e4dbd5ac5d60ae9",
+      "kind": "module",
+      "qualified_name": "app.py",
+      "name": "app",
+      "signature": null,
+      "line_start": 1,
+      "line_end": 14,
+      "language_metadata": {
+        "path": "app.py",
+        "evidence_id": "evidence_eee8352e89cb31c7966e"
+      }
+    },
+    {
+      "symbol_id": "sym_e59d8678a1341cfa2534",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "file_id": "file_845f1e4dbd5ac5d60ae9",
+      "kind": "class",
+      "qualified_name": "app.py:User",
+      "name": "User",
+      "signature": null,
+      "line_start": 5,
+      "line_end": 6,
+      "language_metadata": {}
+    },
+    {
+      "symbol_id": "sym_2403baf2102d3932ebcd",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "file_id": "file_845f1e4dbd5ac5d60ae9",
+      "kind": "function",
+      "qualified_name": "app.py:load_user",
+      "name": "load_user",
+      "signature": "name: str",
+      "line_start": 9,
+      "line_end": 10,
+      "language_metadata": {}
+    },
+    {
+      "symbol_id": "sym_45c48ebdcf30a4171991",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "file_id": "file_845f1e4dbd5ac5d60ae9",
+      "kind": "function",
+      "qualified_name": "app.py:get_user",
+      "name": "get_user",
+      "signature": "name: str",
+      "line_start": 13,
+      "line_end": 14,
+      "language_metadata": {}
+    }
+  ],
+  "facts": [
+    {
+      "fact_id": "fact_62a57b242d760753f899",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "fact_type": "function",
+      "subject_id": "sym_1e125e125281874eae0b",
+      "attributes": {
+        "name": "user_route"
+      },
+      "assertion_status": "verified_static",
+      "evidence_ids": [
+        "evidence_47d785eeb4b79e5df7d0"
+      ],
+      "extraction_method": "python_ast",
+      "extractor_version": "stdlib"
+    },
+    {
+      "fact_id": "fact_2b0525e466e7c3450040",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "fact_type": "import",
+      "subject_id": "file_c033c89731964b13056d",
+      "attributes": {
+        "module": "app",
+        "names": [
+          "get_user"
+        ]
+      },
+      "assertion_status": "verified_static",
+      "evidence_ids": [
+        "evidence_2b4599403c46d74e324e"
+      ],
+      "extraction_method": "python_ast",
+      "extractor_version": "stdlib"
+    },
+    {
+      "fact_id": "fact_9694361c4b8fd8116f1b",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "fact_type": "class",
+      "subject_id": "sym_e59d8678a1341cfa2534",
+      "attributes": {
+        "name": "User"
+      },
+      "assertion_status": "verified_static",
+      "evidence_ids": [
+        "evidence_fe2e2d8e3cf25a63b5ca"
+      ],
+      "extraction_method": "python_ast",
+      "extractor_version": "stdlib"
+    },
+    {
+      "fact_id": "fact_8b5e89ee02e6ac313a60",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "fact_type": "function",
+      "subject_id": "sym_2403baf2102d3932ebcd",
+      "attributes": {
+        "name": "load_user"
+      },
+      "assertion_status": "verified_static",
+      "evidence_ids": [
+        "evidence_2257428b2768c16009fe"
+      ],
+      "extraction_method": "python_ast",
+      "extractor_version": "stdlib"
+    },
+    {
+      "fact_id": "fact_39129076f5cb7df5c3a0",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "fact_type": "function",
+      "subject_id": "sym_45c48ebdcf30a4171991",
+      "attributes": {
+        "name": "get_user"
+      },
+      "assertion_status": "verified_static",
+      "evidence_ids": [
+        "evidence_cf6c26b440fb55890206"
+      ],
+      "extraction_method": "python_ast",
+      "extractor_version": "stdlib"
+    },
+    {
+      "fact_id": "fact_8172faeedb6d84f6c679",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "fact_type": "import",
+      "subject_id": "file_845f1e4dbd5ac5d60ae9",
+      "attributes": {
+        "module": "dataclasses",
+        "names": [
+          "dataclass"
+        ]
+      },
+      "assertion_status": "verified_static",
+      "evidence_ids": [
+        "evidence_a1e136b5f3c1240be3f3"
+      ],
+      "extraction_method": "python_ast",
+      "extractor_version": "stdlib"
+    },
+    {
+      "fact_id": "fact_30c3301197a72705e50c",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "fact_type": "text_reference",
+      "subject_id": "file_96382daa8aeb333c0445",
+      "attributes": {
+        "token": "database"
+      },
+      "assertion_status": "verified_static",
+      "evidence_ids": [
+        "evidence_48d5cc8f1ab9785f6d50"
+      ],
+      "extraction_method": "text_search",
+      "extractor_version": "0.1"
+    },
+    {
+      "fact_id": "fact_77db1dd9da96ec13dbd5",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "fact_type": "query",
+      "subject_id": "file_925dc3b58f4a266a45bc",
+      "attributes": {
+        "operation": "CREATE TABLE"
+      },
+      "assertion_status": "verified_declared",
+      "evidence_ids": [
+        "evidence_1dad7a6dbc8e5897a4dd"
+      ],
+      "extraction_method": "sql_regex",
+      "extractor_version": "0.1"
+    },
+    {
+      "fact_id": "fact_bf9c5dd6398fd6c1e899",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "fact_type": "query",
+      "subject_id": "file_925dc3b58f4a266a45bc",
+      "attributes": {
+        "operation": "SELECT"
+      },
+      "assertion_status": "verified_declared",
+      "evidence_ids": [
+        "evidence_77ea57aa3959a24e1944"
+      ],
+      "extraction_method": "sql_regex",
+      "extractor_version": "0.1"
+    },
+    {
+      "fact_id": "fact_f5a49345a98beca7d158",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "fact_type": "component_understanding",
+      "subject_id": "sym_382c447d30669f919662",
+      "attributes": {
+        "component_id": "sym_382c447d30669f919662",
+        "name": "api",
+        "kind": "module",
+        "file_path": "api.py",
+        "line_range": [
+          1,
+          6
+        ],
+        "summary": "Module api in api.py (domain logic).",
+        "responsibility": "Performs specific computation for 'api' within api.py.",
+        "problem_solved": "Implements core business operation for api.",
+        "inputs": [],
+        "outputs": [],
+        "state_reads": [],
+        "state_writes": [],
+        "dependencies": [
+          "sym_9dec53ca8453ecb9f3e6"
+        ],
+        "dependents": [],
+        "transformations": [],
+        "conditions": [],
+        "error_paths": [],
+        "external_interactions": [],
+        "execution_role": "domain_logic",
+        "modification_guidance": "Inspect existing unit tests and callers before altering api.",
+        "limitations": [
+          "Runtime execution performance and dynamic input data cannot be established from static AST alone.",
+          "Persistence backing (e.g. database transactions) is unverified at runtime without live telemetry."
+        ],
+        "provenance": "deterministic_derived",
+        "evidence_ids": [
+          "evidence_12775fa68c1513daeeae",
+          "evidence_2b4599403c46d74e324e"
+        ],
+        "confidence": 1.0
+      },
+      "assertion_status": "verified_static",
+      "evidence_ids": [
+        "evidence_12775fa68c1513daeeae",
+        "evidence_2b4599403c46d74e324e"
+      ],
+      "extraction_method": "semantic_understanding_engine",
+      "extractor_version": "1.0"
+    },
+    {
+      "fact_id": "fact_ecf22dbedc009b99f1f1",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "fact_type": "component_understanding",
+      "subject_id": "sym_1e125e125281874eae0b",
+      "attributes": {
+        "component_id": "sym_1e125e125281874eae0b",
+        "name": "user_route",
+        "kind": "function",
+        "file_path": "api.py",
+        "line_range": [
+          4,
+          6
+        ],
+        "summary": "Function user_route in api.py (request handler).",
+        "responsibility": "Exposes and handles request flow for 'user_route', receiving parameters and shaping API response.",
+        "problem_solved": "Provides an external access interface to retrieve and format data from api.py.",
+        "inputs": [
+          {
+            "name": "name",
+            "type": "str"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "dict[str, str]",
+            "description": "Returns dict[str, str]"
+          }
+        ],
+        "state_reads": [],
+        "state_writes": [],
+        "dependencies": [],
+        "dependents": [],
+        "transformations": [
+          "user = get_user(name)",
+          "Returns constructed value: {'name': user.name}"
+        ],
+        "conditions": [],
+        "error_paths": [],
+        "external_interactions": [],
+        "execution_role": "request_handler",
+        "modification_guidance": "Verify parameter types and ensure downstream services accept the incoming request schema.",
+        "limitations": [
+          "Runtime execution performance and dynamic input data cannot be established from static AST alone.",
+          "Persistence backing (e.g. database transactions) is unverified at runtime without live telemetry."
+        ],
+        "provenance": "deterministic_derived",
+        "evidence_ids": [
+          "evidence_47d785eeb4b79e5df7d0"
+        ],
+        "confidence": 1.0
+      },
+      "assertion_status": "verified_static",
+      "evidence_ids": [
+        "evidence_47d785eeb4b79e5df7d0"
+      ],
+      "extraction_method": "semantic_understanding_engine",
+      "extractor_version": "1.0"
+    },
+    {
+      "fact_id": "fact_dd14eb06843eacc41d7e",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "fact_type": "component_understanding",
+      "subject_id": "sym_9dec53ca8453ecb9f3e6",
+      "attributes": {
+        "component_id": "sym_9dec53ca8453ecb9f3e6",
+        "name": "app",
+        "kind": "module",
+        "file_path": "app.py",
+        "line_range": [
+          1,
+          14
+        ],
+        "summary": "Module app in app.py (domain logic).",
+        "responsibility": "Performs specific computation for 'app' within app.py.",
+        "problem_solved": "Implements core business operation for app.",
+        "inputs": [],
+        "outputs": [],
+        "state_reads": [],
+        "state_writes": [],
+        "dependencies": [],
+        "dependents": [
+          "sym_382c447d30669f919662"
+        ],
+        "transformations": [],
+        "conditions": [],
+        "error_paths": [],
+        "external_interactions": [],
+        "execution_role": "domain_logic",
+        "modification_guidance": "Inspect existing unit tests and callers before altering app.",
+        "limitations": [
+          "Runtime execution performance and dynamic input data cannot be established from static AST alone.",
+          "Persistence backing (e.g. database transactions) is unverified at runtime without live telemetry."
+        ],
+        "provenance": "deterministic_derived",
+        "evidence_ids": [
+          "evidence_eee8352e89cb31c7966e",
+          "evidence_a1e136b5f3c1240be3f3"
+        ],
+        "confidence": 1.0
+      },
+      "assertion_status": "verified_static",
+      "evidence_ids": [
+        "evidence_eee8352e89cb31c7966e",
+        "evidence_a1e136b5f3c1240be3f3"
+      ],
+      "extraction_method": "semantic_understanding_engine",
+      "extractor_version": "1.0"
+    },
+    {
+      "fact_id": "fact_c6575d3169bca33eae73",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "fact_type": "component_understanding",
+      "subject_id": "sym_e59d8678a1341cfa2534",
+      "attributes": {
+        "component_id": "sym_e59d8678a1341cfa2534",
+        "name": "User",
+        "kind": "class",
+        "file_path": "app.py",
+        "line_range": [
+          5,
+          6
+        ],
+        "summary": "Class User in app.py (entity model).",
+        "responsibility": "Represents domain data structure 'User' and encapsulates entity attributes.",
+        "problem_solved": "Ensures consistent type-safe representation of User across the application.",
+        "inputs": [
+          {
+            "name": "name",
+            "type": "str"
+          }
+        ],
+        "outputs": [],
+        "state_reads": [],
+        "state_writes": [],
+        "dependencies": [],
+        "dependents": [
+          "sym_2403baf2102d3932ebcd"
+        ],
+        "transformations": [],
+        "conditions": [],
+        "error_paths": [],
+        "external_interactions": [],
+        "execution_role": "entity_model",
+        "modification_guidance": "Changing fields requires checking all instantiation and attribute access sites across caller modules.",
+        "limitations": [
+          "Runtime execution performance and dynamic input data cannot be established from static AST alone.",
+          "Persistence backing (e.g. database transactions) is unverified at runtime without live telemetry."
+        ],
+        "provenance": "deterministic_derived",
+        "evidence_ids": [
+          "evidence_fe2e2d8e3cf25a63b5ca"
+        ],
+        "confidence": 1.0
+      },
+      "assertion_status": "verified_static",
+      "evidence_ids": [
+        "evidence_fe2e2d8e3cf25a63b5ca"
+      ],
+      "extraction_method": "semantic_understanding_engine",
+      "extractor_version": "1.0"
+    },
+    {
+      "fact_id": "fact_870629aa31526e2520bb",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "fact_type": "component_understanding",
+      "subject_id": "sym_2403baf2102d3932ebcd",
+      "attributes": {
+        "component_id": "sym_2403baf2102d3932ebcd",
+        "name": "load_user",
+        "kind": "function",
+        "file_path": "app.py",
+        "line_range": [
+          9,
+          10
+        ],
+        "summary": "Function load_user in app.py (data access).",
+        "responsibility": "Encapsulates retrieval and instantiation of user entities.",
+        "problem_solved": "Decouples data construction and loading logic from presentation or API route layers.",
+        "inputs": [
+          {
+            "name": "name",
+            "type": "str"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "User",
+            "description": "Returns User"
+          }
+        ],
+        "state_reads": [],
+        "state_writes": [],
+        "dependencies": [
+          "sym_e59d8678a1341cfa2534"
+        ],
+        "dependents": [
+          "sym_45c48ebdcf30a4171991"
+        ],
+        "transformations": [
+          "Returns constructed value: User(name=name)"
+        ],
+        "conditions": [],
+        "error_paths": [],
+        "external_interactions": [],
+        "execution_role": "data_access",
+        "modification_guidance": "Maintain deterministic return guarantees; handle entity absence or lookup failure cleanly.",
+        "limitations": [
+          "Runtime execution performance and dynamic input data cannot be established from static AST alone.",
+          "Persistence backing (e.g. database transactions) is unverified at runtime without live telemetry."
+        ],
+        "provenance": "deterministic_derived",
+        "evidence_ids": [
+          "evidence_2257428b2768c16009fe"
+        ],
+        "confidence": 1.0
+      },
+      "assertion_status": "verified_static",
+      "evidence_ids": [
+        "evidence_2257428b2768c16009fe"
+      ],
+      "extraction_method": "semantic_understanding_engine",
+      "extractor_version": "1.0"
+    },
+    {
+      "fact_id": "fact_5ead815cec0eba1564c8",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "fact_type": "component_understanding",
+      "subject_id": "sym_45c48ebdcf30a4171991",
+      "attributes": {
+        "component_id": "sym_45c48ebdcf30a4171991",
+        "name": "get_user",
+        "kind": "function",
+        "file_path": "app.py",
+        "line_range": [
+          13,
+          14
+        ],
+        "summary": "Function get_user in app.py (data access).",
+        "responsibility": "Encapsulates retrieval and instantiation of user entities.",
+        "problem_solved": "Decouples data construction and loading logic from presentation or API route layers.",
+        "inputs": [
+          {
+            "name": "name",
+            "type": "str"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "User",
+            "description": "Returns User"
+          }
+        ],
+        "state_reads": [],
+        "state_writes": [],
+        "dependencies": [
+          "sym_2403baf2102d3932ebcd"
+        ],
+        "dependents": [],
+        "transformations": [
+          "Returns constructed value: load_user(name)"
+        ],
+        "conditions": [],
+        "error_paths": [],
+        "external_interactions": [],
+        "execution_role": "data_access",
+        "modification_guidance": "Maintain deterministic return guarantees; handle entity absence or lookup failure cleanly.",
+        "limitations": [
+          "Runtime execution performance and dynamic input data cannot be established from static AST alone.",
+          "Persistence backing (e.g. database transactions) is unverified at runtime without live telemetry."
+        ],
+        "provenance": "deterministic_derived",
+        "evidence_ids": [
+          "evidence_cf6c26b440fb55890206"
+        ],
+        "confidence": 1.0
+      },
+      "assertion_status": "verified_static",
+      "evidence_ids": [
+        "evidence_cf6c26b440fb55890206"
+      ],
+      "extraction_method": "semantic_understanding_engine",
+      "extractor_version": "1.0"
+    },
+    {
+      "fact_id": "fact_24e36b869a27fb006975",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "fact_type": "execution_path",
+      "subject_id": "sym_1e125e125281874eae0b",
+      "attributes": {
+        "path_id": "execpath_87b5817b298897b52d7f",
+        "name": "Flow: user_route",
+        "entry_point_id": "sym_1e125e125281874eae0b",
+        "trigger": "Invocation of user_route",
+        "steps": [
+          {
+            "step_number": 1,
+            "source_component_id": "sym_1e125e125281874eae0b",
+            "target_component_id": null,
+            "operation_type": "entry_call",
+            "description": "Request reaches user_route in api.py with name: str.",
+            "condition": null,
+            "data_in": "name: str",
+            "data_out": null,
+            "evidence_ids": [
+              "evidence_47d785eeb4b79e5df7d0"
+            ],
+            "is_async": false,
+            "provenance": "deterministic_derived"
+          },
+          {
+            "step_number": 2,
+            "source_component_id": "sym_1e125e125281874eae0b",
+            "target_component_id": "sym_45c48ebdcf30a4171991",
+            "operation_type": "call",
+            "description": "user_route invokes get_user in app.py.",
+            "condition": null,
+            "data_in": "name",
+            "data_out": "User",
+            "evidence_ids": [
+              "evidence_cf6c26b440fb55890206"
+            ],
+            "is_async": false,
+            "provenance": "deterministic_derived"
+          },
+          {
+            "step_number": 3,
+            "source_component_id": "sym_45c48ebdcf30a4171991",
+            "target_component_id": "sym_2403baf2102d3932ebcd",
+            "operation_type": "call",
+            "description": "get_user invokes load_user in app.py.",
+            "condition": null,
+            "data_in": "name",
+            "data_out": "User",
+            "evidence_ids": [
+              "evidence_2257428b2768c16009fe"
+            ],
+            "is_async": false,
+            "provenance": "deterministic_derived"
+          },
+          {
+            "step_number": 4,
+            "source_component_id": "sym_2403baf2102d3932ebcd",
+            "target_component_id": "sym_e59d8678a1341cfa2534",
+            "operation_type": "instantiates",
+            "description": "load_user instantiates class User.",
+            "condition": null,
+            "data_in": "name",
+            "data_out": null,
+            "evidence_ids": [
+              "evidence_fe2e2d8e3cf25a63b5ca"
+            ],
+            "is_async": false,
+            "provenance": "deterministic_derived"
+          },
+          {
+            "step_number": 5,
+            "source_component_id": "sym_1e125e125281874eae0b",
+            "target_component_id": null,
+            "operation_type": "return",
+            "description": "user_route returns: Returns constructed value: {'name': user.name}",
+            "condition": null,
+            "data_in": null,
+            "data_out": "dict[str, str]",
+            "evidence_ids": [
+              "evidence_47d785eeb4b79e5df7d0"
+            ],
+            "is_async": false,
+            "provenance": "deterministic_derived"
+          }
+        ],
+        "data_lineage": [
+          {
+            "variable": "name",
+            "origin": "user_route parameter",
+            "flow": [
+              {
+                "component": "user_route",
+                "operation": "entry_call"
+              },
+              {
+                "component": "user_route",
+                "operation": "call"
+              },
+              {
+                "component": "get_user",
+                "operation": "call"
+              },
+              {
+                "component": "load_user",
+                "operation": "instantiates"
+              },
+              {
+                "component": "user_route",
+                "operation": "return"
+              }
+            ],
+            "transformed_to": "Returns constructed value: {'name': user.name}",
+            "transmitted_in_response": true
+          }
+        ],
+        "state_transitions": [
+          {
+            "phase": "entry",
+            "state_description": "Request parameters received by user_route.",
+            "causing_component": "user_route"
+          },
+          {
+            "phase": "execution",
+            "state_description": "Domain components executed: ['get_user', 'User', 'user_route', 'load_user'].",
+            "causing_component": "orchestrated_call_chain"
+          },
+          {
+            "phase": "exit",
+            "state_description": "Result shaped and returned (dict[str, str]).",
+            "causing_component": "user_route"
+          }
+        ],
+        "terminal_result": "dict[str, str]",
+        "error_branches": [],
+        "evidence_ids": [
+          "evidence_47d785eeb4b79e5df7d0",
+          "evidence_cf6c26b440fb55890206",
+          "evidence_2257428b2768c16009fe",
+          "evidence_fe2e2d8e3cf25a63b5ca"
+        ],
+        "provenance": "deterministic_derived",
+        "uncertainties": [
+          "Actual runtime latency and network transmission are dynamic.",
+          "Conditional branches not exercised in this primary static path require testing."
+        ]
+      },
+      "assertion_status": "verified_static",
+      "evidence_ids": [
+        "evidence_47d785eeb4b79e5df7d0",
+        "evidence_cf6c26b440fb55890206",
+        "evidence_2257428b2768c16009fe",
+        "evidence_fe2e2d8e3cf25a63b5ca"
+      ],
+      "extraction_method": "execution_flow_tracer",
+      "extractor_version": "1.0"
+    },
+    {
+      "fact_id": "fact_5f77a8da4adebc65b8c7",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "fact_type": "knowledge_gap",
+      "subject_id": null,
+      "attributes": {
+        "gap_id": "gap_b42ae26e602d7e09babe",
+        "category": "doc_conflict",
+        "subject_id": null,
+        "subject_name": "database",
+        "description": "README mentions 'database', but no corresponding Python symbol or active connection was found in the analyzed source.",
+        "evidence_ids": [],
+        "resolution_attempt": null,
+        "resolution_status": "disclosed_limitation",
+        "limitation_note": "Documentation describes 'database', but implementation remains static declarations or external configuration."
+      },
+      "assertion_status": "verified_static",
+      "evidence_ids": [],
+      "extraction_method": "knowledge_gap_detector",
+      "extractor_version": "1.0"
+    },
+    {
+      "fact_id": "fact_0eef9c8f28fb04d18307",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "fact_type": "knowledge_gap",
+      "subject_id": null,
+      "attributes": {
+        "gap_id": "gap_20be6bd731aed2042abd",
+        "category": "runtime_uncertainty",
+        "subject_id": null,
+        "subject_name": "schema.sql",
+        "description": "SQL schema file 'schema.sql' contains static DDL/DML, but runtime database engine connection is unverified statically.",
+        "evidence_ids": [],
+        "resolution_attempt": null,
+        "resolution_status": "disclosed_limitation",
+        "limitation_note": "Do not claim database tables were created or populated at runtime without live DB verification."
+      },
+      "assertion_status": "verified_static",
+      "evidence_ids": [],
+      "extraction_method": "knowledge_gap_detector",
+      "extractor_version": "1.0"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "evidence_12775fa68c1513daeeae",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "file_id": "file_c033c89731964b13056d",
+      "source_path": "api.py",
+      "line_start": 1,
+      "line_end": 3,
+      "excerpt": "from app import get_user\n\n\n",
+      "evidence_type": "module_declaration",
+      "extraction_method": "file_inventory",
+      "verification_method": "parser_location",
+      "verification_status": "verified",
+      "parser_version": "stdlib",
+      "content_hash": "sha256:7760e0127589b704eb7972331b95d1c01f396755dc026c621f105ebdefc236d8"
+    },
+    {
+      "evidence_id": "evidence_47d785eeb4b79e5df7d0",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "file_id": "file_c033c89731964b13056d",
+      "source_path": "api.py",
+      "line_start": 4,
+      "line_end": 6,
+      "excerpt": "def user_route(name: str) -> dict[str, str]:\n    user = get_user(name)\n    return {\"name\": user.name}\n",
+      "evidence_type": "symbol_declaration",
+      "extraction_method": "python_ast",
+      "verification_method": "parser_location",
+      "verification_status": "verified",
+      "parser_version": "stdlib",
+      "content_hash": "sha256:7760e0127589b704eb7972331b95d1c01f396755dc026c621f105ebdefc236d8"
+    },
+    {
+      "evidence_id": "evidence_2b4599403c46d74e324e",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "file_id": "file_c033c89731964b13056d",
+      "source_path": "api.py",
+      "line_start": 1,
+      "line_end": 1,
+      "excerpt": "from app import get_user\n",
+      "evidence_type": "import",
+      "extraction_method": "python_ast",
+      "verification_method": "parser_location",
+      "verification_status": "verified",
+      "parser_version": "stdlib",
+      "content_hash": "sha256:7760e0127589b704eb7972331b95d1c01f396755dc026c621f105ebdefc236d8"
+    },
+    {
+      "evidence_id": "evidence_eee8352e89cb31c7966e",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "file_id": "file_845f1e4dbd5ac5d60ae9",
+      "source_path": "app.py",
+      "line_start": 1,
+      "line_end": 3,
+      "excerpt": "from dataclasses import dataclass\n\n\n",
+      "evidence_type": "module_declaration",
+      "extraction_method": "file_inventory",
+      "verification_method": "parser_location",
+      "verification_status": "verified",
+      "parser_version": "stdlib",
+      "content_hash": "sha256:4f321992f244957b8b916f4844baa5b492806981dc17d45535d5e0ace1bc9368"
+    },
+    {
+      "evidence_id": "evidence_fe2e2d8e3cf25a63b5ca",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "file_id": "file_845f1e4dbd5ac5d60ae9",
+      "source_path": "app.py",
+      "line_start": 5,
+      "line_end": 6,
+      "excerpt": "class User:\n    name: str\n",
+      "evidence_type": "symbol_declaration",
+      "extraction_method": "python_ast",
+      "verification_method": "parser_location",
+      "verification_status": "verified",
+      "parser_version": "stdlib",
+      "content_hash": "sha256:4f321992f244957b8b916f4844baa5b492806981dc17d45535d5e0ace1bc9368"
+    },
+    {
+      "evidence_id": "evidence_2257428b2768c16009fe",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "file_id": "file_845f1e4dbd5ac5d60ae9",
+      "source_path": "app.py",
+      "line_start": 9,
+      "line_end": 10,
+      "excerpt": "def load_user(name: str) -> User:\n    return User(name=name)\n",
+      "evidence_type": "symbol_declaration",
+      "extraction_method": "python_ast",
+      "verification_method": "parser_location",
+      "verification_status": "verified",
+      "parser_version": "stdlib",
+      "content_hash": "sha256:4f321992f244957b8b916f4844baa5b492806981dc17d45535d5e0ace1bc9368"
+    },
+    {
+      "evidence_id": "evidence_cf6c26b440fb55890206",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "file_id": "file_845f1e4dbd5ac5d60ae9",
+      "source_path": "app.py",
+      "line_start": 13,
+      "line_end": 14,
+      "excerpt": "def get_user(name: str) -> User:\n    return load_user(name)\n",
+      "evidence_type": "symbol_declaration",
+      "extraction_method": "python_ast",
+      "verification_method": "parser_location",
+      "verification_status": "verified",
+      "parser_version": "stdlib",
+      "content_hash": "sha256:4f321992f244957b8b916f4844baa5b492806981dc17d45535d5e0ace1bc9368"
+    },
+    {
+      "evidence_id": "evidence_679c464337a050506965",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "file_id": "file_845f1e4dbd5ac5d60ae9",
+      "source_path": "app.py",
+      "line_start": 10,
+      "line_end": 10,
+      "excerpt": "    return User(name=name)\n",
+      "evidence_type": "call_expression",
+      "extraction_method": "python_ast",
+      "verification_method": "parser_location",
+      "verification_status": "verified",
+      "parser_version": "stdlib",
+      "content_hash": "sha256:4f321992f244957b8b916f4844baa5b492806981dc17d45535d5e0ace1bc9368"
+    },
+    {
+      "evidence_id": "evidence_9a5684d9df514856263d",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "file_id": "file_845f1e4dbd5ac5d60ae9",
+      "source_path": "app.py",
+      "line_start": 14,
+      "line_end": 14,
+      "excerpt": "    return load_user(name)\n",
+      "evidence_type": "call_expression",
+      "extraction_method": "python_ast",
+      "verification_method": "parser_location",
+      "verification_status": "verified",
+      "parser_version": "stdlib",
+      "content_hash": "sha256:4f321992f244957b8b916f4844baa5b492806981dc17d45535d5e0ace1bc9368"
+    },
+    {
+      "evidence_id": "evidence_a1e136b5f3c1240be3f3",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "file_id": "file_845f1e4dbd5ac5d60ae9",
+      "source_path": "app.py",
+      "line_start": 1,
+      "line_end": 1,
+      "excerpt": "from dataclasses import dataclass\n",
+      "evidence_type": "import",
+      "extraction_method": "python_ast",
+      "verification_method": "parser_location",
+      "verification_status": "verified",
+      "parser_version": "stdlib",
+      "content_hash": "sha256:4f321992f244957b8b916f4844baa5b492806981dc17d45535d5e0ace1bc9368"
+    },
+    {
+      "evidence_id": "evidence_48d5cc8f1ab9785f6d50",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "file_id": "file_96382daa8aeb333c0445",
+      "source_path": "README.md",
+      "line_start": 3,
+      "line_end": 3,
+      "excerpt": "This fixture contains a small service workflow and a database query reference.\n",
+      "evidence_type": "text_reference",
+      "extraction_method": "text_search",
+      "verification_method": "parser_location",
+      "verification_status": "verified",
+      "parser_version": "stdlib",
+      "content_hash": "sha256:56b4923578798a616c64c144a254b7d618adf4a08f01c0d02b1fd25d7721edbe"
+    },
+    {
+      "evidence_id": "evidence_1dad7a6dbc8e5897a4dd",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "file_id": "file_925dc3b58f4a266a45bc",
+      "source_path": "schema.sql",
+      "line_start": 1,
+      "line_end": 1,
+      "excerpt": "CREATE TABLE users (name TEXT PRIMARY KEY);\n",
+      "evidence_type": "sql_statement",
+      "extraction_method": "sql_regex",
+      "verification_method": "parser_location",
+      "verification_status": "verified",
+      "parser_version": "stdlib",
+      "content_hash": "sha256:3e545f61425b9535926a4d3fc63f4f332667dd94b0d2ab5e8c50ffa438236787"
+    },
+    {
+      "evidence_id": "evidence_77ea57aa3959a24e1944",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "file_id": "file_925dc3b58f4a266a45bc",
+      "source_path": "schema.sql",
+      "line_start": 2,
+      "line_end": 2,
+      "excerpt": "SELECT name FROM users;\n",
+      "evidence_type": "sql_statement",
+      "extraction_method": "sql_regex",
+      "verification_method": "parser_location",
+      "verification_status": "verified",
+      "parser_version": "stdlib",
+      "content_hash": "sha256:3e545f61425b9535926a4d3fc63f4f332667dd94b0d2ab5e8c50ffa438236787"
+    },
+    {
+      "evidence_id": "evidence_c1630ff1762107ddb781",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "file_id": null,
+      "source_path": "api.py",
+      "line_start": 5,
+      "line_end": 5,
+      "excerpt": "user = get_user(name)",
+      "evidence_type": "cross_file_call",
+      "extraction_method": "cross_file_ast_resolution",
+      "verification_method": "resolved_symbol_target",
+      "verification_status": "verified",
+      "parser_version": "repoflow-semantic-1.0",
+      "content_hash": null
+    },
+    {
+      "evidence_id": "evidence_3503ad58933df72b7665",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "file_id": null,
+      "source_path": "app.py",
+      "line_start": 10,
+      "line_end": 10,
+      "excerpt": "return User(name=name)",
+      "evidence_type": "cross_file_call",
+      "extraction_method": "cross_file_ast_resolution",
+      "verification_method": "resolved_symbol_target",
+      "verification_status": "verified",
+      "parser_version": "repoflow-semantic-1.0",
+      "content_hash": null
+    }
+  ],
+  "relationships": [
+    {
+      "relationship_id": "rel_fc8c0c1aa9f5f023fd17",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "source_id": "sym_2403baf2102d3932ebcd",
+      "target_id": "sym_e59d8678a1341cfa2534",
+      "relationship_type": "calls",
+      "status": "verified",
+      "claim_level": "resolved_static",
+      "evidence_ids": [
+        "evidence_679c464337a050506965"
+      ],
+      "verification_method": "python_ast_name_resolution",
+      "verification_status": "verified",
+      "confidence": 0.95,
+      "unresolved_reason": null,
+      "created_by": "python-ast"
+    },
+    {
+      "relationship_id": "rel_5203bb3f97c4d7ea95a9",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "source_id": "sym_45c48ebdcf30a4171991",
+      "target_id": "sym_2403baf2102d3932ebcd",
+      "relationship_type": "calls",
+      "status": "verified",
+      "claim_level": "resolved_static",
+      "evidence_ids": [
+        "evidence_9a5684d9df514856263d"
+      ],
+      "verification_method": "python_ast_name_resolution",
+      "verification_status": "verified",
+      "confidence": 0.95,
+      "unresolved_reason": null,
+      "created_by": "python-ast"
+    },
+    {
+      "relationship_id": "rel_ac189ab7a8b331cbf8fd",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "source_id": "sym_382c447d30669f919662",
+      "target_id": "sym_9dec53ca8453ecb9f3e6",
+      "relationship_type": "imports",
+      "status": "verified",
+      "claim_level": "resolved_static",
+      "evidence_ids": [
+        "evidence_2b4599403c46d74e324e"
+      ],
+      "verification_method": "static_import_resolution",
+      "verification_status": "verified",
+      "confidence": 0.9,
+      "unresolved_reason": null,
+      "created_by": "repository-analyzer"
+    },
+    {
+      "relationship_id": "rel_2b89c0d9be85e2a21a07",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "source_id": "sym_1e125e125281874eae0b",
+      "target_id": "sym_45c48ebdcf30a4171991",
+      "relationship_type": "calls",
+      "status": "verified",
+      "claim_level": "resolved_static",
+      "evidence_ids": [
+        "evidence_c1630ff1762107ddb781"
+      ],
+      "verification_method": "cross_file_ast_resolution",
+      "verification_status": "verified",
+      "confidence": 1.0,
+      "unresolved_reason": null,
+      "created_by": "semantic-understanding-engine"
+    },
+    {
+      "relationship_id": "rel_f4846ddb5488c43c2dad",
+      "repository_id": "repo_acb028d900f37f34a321",
+      "pkm_revision_id": "pkmrev_b5a44434ccec03197f43",
+      "source_id": "sym_2403baf2102d3932ebcd",
+      "target_id": "sym_e59d8678a1341cfa2534",
+      "relationship_type": "instantiates",
+      "status": "verified",
+      "claim_level": "resolved_static",
+      "evidence_ids": [
+        "evidence_3503ad58933df72b7665"
+      ],
+      "verification_method": "cross_file_ast_resolution",
+      "verification_status": "verified",
+      "confidence": 1.0,
+      "unresolved_reason": null,
+      "created_by": "semantic-understanding-engine"
+    }
+  ]
+}
