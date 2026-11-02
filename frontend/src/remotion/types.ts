@@ -3,6 +3,7 @@ export interface VisualNode {
   label: string;
   kind?: string;
   role?: string;
+  subsystem?: string;
   x?: number;
   y?: number;
   width?: number;
@@ -10,10 +11,13 @@ export interface VisualNode {
 }
 
 export interface VisualEdge {
+  id?: string;
   source: string;
   target: string;
   type?: string;
   label?: string;
+  why_it_exists?: string;
+  status?: string;
 }
 
 export interface Boundary {
@@ -29,7 +33,7 @@ export interface SemanticSceneProps {
   scene_id: string;
   title: string;
   kind: string;
-  visual_type: "architecture" | "code" | "flow" | "data_transformation" | "summary";
+  visual_type: string;
   objective?: string;
   question_answered?: string;
   narration: string;
@@ -38,15 +42,25 @@ export interface SemanticSceneProps {
   counterfactual?: string;
   code_excerpt?: string;
   code_path?: string;
+  highlight_line?: number;
   highlight_lines?: number[];
   visual_nodes?: VisualNode[];
   visual_edges?: VisualEdge[];
   flow_nodes?: string[];
+  execution_steps?: Array<{
+    step_number: number;
+    component_name: string;
+    description: string;
+    operation_type: string;
+    source_ref?: string;
+  }>;
   flow_steps?: Array<{ step_number: number; description: string; operation_type: string }>;
   boundaries?: Boundary[];
   source_refs?: string[];
+  invariants?: string[];
+  limitations?: string[];
   duration_ms: number;
-  audio_url?: string;
+  audio_url?: string | null;
   checkpoint?: {
     checkpoint_id: string;
     question_text: string;

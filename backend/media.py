@@ -229,7 +229,7 @@ def render_lesson(lesson: dict[str, Any], output_dir: Path, voice: str = "alba")
         result = narrator.generate(str(scene["narration"]), audio_path)
         narration_segments.append({"scene_id": scene["scene_id"], "text": scene["narration"], "path": result.get("path"), "duration_ms": result.get("duration_ms", int(scene.get("duration_ms", 6000))), "status": result.get("status")})
     manifest: dict[str, Any] = {
-        "lesson_id": lesson["lesson_id"],
+        "lesson_id": lesson.get("lesson_id") or lesson.get("storyboard_id") or "lesson_default",
         "status": "preview_ready",
         "frames": [str(item) for item in frames],
         "narration": {"status": "generated" if all(item["status"] == "generated" for item in narration_segments) else "fallback_text_only", "voice": voice, "segments": narration_segments},
@@ -280,6 +280,7 @@ def render_lesson(lesson: dict[str, Any], output_dir: Path, voice: str = "alba")
     }
     (output_dir / "remotion_props.json").write_text(json.dumps(remotion_props, indent=2), encoding="utf-8")
     
+    from backend.media_stream import validate_mp4_file
     from backend.remotion_renderer import RemotionRenderer
     remotion_renderer = RemotionRenderer()
     if remotion_renderer.available():
@@ -290,12 +291,19 @@ def render_lesson(lesson: dict[str, Any], output_dir: Path, voice: str = "alba")
             except OSError:
                 pass
         remotion_res = remotion_renderer.render(output_dir / "remotion_props.json", target_mp4)
-        if remotion_res.get("status") == "playable":
-            manifest["video_status"] = "playable"
-            manifest["video_path"] = remotion_res["video_path"]
-            manifest["renderer"] = "remotion"
-            (output_dir / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
-            return manifest
+        if remotion_res.get("status") == "playable" and target_mp4.is_file():
+            validation = validate_mp4_file(target_mp4)
+            manifest["video_validation"] = validation
+            if validation.get("valid"):
+                manifest["video_status"] = "playable"
+                manifest["video_path"] = remotion_res["video_path"]
+                manifest["duration_seconds"] = validation.get("duration_seconds", 0)
+                manifest["renderer"] = "remotion"
+                (output_dir / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+                return manifest
+            else:
+                manifest["video_status"] = "validation_failed"
+                manifest["video_error"] = validation.get("reason")
     manifest["renderer"] = "pillow_ffmpeg"
 
     ffmpeg = shutil.which("ffmpeg")
@@ -342,8 +350,15 @@ def render_lesson(lesson: dict[str, Any], output_dir: Path, voice: str = "alba")
             else:
                 process_result = subprocess.CompletedProcess([], 1)
             if process_result.returncode == 0 and video_path.exists():
-                manifest["video_status"] = "playable" if narration_ready else "preview_ready_no_narration"
-                manifest["video_path"] = str(video_path)
+                validation = validate_mp4_file(video_path)
+                manifest["video_validation"] = validation
+                if validation.get("valid"):
+                    manifest["video_status"] = "playable" if narration_ready else "preview_ready_no_narration"
+                    manifest["video_path"] = str(video_path)
+                    manifest["duration_seconds"] = validation.get("duration_seconds", 0)
+                else:
+                    manifest["video_status"] = "validation_failed"
+                    manifest["video_error"] = validation.get("reason")
         elif shutil.which("convert") or shutil.which("magick"):
             rasteriser = shutil.which("magick") or shutil.which("convert")
             assert rasteriser is not None
@@ -353,8 +368,15 @@ def render_lesson(lesson: dict[str, Any], output_dir: Path, voice: str = "alba")
                 subprocess.run([rasteriser, str(frame), str(png_dir / f"{frame.stem}.png")], check=False, capture_output=True)
             process_result = subprocess.run([ffmpeg, "-y", "-framerate", "1", "-i", str(png_dir / "scene-%03d.png"), "-c:v", "libx264", "-pix_fmt", "yuv420p", str(video_path)], check=False, capture_output=True)
             if process_result.returncode == 0 and video_path.exists():
-                manifest["video_status"] = "playable" if narration_ready else "preview_ready_no_narration"
-                manifest["video_path"] = str(video_path)
+                validation = validate_mp4_file(video_path)
+                manifest["video_validation"] = validation
+                if validation.get("valid"):
+                    manifest["video_status"] = "playable" if narration_ready else "preview_ready_no_narration"
+                    manifest["video_path"] = str(video_path)
+                    manifest["duration_seconds"] = validation.get("duration_seconds", 0)
+                else:
+                    manifest["video_status"] = "validation_failed"
+                    manifest["video_error"] = validation.get("reason")
         else:
             manifest["video_status"] = "blocked_missing_image_renderer"
     else:

@@ -27,7 +27,34 @@ class LearningStore:
             CREATE TABLE IF NOT EXISTS enrollments (enrollment_id TEXT PRIMARY KEY, lesson_id TEXT NOT NULL, learner_id TEXT NOT NULL, current_scene_id TEXT, payload TEXT NOT NULL);
             CREATE TABLE IF NOT EXISTS events (event_id TEXT PRIMARY KEY, enrollment_id TEXT NOT NULL, event_type TEXT NOT NULL, payload TEXT NOT NULL);
             CREATE TABLE IF NOT EXISTS attempts (attempt_id TEXT PRIMARY KEY, enrollment_id TEXT NOT NULL, step_id TEXT NOT NULL, score REAL NOT NULL, evidence_refs INTEGER NOT NULL, payload TEXT NOT NULL);
+            CREATE TABLE IF NOT EXISTS learning_projects (project_id TEXT PRIMARY KEY, repository_id TEXT NOT NULL, learner_id TEXT NOT NULL, payload TEXT NOT NULL, updated_at TEXT NOT NULL);
             """)
+
+    def save_project(self, project: dict[str, Any]) -> None:
+        import datetime
+        now = datetime.datetime.now(datetime.timezone.utc).isoformat()
+        with sqlite3.connect(self.path) as db:
+            db.execute(
+                "INSERT OR REPLACE INTO learning_projects VALUES (?, ?, ?, ?, ?)",
+                (project["project_id"], project["repository_id"], project["learner_id"], json.dumps(project), now),
+            )
+
+    def get_project(self, project_id: str) -> dict[str, Any] | None:
+        with sqlite3.connect(self.path) as db:
+            row = db.execute("SELECT payload FROM learning_projects WHERE project_id=?", (project_id,)).fetchone()
+            return json.loads(row[0]) if row else None
+
+    def list_projects(self, learner_id: str | None = None, repository_id: str | None = None) -> list[dict[str, Any]]:
+        with sqlite3.connect(self.path) as db:
+            if learner_id and repository_id:
+                rows = db.execute("SELECT payload FROM learning_projects WHERE learner_id=? AND repository_id=? ORDER BY updated_at DESC", (learner_id, repository_id)).fetchall()
+            elif learner_id:
+                rows = db.execute("SELECT payload FROM learning_projects WHERE learner_id=? ORDER BY updated_at DESC", (learner_id,)).fetchall()
+            elif repository_id:
+                rows = db.execute("SELECT payload FROM learning_projects WHERE repository_id=? ORDER BY updated_at DESC", (repository_id,)).fetchall()
+            else:
+                rows = db.execute("SELECT payload FROM learning_projects ORDER BY updated_at DESC").fetchall()
+            return [json.loads(r[0]) for r in rows]
 
     def save_lesson(self, lesson: dict[str, Any]) -> None:
         with sqlite3.connect(self.path) as db:

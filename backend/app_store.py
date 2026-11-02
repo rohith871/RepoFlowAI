@@ -187,6 +187,18 @@ class AppStore:
                 manifest_json=excluded.manifest_json, updated_at=excluded.updated_at""",
                        (video_id, lesson_id, repository_id, title, topic, status, path, json.dumps(manifest), now, now))
 
+    def save_video(self, data: dict[str, Any]) -> None:
+        self.upsert_video(
+            video_id=data["video_id"],
+            lesson_id=data.get("lesson_id", ""),
+            repository_id=data.get("repository_id", ""),
+            title=data.get("title", ""),
+            topic=data.get("topic", ""),
+            status=data.get("status", "playable"),
+            path=data.get("path") or (data.get("manifest", {}).get("video_path")),
+            manifest=data.get("manifest", {}),
+        )
+
     def list_videos(self, repository_id: str | None = None) -> list[dict[str, Any]]:
         query = "SELECT * FROM videos"
         params: list[Any] = []

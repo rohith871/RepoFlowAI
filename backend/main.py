@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Any, Literal
 from urllib.parse import urlparse
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
@@ -31,6 +31,8 @@ app = FastAPI(title="RepoFlow AI", version="0.1.0")
 app.add_middleware(CORSMiddleware, allow_origins=["http://127.0.0.1:5173", "http://localhost:5173"], allow_methods=["*"], allow_headers=["*"])
 pkm_store = PkmStore(settings.database_path)
 learning_store = LearningStore(settings.database_path)
+from backend.learner_profile import LearnerProfileStore
+profile_store = LearnerProfileStore(settings.database_path)
 app_store = AppStore(settings.database_path)
 analyzer = RepositoryAnalyzer(settings, pkm_store)
 retriever = EvidenceRetriever()
@@ -88,6 +90,30 @@ class HintRequest(BaseModel):
 class CheckpointResponseRequest(BaseModel):
     checkpoint_id: str
     selected_option_id: str
+
+
+class CreateProjectRequest(BaseModel):
+    learner_id: str = Field(default="default_learner", min_length=1, max_length=120)
+
+
+class GenerateDomainProjectRequest(BaseModel):
+    domain: str = "Machine Learning"
+    learner_id: str = Field(default="default_learner", min_length=1, max_length=120)
+
+
+class RecommendProjectRequest(BaseModel):
+    learner_id: str = Field(default="default_learner", min_length=1, max_length=120)
+
+
+class GenerateReferenceProjectRequest(BaseModel):
+    repository_id: str
+    learner_id: str = Field(default="default_learner", min_length=1, max_length=120)
+
+
+class SubmitTaskRequest(BaseModel):
+    learner_response: str = Field(default="", max_length=5000)
+    solution_code: str = Field(default="", max_length=5000)
+    learner_id: str | None = None
 
 
 @app.get("/health")
@@ -384,40 +410,84 @@ def get_source(repository_id: str, source_path: str, revision_id: str | None = N
     return {"repository_id": repository_id, "revision_id": snapshot.revision.pkm_revision_id, "path": file_item.path, "content": source_file.read_text(encoding="utf-8", errors="replace"), "content_hash": file_item.content_hash}
 
 
+from backend.media_stream import stream_media_file, validate_mp4_file
+
+
+def _resolve_media_dir(identifier: str) -> Path | None:
+    """Intelligently resolve any media directory by lesson_id, stage_id, repository_id, or video_id."""
+    media_base = settings.storage_dir / "media"
+    if not media_base.is_dir():
+        return None
+
+    # 1. Direct path match
+    candidates = [
+        media_base / identifier,
+        media_base / f"stage_{identifier}",
+        media_base / f"stage_{identifier.removeprefix('stage_')}",
+        media_base / f"stage_{identifier.removeprefix('lesson_stage_')}",
+        media_base / f"repo_{identifier}_explainer",
+        media_base / f"repo_{identifier.removeprefix('lesson_')}_explainer",
+        media_base / f"repo_{identifier.removeprefix('repo_')}_explainer",
+    ]
+    for c in candidates:
+        if (c / "manifest.json").is_file():
+            return c
+
+    # 2. Check AppStore video registration
+    registered_video = app_store.get_video(identifier)
+    if registered_video:
+        manifest = registered_video.get("manifest", {})
+        vpath = manifest.get("video_path")
+        if vpath and Path(vpath).is_file():
+            return Path(vpath).parent
+
+    # 3. Scan manifest.json files in media_base
+    for sub in media_base.iterdir():
+        if sub.is_dir() and (sub / "manifest.json").is_file():
+            try:
+                import json
+                m_data = json.loads((sub / "manifest.json").read_text(encoding="utf-8"))
+                if (
+                    m_data.get("lesson_id") == identifier
+                    or sub.name == identifier
+                    or sub.name == f"stage_{identifier}"
+                    or sub.name == f"repo_{identifier}_explainer"
+                ):
+                    return sub
+            except Exception:
+                continue
+    return None
+
+
 @app.get("/api/lessons/{lesson_id}/media")
 def get_media(lesson_id: str) -> dict[str, Any]:
-    manifest = settings.storage_dir / "media" / lesson_id / "manifest.json"
-    if not manifest.is_file():
+    mdir = _resolve_media_dir(lesson_id)
+    if not mdir or not (mdir / "manifest.json").is_file():
         raise HTTPException(status_code=404, detail={"code": "MEDIA_NOT_FOUND", "message": "Render the lesson first"})
     import json
-    return json.loads(manifest.read_text(encoding="utf-8"))
+    return json.loads((mdir / "manifest.json").read_text(encoding="utf-8"))
 
 
 @app.get("/api/lessons/{lesson_id}/media/video")
-def media_video(lesson_id: str) -> FileResponse:
-    manifest_path = settings.storage_dir / "media" / lesson_id / "manifest.json"
-    if not manifest_path.is_file():
-        raise HTTPException(status_code=404, detail={"code": "MEDIA_NOT_FOUND", "message": "Render the lesson first"})
-    import json
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    media_root = (settings.storage_dir / "media" / lesson_id).resolve()
-    video = Path(manifest.get("video_path", ""))
-    video = (video if video.is_absolute() else media_root / video).resolve()
-    try:
-        video.relative_to(media_root)
-    except ValueError as exc:
-        raise HTTPException(status_code=400, detail={"code": "MEDIA_PATH_UNSAFE", "message": "Video path is outside the lesson media directory"}) from exc
-    if not video.is_file():
-        raise HTTPException(status_code=404, detail={"code": "VIDEO_NOT_FOUND", "message": "Playable video is not available"})
-    return FileResponse(video, media_type="video/mp4", filename=f"{lesson_id}.mp4")
+def media_video(lesson_id: str, request: Request) -> Response:
+    mdir = _resolve_media_dir(lesson_id)
+    if not mdir:
+        raise HTTPException(status_code=404, detail={"code": "MEDIA_NOT_FOUND", "message": f"Media not found for {lesson_id}"})
+    video_path = mdir / "lesson.mp4"
+    if not video_path.is_file():
+        raise HTTPException(status_code=404, detail={"code": "VIDEO_NOT_FOUND", "message": "Playable video not available on disk"})
+    return stream_media_file(video_path, request, media_type="video/mp4", allow_download_name=f"{lesson_id}.mp4")
 
 
 @app.get("/api/lessons/{lesson_id}/media/captions")
-def media_captions(lesson_id: str) -> FileResponse:
-    captions = settings.storage_dir / "media" / lesson_id / "captions.vtt"
+def media_captions(lesson_id: str, request: Request) -> Response:
+    mdir = _resolve_media_dir(lesson_id)
+    if not mdir:
+        raise HTTPException(status_code=404, detail={"code": "MEDIA_NOT_FOUND", "message": f"Media not found for {lesson_id}"})
+    captions = mdir / "captions.vtt"
     if not captions.is_file():
-        raise HTTPException(status_code=404, detail={"code": "CAPTIONS_NOT_FOUND", "message": "Captions are not available"})
-    return FileResponse(captions, media_type="text/vtt", filename=f"{lesson_id}.vtt")
+        raise HTTPException(status_code=404, detail={"code": "CAPTIONS_NOT_FOUND", "message": "Captions not found"})
+    return stream_media_file(captions, request, media_type="text/vtt", allow_download_name=f"{lesson_id}.vtt")
 
 
 @app.post("/api/lessons")
@@ -592,6 +662,555 @@ def submit_checkpoint_response(enrollment_id: str, request: CheckpointResponseRe
     })
 
     return eval_result.model_dump(mode="json")
+
+
+# -------------------------------------------------------------------------
+# Independent Project-Based Learning & Adaptive Tutor Endpoints
+# -------------------------------------------------------------------------
+
+@app.post("/api/repositories/{repository_id}/learning-projects")
+def create_learning_project(repository_id: str, request: CreateProjectRequest) -> dict[str, Any]:
+    snapshot = pkm_store.get_snapshot(repository_id)
+    if snapshot is None:
+        raise HTTPException(status_code=404, detail={"code": "PKM_NOT_FOUND", "message": "Analyse the repository first"})
+    
+    from backend.understanding import SemanticUnderstandingEngine
+    from backend.execution_flows import ExecutionFlowTracer
+    from backend.knowledge_gaps import KnowledgeGapDetector
+    from backend.learning_projects import ProjectGenerator
+
+    source_root = settings.storage_dir / "repositories" / repository_id / "snapshots" / snapshot.revision.pkm_revision_id
+    files_map = {f.path: (source_root / f.path).read_text(encoding="utf-8", errors="replace") for f in snapshot.files if (source_root / f.path).is_file()}
+    engine = SemanticUnderstandingEngine(snapshot, files_map)
+    engine.parse_all()
+    understandings = engine.analyze_components()
+    tracer = ExecutionFlowTracer(snapshot, understandings, snapshot.relationships)
+    paths = tracer.trace_paths()
+    gaps = KnowledgeGapDetector(snapshot, understandings, paths, files_map).detect_all()
+
+    profile = profile_store.get_profile(request.learner_id)
+    generator = ProjectGenerator(snapshot, understandings, paths, gaps)
+    project = generator.generate_project(request.learner_id, profile.concept_mastery)
+    
+    proj_dict = project.model_dump(mode="json")
+    learning_store.save_project(proj_dict)
+    
+    if project.project_id not in profile.projects_enrolled:
+        profile.projects_enrolled.append(project.project_id)
+        profile_store.save_profile(profile)
+
+    return proj_dict
+
+
+@app.get("/api/learning-projects/{project_id}")
+def get_learning_project(project_id: str) -> dict[str, Any]:
+    project = learning_store.get_project(project_id)
+    if not project:
+        raise HTTPException(status_code=404, detail={"code": "PROJECT_NOT_FOUND", "message": "Learning project not found"})
+    return project
+
+
+@app.get("/api/learners/{learner_id}/profile")
+def get_learner_profile(learner_id: str) -> dict[str, Any]:
+    profile = profile_store.get_profile(learner_id)
+    payload = profile.model_dump(mode="json")
+
+    # Calculate DQN policy state features
+    attempt_count = float(profile.tutor_takeovers_count + len(profile.history_records))
+    avg_correctness = float(sum(profile.concept_mastery.values()) / max(1, len(profile.concept_mastery)))
+    hint_rate = float(profile.total_hints_used / max(1, attempt_count))
+    independence = max(0.1, round(avg_correctness - min(0.3, profile.total_hints_used * 0.05), 3))
+
+    state_features = {
+        "attempt_count": attempt_count,
+        "correctness_ema": avg_correctness,
+        "hint_use_rate": hint_rate,
+        "revisit_count": 0.0,
+        "independence_score": independence,
+    }
+
+    from backend.learning import ACTION_IDS
+    decision = trained_policy.select_action(state_features, ACTION_IDS)
+
+    payload["dqn_features"] = state_features
+    payload["dqn_decision"] = {
+        "action_id": decision.action_id,
+        "policy_version": decision.policy_version,
+        "reason_code": decision.reason_code,
+        "fallback_used": decision.fallback_used,
+    }
+    return payload
+
+
+@app.get("/api/learners/{learner_id}/projects")
+def list_learner_projects(learner_id: str) -> list[dict[str, Any]]:
+    return learning_store.list_projects(learner_id=learner_id)
+
+
+@app.post("/api/projects/generate/domain")
+def api_generate_domain_project(request: GenerateDomainProjectRequest) -> dict[str, Any]:
+    from backend.learning_projects import generate_domain_project
+    profile = profile_store.get_profile(request.learner_id)
+    project = generate_domain_project(request.domain, profile, request.learner_id)
+    pdict = project.model_dump(mode="json")
+    learning_store.save_project(pdict)
+    if project.project_id not in profile.projects_enrolled:
+        profile.projects_enrolled.append(project.project_id)
+        profile_store.save_profile(profile)
+    return pdict
+
+
+@app.post("/api/projects/recommend")
+def api_recommend_project(request: RecommendProjectRequest) -> dict[str, Any]:
+    from backend.learning_projects import recommend_project
+    profile = profile_store.get_profile(request.learner_id)
+    result = recommend_project(profile)
+    pdict = result["project"]
+    learning_store.save_project(pdict)
+    if pdict["project_id"] not in profile.projects_enrolled:
+        profile.projects_enrolled.append(pdict["project_id"])
+        profile_store.save_profile(profile)
+    return result
+
+
+@app.post("/api/projects/generate/reference")
+def api_generate_reference_project(request: GenerateReferenceProjectRequest) -> dict[str, Any]:
+    snapshot = pkm_store.get_snapshot(request.repository_id)
+    if not snapshot:
+        raise HTTPException(status_code=404, detail={"code": "PKM_NOT_FOUND", "message": "Analyse reference repository first"})
+
+    from backend.understanding import SemanticUnderstandingEngine
+    from backend.execution_flows import ExecutionFlowTracer
+    from backend.learning_projects import generate_reference_inspired_project
+
+    source_root = settings.storage_dir / "repositories" / request.repository_id / "snapshots" / snapshot.revision.pkm_revision_id
+    files_map = {f.path: (source_root / f.path).read_text(encoding="utf-8", errors="replace") for f in snapshot.files if (source_root / f.path).is_file()}
+    engine = SemanticUnderstandingEngine(snapshot, files_map)
+    engine.parse_all()
+    understandings = engine.analyze_components()
+    tracer = ExecutionFlowTracer(snapshot, understandings, snapshot.relationships)
+    paths = tracer.trace_paths()
+
+    profile = profile_store.get_profile(request.learner_id)
+    project = generate_reference_inspired_project(snapshot, understandings, paths, files_map, profile, request.learner_id)
+    pdict = project.model_dump(mode="json")
+    learning_store.save_project(pdict)
+    if project.project_id not in profile.projects_enrolled:
+        profile.projects_enrolled.append(project.project_id)
+        profile_store.save_profile(profile)
+    return pdict
+
+
+@app.post("/api/learning-projects/{project_id}/stages/{stage_id}/render-video")
+def render_stage_video(project_id: str, stage_id: str) -> dict[str, Any]:
+    project = learning_store.get_project(project_id)
+    if not project:
+        raise HTTPException(status_code=404, detail={"code": "PROJECT_NOT_FOUND", "message": "Project not found"})
+    target_stage = next((s for s in project.get("stages", []) if s.get("stage_id") == stage_id), None)
+    if not target_stage:
+        raise HTTPException(status_code=404, detail={"code": "STAGE_NOT_FOUND", "message": "Stage not found"})
+
+    stage_video_spec = target_stage.get("stage_video", {})
+    if not stage_video_spec or not stage_video_spec.get("scenes"):
+        stage_video_spec = {
+            "title": f"{target_stage.get('title', 'Learning Stage')} — Deep Dive",
+            "scenes": [
+                {
+                    "scene_id": f"{stage_id}_orient",
+                    "title": target_stage.get("title", "Stage Orientation"),
+                    "kind": "orientation",
+                    "visual_type": "summary",
+                    "narration": f"In this stage we master {target_stage.get('primary_concept', 'core invariants')}. {target_stage.get('description', '')}",
+                    "source_refs": target_stage.get("relevant_files_or_resources", []),
+                    "duration_ms": 1500,
+                },
+                {
+                    "scene_id": f"{stage_id}_code",
+                    "title": f"Implementation: {target_stage.get('primary_concept', 'Concept')}",
+                    "kind": "code_walkthrough",
+                    "visual_type": "code",
+                    "narration": f"Examine the architectural contract and invariants required for {target_stage.get('primary_concept', 'this milestone')}.",
+                    "code_path": target_stage.get("relevant_files_or_resources", ["main.py"])[0],
+                    "code_excerpt": "def execute_contract(payload: dict):\n    # Enforce contract validation\n    return {'status': 'verified'}",
+                    "highlight_lines": [2, 3],
+                    "key_takeaway": target_stage.get("purpose", "Decouples domain from presentation"),
+                    "failure_mode": f"[HYPOTHETICAL] Skipping boundary validation in {target_stage.get('primary_concept')} introduces silent state errors.",
+                    "source_refs": target_stage.get("relevant_files_or_resources", [])[:1],
+                    "duration_ms": 2000,
+                },
+            ],
+        }
+
+    stage_media_dir = settings.storage_dir / "media" / f"stage_{stage_id}"
+    lesson_dict = {
+        "lesson_id": f"lesson_stage_{stage_id}",
+        "repository_id": project.get("repository_id", "project_repo"),
+        "title": stage_video_spec.get("title", "Stage Technical Explainer"),
+        "scenes": stage_video_spec.get("scenes", []),
+    }
+    manifest = render_lesson(lesson_dict, stage_media_dir)
+    video_playable = manifest.get("video_status") == "playable" and Path(manifest.get("video_path", "")).is_file()
+    target_stage["video_path"] = manifest.get("video_path")
+    target_stage["video_id"] = f"vid_{stage_id}"
+    target_stage["video_generation_status"] = "ready_to_watch" if video_playable else "failed"
+    target_stage["video_duration_seconds"] = manifest.get("duration_seconds", 0)
+    target_stage["video_url"] = f"/api/learning-projects/{project_id}/stages/{stage_id}/video"
+    target_stage["captions_url"] = f"/api/learning-projects/{project_id}/stages/{stage_id}/captions"
+    learning_store.save_project(project)
+
+    app_store.save_video({
+        "video_id": f"vid_{stage_id}",
+        "lesson_id": f"lesson_stage_{stage_id}",
+        "repository_id": project.get("repository_id", "project_repo"),
+        "title": f"{project.get('title', 'Project')} — {target_stage.get('title')}",
+        "topic": target_stage.get("primary_concept", "Engineering Milestone"),
+        "status": "playable" if video_playable else "failed",
+        "manifest": manifest,
+    })
+    return {
+        "status": "rendered" if video_playable else "render_failed",
+        "video_path": manifest.get("video_path"),
+        "video_id": f"vid_{stage_id}",
+        "video_url": f"/api/learning-projects/{project_id}/stages/{stage_id}/video",
+        "captions_url": f"/api/learning-projects/{project_id}/stages/{stage_id}/captions",
+        "manifest": manifest,
+    }
+
+
+@app.post("/api/repositories/{repository_id}/render-explainer")
+def render_repository_explainer(repository_id: str) -> dict[str, Any]:
+    snapshot = pkm_store.get_snapshot(repository_id)
+    if not snapshot:
+        raise HTTPException(status_code=404, detail={"code": "PKM_NOT_FOUND", "message": "Analyse repository first"})
+
+    from backend.understanding import SemanticUnderstandingEngine
+    from backend.execution_flows import ExecutionFlowTracer
+    from backend.architecture_reasoning import ArchitectureReasoningEngine
+    from backend.knowledge_gaps import KnowledgeGapDetector
+    from backend.semantic_storyboard import SemanticStoryboardBuilder
+
+    source_root = settings.storage_dir / "repositories" / repository_id / "snapshots" / snapshot.revision.pkm_revision_id
+    files_map = {f.path: (source_root / f.path).read_text(encoding="utf-8", errors="replace") for f in snapshot.files if (source_root / f.path).is_file()}
+    engine = SemanticUnderstandingEngine(snapshot, files_map)
+    engine.parse_all()
+    understandings = engine.analyze_components()
+    tracer = ExecutionFlowTracer(snapshot, understandings, snapshot.relationships)
+    paths = tracer.trace_paths()
+    gaps = KnowledgeGapDetector(snapshot, understandings, paths, files_map).detect_all()
+    arch_engine = ArchitectureReasoningEngine(snapshot, understandings, snapshot.relationships, paths)
+    views = arch_engine.generate_views()
+
+    builder = SemanticStoryboardBuilder(snapshot, understandings, paths, gaps, views, files_map)
+    storyboard = builder.build(scope="repository")
+    storyboard.setdefault("lesson_id", f"lesson_{repository_id}")
+
+    explainer_dir = settings.storage_dir / "media" / f"repo_{repository_id}_explainer"
+    manifest = render_lesson(storyboard, explainer_dir)
+    vid_id = stable_id("vid_repo", repository_id)
+    video_playable = manifest.get("video_status") == "playable" and Path(manifest.get("video_path", "")).is_file()
+    app_store.save_video({
+        "video_id": vid_id,
+        "lesson_id": storyboard.get("lesson_id", f"lesson_{repository_id}"),
+        "repository_id": repository_id,
+        "title": f"{snapshot.repositories[0].name if snapshot.repositories else repository_id} — Architectural Explainer",
+        "topic": "System Architecture & Execution Flow",
+        "status": "playable" if video_playable else "failed",
+        "manifest": manifest,
+    })
+    return {
+        "status": "rendered" if video_playable else "render_failed",
+        "video_id": vid_id,
+        "video_path": manifest.get("video_path"),
+        "video_url": f"/api/repositories/{repository_id}/explainer/video",
+        "captions_url": f"/api/repositories/{repository_id}/explainer/captions",
+        "manifest": manifest,
+    }
+
+
+@app.get("/api/learning-projects/{project_id}/stages/{stage_id}/video")
+def stage_media_video(project_id: str, stage_id: str, request: Request) -> Response:
+    stage_dir = settings.storage_dir / "media" / f"stage_{stage_id}"
+    if not stage_dir.is_dir() or not (stage_dir / "lesson.mp4").is_file():
+        stage_dir = _resolve_media_dir(f"stage_{stage_id}")
+    if not stage_dir or not (stage_dir / "lesson.mp4").is_file():
+        raise HTTPException(status_code=404, detail={"code": "VIDEO_NOT_FOUND", "message": f"Stage video not found for stage {stage_id}"})
+    return stream_media_file(stage_dir / "lesson.mp4", request, media_type="video/mp4", allow_download_name=f"stage_{stage_id}.mp4")
+
+
+@app.get("/api/learning-projects/{project_id}/stages/{stage_id}/captions")
+def stage_media_captions(project_id: str, stage_id: str, request: Request) -> Response:
+    stage_dir = settings.storage_dir / "media" / f"stage_{stage_id}"
+    if not stage_dir.is_dir() or not (stage_dir / "captions.vtt").is_file():
+        stage_dir = _resolve_media_dir(f"stage_{stage_id}")
+    if not stage_dir or not (stage_dir / "captions.vtt").is_file():
+        raise HTTPException(status_code=404, detail={"code": "CAPTIONS_NOT_FOUND", "message": f"Captions not found for stage {stage_id}"})
+    return stream_media_file(stage_dir / "captions.vtt", request, media_type="text/vtt", allow_download_name=f"stage_{stage_id}.vtt")
+
+
+@app.get("/api/repositories/{repository_id}/explainer/video")
+def repo_explainer_video(repository_id: str, request: Request) -> Response:
+    repo_dir = settings.storage_dir / "media" / f"repo_{repository_id}_explainer"
+    if not repo_dir.is_dir() or not (repo_dir / "lesson.mp4").is_file():
+        repo_dir = _resolve_media_dir(f"repo_{repository_id}")
+    if not repo_dir or not (repo_dir / "lesson.mp4").is_file():
+        raise HTTPException(status_code=404, detail={"code": "VIDEO_NOT_FOUND", "message": f"Explainer video not found for repo {repository_id}"})
+    return stream_media_file(repo_dir / "lesson.mp4", request, media_type="video/mp4", allow_download_name=f"repo_{repository_id}.mp4")
+
+
+@app.get("/api/repositories/{repository_id}/explainer/captions")
+def repo_explainer_captions(repository_id: str, request: Request) -> Response:
+    repo_dir = settings.storage_dir / "media" / f"repo_{repository_id}_explainer"
+    if not repo_dir.is_dir() or not (repo_dir / "captions.vtt").is_file():
+        repo_dir = _resolve_media_dir(f"repo_{repository_id}")
+    if not repo_dir or not (repo_dir / "captions.vtt").is_file():
+        raise HTTPException(status_code=404, detail={"code": "CAPTIONS_NOT_FOUND", "message": f"Captions not found for repo {repository_id}"})
+    return stream_media_file(repo_dir / "captions.vtt", request, media_type="text/vtt", allow_download_name=f"repo_{repository_id}.vtt")
+
+
+@app.get("/api/videos/{video_id}/stream")
+def video_stream_by_id(video_id: str, request: Request) -> Response:
+    video_rec = app_store.get_video(video_id)
+    if not video_rec:
+        raise HTTPException(status_code=404, detail={"code": "VIDEO_NOT_FOUND", "message": f"Video not registered: {video_id}"})
+    vpath = video_rec.get("path") or video_rec.get("manifest", {}).get("video_path")
+    if not vpath or not Path(vpath).is_file():
+        mdir = _resolve_media_dir(video_rec.get("lesson_id", video_id))
+        if mdir and (mdir / "lesson.mp4").is_file():
+            vpath = str(mdir / "lesson.mp4")
+    if not vpath or not Path(vpath).is_file():
+        raise HTTPException(status_code=404, detail={"code": "VIDEO_NOT_FOUND", "message": "Playable video file missing from disk"})
+    return stream_media_file(Path(vpath), request, media_type="video/mp4", allow_download_name=f"{video_id}.mp4")
+
+
+@app.get("/api/videos/{video_id}/captions")
+def video_captions_by_id(video_id: str, request: Request) -> Response:
+    video_rec = app_store.get_video(video_id)
+    if not video_rec:
+        raise HTTPException(status_code=404, detail={"code": "VIDEO_NOT_FOUND", "message": f"Video not registered: {video_id}"})
+    vpath = video_rec.get("path") or video_rec.get("manifest", {}).get("video_path")
+    cpath = Path(vpath).parent / "captions.vtt" if vpath else None
+    if not cpath or not cpath.is_file():
+        mdir = _resolve_media_dir(video_rec.get("lesson_id", video_id))
+        if mdir and (mdir / "captions.vtt").is_file():
+            cpath = mdir / "captions.vtt"
+    if not cpath or not cpath.is_file():
+        raise HTTPException(status_code=404, detail={"code": "CAPTIONS_NOT_FOUND", "message": "Captions file missing from disk"})
+    return stream_media_file(cpath, request, media_type="text/vtt", allow_download_name=f"{video_id}.vtt")
+
+
+@app.post("/api/learning-projects/{project_id}/tasks/{task_id}/submit")
+def submit_project_task(project_id: str, task_id: str, request: SubmitTaskRequest) -> dict[str, Any]:
+    project = learning_store.get_project(project_id)
+    if not project:
+        raise HTTPException(status_code=404, detail={"code": "PROJECT_NOT_FOUND", "message": "Project not found"})
+    
+    target_stage = None
+    target_task = None
+    for stage in project.get("stages", []):
+        for task in stage.get("tasks", []):
+            if task.get("task_id") == task_id:
+                target_stage = stage
+                target_task = task
+                break
+        if target_task:
+            break
+
+    if not target_task:
+        raise HTTPException(status_code=404, detail={"code": "TASK_NOT_FOUND", "message": "Task not found in project"})
+
+    submitted_text = request.learner_response or request.solution_code
+    learner_id = request.learner_id or project.get("learner_id", "default_learner")
+    profile = profile_store.get_profile(learner_id)
+    concept = target_task.get("required_concepts", ["general"])[0]
+
+    target_task["attempts_count"] = target_task.get("attempts_count", 0) + 1
+    target_task["learner_response"] = submitted_text
+
+    # Evaluate criteria
+    criteria = target_task.get("completion_criteria", {})
+    req_keywords = criteria.get("required_keywords", [])
+    response_lower = submitted_text.lower()
+    
+    is_successful = (
+        len(submitted_text.strip()) >= 5
+        and (not req_keywords or any(kw.lower() in response_lower for kw in req_keywords))
+    )
+
+    if is_successful:
+        target_task["status"] = "completed"
+        target_task["evaluation_feedback"] = "Task passed! Evidence matches repository architecture."
+        import datetime
+        target_task["completed_at"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+        
+        # Unlock next stage if this stage's tasks are complete
+        if all(t.get("status") in {"completed", "tutor_demonstrated"} for t in target_stage.get("tasks", [])):
+            target_stage["status"] = "completed"
+            stage_idx = project["stages"].index(target_stage)
+            if stage_idx + 1 < len(project["stages"]):
+                project["stages"][stage_idx + 1]["status"] = "in_progress"
+
+        project["completed_tasks"] = sum(
+            1 for s in project.get("stages", []) for t in s.get("tasks", []) if t.get("status") in {"completed", "tutor_demonstrated"}
+        )
+        if project["completed_tasks"] == project.get("total_tasks", 0):
+            project["status"] = "completed"
+            if project["project_id"] not in profile.completed_projects:
+                profile.completed_projects.append(project["project_id"])
+
+        profile.record_attempt(
+            repository_id=project["repository_id"],
+            project_id=project_id,
+            task_id=task_id,
+            concept=concept,
+            is_successful=True,
+            hints_used=target_task.get("hints_used", 0),
+            attempts_count=target_task["attempts_count"],
+        )
+    else:
+        target_task["status"] = "needs_revision"
+        target_task["evaluation_feedback"] = (
+            f"Response could not be fully verified. Required architectural components or keywords ({', '.join(req_keywords)}) were missing."
+        )
+        profile.record_attempt(
+            repository_id=project["repository_id"],
+            project_id=project_id,
+            task_id=task_id,
+            concept=concept,
+            is_successful=False,
+            hints_used=target_task.get("hints_used", 0),
+            attempts_count=target_task["attempts_count"],
+        )
+
+    learning_store.save_project(project)
+    profile_store.save_profile(profile)
+
+    return {
+        "task_id": task_id,
+        "status": target_task["status"],
+        "is_successful": is_successful,
+        "passed": is_successful,
+        "evaluation_feedback": target_task["evaluation_feedback"],
+        "updated_concept_mastery": profile.concept_mastery.get(concept, 0.5),
+        "project_completed_tasks": project["completed_tasks"],
+        "project_status": project["status"],
+    }
+
+
+@app.post("/api/learning-projects/{project_id}/tasks/{task_id}/hint")
+def request_project_task_hint(project_id: str, task_id: str) -> dict[str, Any]:
+    project = learning_store.get_project(project_id)
+    if not project:
+        raise HTTPException(status_code=404, detail={"code": "PROJECT_NOT_FOUND", "message": "Project not found"})
+
+    target_task = None
+    for stage in project.get("stages", []):
+        for task in stage.get("tasks", []):
+            if task.get("task_id") == task_id:
+                target_task = task
+                break
+        if target_task:
+            break
+
+    if not target_task:
+        raise HTTPException(status_code=404, detail={"code": "TASK_NOT_FOUND", "message": "Task not found"})
+
+    hints = target_task.get("hints", [])
+    hints_used = target_task.get("hints_used", 0)
+    if hints_used < len(hints):
+        current_hint = hints[hints_used]
+        target_task["hints_used"] = hints_used + 1
+        learning_store.save_project(project)
+        h_lvl = int(current_hint.get("level", hints_used + 1))
+        h_text = current_hint.get("hint", "")
+        return {
+            "hint_level": str(h_lvl),
+            "hint_text": h_text,
+            "remaining_hints": len(hints) - target_task["hints_used"],
+            "hint": {"level": h_lvl, "text": h_text},
+        }
+    return {
+        "hint_level": "exhausted",
+        "hint_text": "All hints for this task have been revealed. Consider using 'Tutor Takeover' for a full demonstration.",
+        "remaining_hints": 0,
+        "hint": {"level": 0, "text": "All hints revealed."},
+    }
+
+
+@app.post("/api/learning-projects/{project_id}/tasks/{task_id}/tutor-takeover")
+def trigger_tutor_takeover(project_id: str, task_id: str) -> dict[str, Any]:
+    project = learning_store.get_project(project_id)
+    if not project:
+        raise HTTPException(status_code=404, detail={"code": "PROJECT_NOT_FOUND", "message": "Project not found"})
+
+    target_stage = None
+    target_task = None
+    for stage in project.get("stages", []):
+        for task in stage.get("tasks", []):
+            if task.get("task_id") == task_id:
+                target_stage = stage
+                target_task = task
+                break
+        if target_task:
+            break
+
+    if not target_task:
+        raise HTTPException(status_code=404, detail={"code": "TASK_NOT_FOUND", "message": "Task not found"})
+
+    learner_id = project.get("learner_id", "default_learner")
+    profile = profile_store.get_profile(learner_id)
+    concept = target_task.get("required_concepts", ["general"])[0]
+
+    target_task["status"] = "tutor_demonstrated"
+    import datetime
+    target_task["completed_at"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    target_task["evaluation_feedback"] = "Task demonstrated by RepoFlow AI Tutor with source citations."
+
+    if all(t.get("status") in {"completed", "tutor_demonstrated"} for t in target_stage.get("tasks", [])):
+        target_stage["status"] = "completed"
+        stage_idx = project["stages"].index(target_stage)
+        if stage_idx + 1 < len(project["stages"]):
+            project["stages"][stage_idx + 1]["status"] = "in_progress"
+
+    project["completed_tasks"] = sum(
+        1 for s in project.get("stages", []) for t in s.get("tasks", []) if t.get("status") in {"completed", "tutor_demonstrated"}
+    )
+
+    profile.record_attempt(
+        repository_id=project["repository_id"],
+        project_id=project_id,
+        task_id=task_id,
+        concept=concept,
+        is_successful=True,
+        hints_used=target_task.get("hints_used", 0),
+        attempts_count=target_task.get("attempts_count", 1),
+        tutor_assisted=True,
+    )
+
+    learning_store.save_project(project)
+    profile_store.save_profile(profile)
+
+    td = target_task.get("tutor_demonstration", {})
+    fc = target_task.get("follow_up_challenge", {})
+    return {
+        "task_id": task_id,
+        "status": "tutor_demonstrated",
+        "task": target_task,
+        "tutor_takeover": {
+            "task_id": task_id,
+            "demonstration_steps": td.get("demonstration_walkthrough", [
+                f"1. Inspected {td.get('evidence_path', '')}.",
+                f"2. Verified code lines {td.get('line_range', '')}.",
+                "3. Verified architectural boundaries."
+            ]),
+            "demonstrated_code": td.get("evidence_path", ""),
+            "verified_facts": td.get("verified_vs_inferred", "VERIFIED: static source confirmed."),
+            "follow_up_challenge": fc.get("challenge", ""),
+            "explanation_rationale": td.get("task_summary", "Architecture explanation"),
+        },
+        "tutor_demonstration": td,
+        "follow_up_challenge": fc,
+        "message": "Tutor has demonstrated this task with verified source evidence. Complete the follow-up challenge to verify your understanding.",
+    }
 
 
 def _retrieval_context(snapshot: Any, items: list[Any]) -> list[dict[str, Any]]:

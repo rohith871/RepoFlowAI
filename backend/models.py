@@ -164,6 +164,10 @@ class PkmSnapshot(BaseModel):
     evidence: list[Evidence] = Field(default_factory=list)
     relationships: list[Relationship] = Field(default_factory=list)
 
+    @property
+    def repository_id(self) -> str:
+        return self.revision.repository_id
+
 
 class ErrorEnvelope(BaseModel):
     code: str

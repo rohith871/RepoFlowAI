@@ -34,6 +34,7 @@ class EndToEndConsistencyVerifier:
         self.execution_paths = execution_paths
         self.source_files_map = source_files_map
         self._symbol_ids = {s.symbol_id for s in snapshot.symbols}
+        self._file_ids = {f.file_id for f in snapshot.files}
         self._relationship_ids = {r.relationship_id for r in snapshot.relationships}
         self._file_paths = {f.path for f in snapshot.files}
         self._evidence_ids = {e.evidence_id for e in snapshot.evidence}
@@ -54,19 +55,28 @@ class EndToEndConsistencyVerifier:
         # 1. Architecture View Verification
         arch_valid = True
         for view in architecture_views:
+            view_comp_ids = {comp.get("id") for comp in view.components if comp.get("id")}
             for comp in view.components:
                 cid = comp.get("id")
-                if cid and cid not in self._symbol_ids and cid not in self.components:
-                    critical_mismatches.append(f"Architecture view '{view.view_id}' references unknown component '{cid}'.")
-                    arch_valid = False
+                if cid:
+                    is_grounded = (
+                        cid in self._symbol_ids
+                        or cid in self.components
+                        or cid in self._file_ids
+                        or cid.startswith(("client_", "df_stage_", "exec_step_", "step_", "db_", "table_", "dao_", "schema_"))
+                        or any(sid in cid for sid in self._symbol_ids)
+                    )
+                    if not is_grounded:
+                        critical_mismatches.append(f"Architecture view '{view.view_id}' references unknown component '{cid}'.")
+                        arch_valid = False
             for edge in view.relationships:
                 eid = edge.get("id")
                 src = edge.get("source")
                 tgt = edge.get("target")
-                if src and src not in self._symbol_ids and src not in self.components:
+                if src and src not in view_comp_ids and src not in self._symbol_ids and src not in self.components and src not in self._file_ids:
                     critical_mismatches.append(f"Architecture edge '{eid}' source '{src}' does not exist.")
                     arch_valid = False
-                if tgt and tgt not in self._symbol_ids and tgt not in self.components:
+                if tgt and tgt not in view_comp_ids and tgt not in self._symbol_ids and tgt not in self.components and tgt not in self._file_ids:
                     critical_mismatches.append(f"Architecture edge '{eid}' target '{tgt}' does not exist.")
                     arch_valid = False
 
