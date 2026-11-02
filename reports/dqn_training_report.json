@@ -1,0 +1,42 @@
+{
+  "checkpoint_path": "storage\\models\\teaching_policy.pt",
+  "epochs": 500,
+  "loss": 6.296367791946977e-05,
+  "evaluation": {
+    "profiles": [
+      {
+        "profile": "novice",
+        "expected_action": "hint_concept",
+        "selected_action": "hint_concept",
+        "correct": true
+      },
+      {
+        "profile": "repeated_error",
+        "expected_action": "show_source_excerpt",
+        "selected_action": "show_source_excerpt",
+        "correct": true
+      },
+      {
+        "profile": "developing",
+        "expected_action": "ask_guided_question",
+        "selected_action": "ask_guided_question",
+        "correct": true
+      },
+      {
+        "profile": "mastered",
+        "expected_action": "ask_transfer_question",
+        "selected_action": "ask_transfer_question",
+        "correct": true
+      },
+      {
+        "profile": "returning",
+        "expected_action": "replay_scene",
+        "selected_action": "replay_scene",
+        "correct": true
+      }
+    ],
+    "accuracy": 1.0,
+    "model": "dqn-style-q-network",
+    "checkpoint": "storage\\models\\teaching_policy.pt"
+  }
+}
